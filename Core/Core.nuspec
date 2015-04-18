@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>Core.Common</id>
+    <version>0.1.15</version>
+    <authors>tobiasschulz</authors>
+    <owners>tobiasschulz</owners>
+    <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
+    <projectUrl>https://github.com/media-tools/core/</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/media-tools/core/master/Core/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Common utilities for .NET applications</description>
+    <releaseNotes>an open source project which provides common utility and helper classes for .NET applications.</releaseNotes>
+    <tags>Utilities Common Core</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="6.0.8" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="Core.Portable/bin/$configuration$/Core.Portable.dll" target="lib/portable-windows8+net45/" />
+
+    <file src="Core.Portable/bin/$configuration$/Core.Portable.dll" target="lib/portable-net45+win+wp80/" />
+
+    <file src="Core.Portable/bin/$configuration$/Core.Portable.dll" target="lib/net45/" />
+    <file src="Core.Platform/bin/$configuration$/Core.Platform.dll" target="lib/net45/" />
+
+    <file src="Core.Portable/bin/$configuration$/Core.Portable.dll" target="lib/net40/" />
+    <file src="Core.Platform/bin/$configuration$/Core.Platform.dll" target="lib/net40/" />
+  </files>
+</package>

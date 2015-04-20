@@ -8,9 +8,13 @@ namespace Core.Common
 		{
 			try {
 				tryAction ();
-			} catch (T _ex) {
+			} catch (T ex) {
+				if (catchAction != null) {
+					catchAction (ex);
+				}
+			} catch (System.Reflection.TargetInvocationException _ex) {
 				Exception ex;
-				if (_ex is System.Reflection.TargetInvocationException && _ex.InnerException != null)
+				if (_ex.InnerException != null)
 					ex = _ex.InnerException;
 				else
 					ex = _ex;

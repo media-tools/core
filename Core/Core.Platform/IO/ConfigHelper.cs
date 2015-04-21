@@ -46,6 +46,19 @@ namespace Core.Common
 			File.WriteAllText (fullPath, JsonConvert.SerializeObject (stuff, Formatting.Indented, serSettings) + "\n");
 			return stuff;
 		}
+		public static void SaveConfig<Config> (string fullPath, Config stuff) where Config : class, new()
+		{
+			string dirname = Path.GetDirectoryName (fullPath);
+			if (!string.IsNullOrEmpty (dirname)) {
+				Directory.CreateDirectory (dirname);
+			}
+			File.AppendAllText (fullPath, "");
+
+			JsonSerializerSettings serSettings = new JsonSerializerSettings ();
+			serSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver ();
+
+			File.WriteAllText (fullPath, JsonConvert.SerializeObject (stuff, Formatting.Indented, serSettings) + "\n");
+		}
 	}
 }
 

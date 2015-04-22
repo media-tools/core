@@ -11,7 +11,8 @@ namespace Core.Common
 
 		public static string Base64Decode (string str)
 		{
-			return System.Text.Encoding.UTF8.GetString (Convert.FromBase64String (str));
+			byte[] buffer = Convert.FromBase64String (str);
+			return System.Text.Encoding.UTF8.GetString (buffer, 0, buffer.Length);
 		}
 	}
 }

@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Core.Common</id>
-    <version>0.1.23</version>
+    <version>0.1.24</version>
     <authors>tobiasschulz</authors>
     <owners>tobiasschulz</owners>
     <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
@@ -18,6 +18,8 @@
   </metadata>
   <files>
     <file src="Core.Portable/bin/$configuration$/Core.Portable.dll" target="lib/portable-net40+win/" />
+
+    <file src="Core.Portable/bin/$configuration$/Core.Portable.dll" target="lib/portable-net45+win/" />
 
     <file src="Core.Portable/bin/$configuration$/Core.Portable.dll" target="lib/portable-net40+sl5+wp80+win8+wpa81/" />
 

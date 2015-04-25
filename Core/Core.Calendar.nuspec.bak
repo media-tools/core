@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
-    <id>Core.Common.Calendar</id>
-    <version>0.1.9</version>
+    <id>Core.Calendar</id>
+    <version>0.1.10</version>
     <authors>tobiasschulz</authors>
     <owners>tobiasschulz</owners>
     <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>

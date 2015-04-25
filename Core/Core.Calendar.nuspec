@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Core.Common.Calendar</id>
-    <version>0.1.9</version>
+    <version>0.1.10</version>
     <authors>tobiasschulz</authors>
     <owners>tobiasschulz</owners>
     <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
@@ -13,6 +13,7 @@
     <releaseNotes>an open source project which provides common utility and helper classes for calendar synchronisation in .NET applications.</releaseNotes>
     <tags>Utilities Common Core Calendar</tags>
     <dependencies>
+      <dependency id="Core.Common" version="0.1.0" />
       <dependency id="Newtonsoft.Json" version="6.0.8" />
       <dependency id="DDay.iCal" version="1.0.2.575" />
     </dependencies>

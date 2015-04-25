@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>Core.Common.Calendar</id>
+    <version>0.1.8</version>
+    <authors>tobiasschulz</authors>
+    <owners>tobiasschulz</owners>
+    <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
+    <projectUrl>https://github.com/media-tools/core/</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/media-tools/core/master/Core/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Common calendar classes for .NET applications</description>
+    <releaseNotes>an open source project which provides common utility and helper classes for calendar synchronisation in .NET applications.</releaseNotes>
+    <tags>Utilities Common Core Calendar</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="6.0.8" />
+      <dependency id="DDay.iCal" version="1.0.2.575" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="Core.Calendar/bin/$configuration$/Core.Calendar.dll" target="lib/net45/" />
+
+    <file src="Core.Calendar/bin/$configuration$/Core.Calendar.dll" target="lib/net40/" />
+  </files>
+</package>

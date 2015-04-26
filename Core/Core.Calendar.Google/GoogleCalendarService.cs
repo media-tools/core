@@ -55,7 +55,7 @@ namespace Core.Calendar.Google
 				Log.Debug ("delete: ", app);
 
 				app.Delete ();
-				//PortableThread.Sleep (1000);
+				PortableThread.Sleep (1000);
 			}
 		}
 

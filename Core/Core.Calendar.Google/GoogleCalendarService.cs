@@ -17,8 +17,8 @@ namespace Core.Calendar.Google
 		private const string RedirectUri = "urn:ietf:wg:oauth:2.0:oob";
 		private const string ApplicationName = "AtractanthaAureolanata";
 
-		private CalendarService service;
-		private string calendarId;
+		private readonly CalendarService service;
+		private readonly string calendarId;
 
 		public GoogleCalendarService (IGoogleConfig config)
 		{
@@ -68,7 +68,7 @@ namespace Core.Calendar.Google
 
 			lr.MaxResults = 2499;
 			//lr.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
-			lr.ShowDeleted = true;
+			//lr.ShowDeleted = true;
 
 			Log.Debug ("TimeMin: ", lr.TimeMin.ToString (), ", TimeMax: ", lr.TimeMax.ToString ());
 

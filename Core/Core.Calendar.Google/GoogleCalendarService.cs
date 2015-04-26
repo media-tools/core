@@ -12,7 +12,7 @@ using Core.Calendar;
 
 namespace Core.Calendar.Google
 {
-	public class GoogleCalendarService
+	public class GoogleCalendarService : CalendarBase<GoogleAppointment>
 	{
 		private const string RedirectUri = "urn:ietf:wg:oauth:2.0:oob";
 		private const string ApplicationName = "AtractanthaAureolanata";
@@ -49,39 +49,17 @@ namespace Core.Calendar.Google
 
 		public void Clear ()
 		{
-			Events existingEvents = ListEvents ();
+			GoogleAppointment[] existingEvents = Appointments.ToArray ();
 
-			foreach (Event e in existingEvents.Items) {
-				Log.Debug ("delete: ", e.Summary, "/", e.Start.DateTimeRaw);
+			foreach (GoogleAppointment app in existingEvents) {
+				Log.Debug ("delete: ", app);
 
-				try {
-					var request = service.Events.Delete (calendarId: calendarId, eventId: e.Id);
-					request.Execute ();
-					//PortableThread.Sleep (1000);
-				} catch (Exception ex) {
-					Log.Error (ex);
-				}
+				app.Delete ();
+				//PortableThread.Sleep (1000);
 			}
 		}
 
-		public void Sync (CalendarBase cal)
-		{
-			Events existingEvents = ListEvents ();
-			IEnumerable<Event> allEvents = ConvertEvents (cal);
-
-			IEnumerable<Event> newEvents = from e in allEvents
-			                               where existingEvents.Items.All (ee => ee.Start.DateTime != e.Start.DateTime)
-			                               select e; 
-			AddEvents (newEvents);
-
-			foreach (Event e in allEvents) {
-				IEnumerable<Event> sameEvents = existingEvents.Items.Where (ee => ee.Start.DateTime == e.Start.DateTime); // ee.Summary == e.Summary && 
-				Log.Debug (e.Summary, "/", e.Start.DateTimeRaw, "/", string.Join (",", sameEvents));
-				UpdateEvents (sameEvents, e);
-			}
-		}
-
-		Events ListEvents ()
+		Events ListInternalEvents ()
 		{
 			Events request = null;
 			var lr = service.Events.List (calendarId);
@@ -93,28 +71,31 @@ namespace Core.Calendar.Google
 			return request;
 		}
 
-		IEnumerable<Event> ConvertEvents (CalendarBase cal)
-		{
-			foreach (AppointmentBase appointment in cal.Appointments) {
-				var newEvent = new Event {
-					Start = new EventDateTime { DateTime = appointment.StartDate },
-					End = new EventDateTime { DateTime = appointment.EndDate },
-					Description = appointment.Body,
-					Summary = appointment.Title,
-					Location = appointment.Location,
-				};
-				yield return newEvent;
+		public override IEnumerable<GoogleAppointment> Appointments {
+			get {
+				try {
+					List<GoogleAppointment> result = new List<GoogleAppointment> ();
+					Events internalEvents = ListInternalEvents ();
+					foreach (Event internalEvent in internalEvents.Items) {
+						result.Add (new GoogleAppointment (internalEvent: internalEvent, service: service, calendarId: calendarId));
+					}
+					return result.ToArray ();
+				} catch (Exception ex) {
+					Log.Error (ex);
+					return new GoogleAppointment[]{ };
+				}
 			}
 		}
 
-		void AddEvents (IEnumerable<Event> events)
+		public void AddAppointment (AppointmentBase appointment)
 		{
-			foreach (Event e in events) {
-				Log.Debug ("Add event: ", e.Start, e.Summary, e.Location);
-				var request = service.Events.Insert (e, calendarId);
-				request.Execute ();
+			try {
+				GoogleAppointment.Insert (appointment: appointment, service: service, calendarId: calendarId);
+			} catch (Exception ex) {
+				Log.Error (ex);
 			}
 		}
+
 
 		void UpdateEvents (IEnumerable<Event> events, Event update)
 		{

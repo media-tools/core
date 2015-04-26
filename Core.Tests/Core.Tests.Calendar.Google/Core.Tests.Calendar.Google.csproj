@@ -79,6 +79,10 @@
       <Project>{128D877C-DECA-4EA7-A34D-12E7E38E69C5}</Project>
       <Name>Core.Calendar.Google</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\Core.Calendar\Core.Calendar.csproj">
+      <Project>{DAE4783E-9B3D-4EFA-A521-87B8F0E410D9}</Project>
+      <Name>Core.Calendar</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

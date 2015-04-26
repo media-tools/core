@@ -70,6 +70,7 @@
     <Compile Include="GoogleCalendarService.cs" />
     <Compile Include="IGoogleConfig.cs" />
     <Compile Include="IGoogleAuth.cs" />
+    <Compile Include="GoogleAppointment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

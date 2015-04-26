@@ -6,7 +6,7 @@ namespace Core.Calendar
 {
 	public static class ICalFormat
 	{
-		public static string Export (CalendarBase calendar)
+		public static string Export<T> (CalendarBase<T> calendar) where T : AppointmentBase
 		{
 			var iCal = new iCalendar {
 				Method = "PUBLISH",

@@ -6,6 +6,7 @@ nuget restore
 
 # build
 xbuild /p:Configuration=Release Core.sln
+xbuild /p:Configuration=Debug Core.sln
 
 # nuget version
 for x in *.nuspec
@@ -19,7 +20,7 @@ rm -rf nuget-out
 mkdir nuget-out
 for x in *.nuspec
 do
-	nuget pack "$x" -Prop Configuration=Release -OutputDirectory nuget-out
+	nuget pack "$x" -Prop Configuration=Debug -OutputDirectory nuget-out
 done
 
 # git

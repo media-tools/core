@@ -70,7 +70,7 @@ namespace Core.Calendar.Google
 			//lr.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
 			//lr.ShowDeleted = true;
 
-			Log.Debug ("TimeMin: ", lr.TimeMin.ToString (), ", TimeMax: ", lr.TimeMax.ToString ());
+			//Log.Debug ("TimeMin: ", lr.TimeMin.ToString (), ", TimeMax: ", lr.TimeMax.ToString ());
 
 			Events request = lr.Execute ();
 			return request;
@@ -78,17 +78,16 @@ namespace Core.Calendar.Google
 
 		public override IEnumerable<AppointmentBase> Appointments {
 			get {
+				List<GoogleAppointment> result = new List<GoogleAppointment> ();
 				try {
-					List<GoogleAppointment> result = new List<GoogleAppointment> ();
 					Events internalEvents = ListInternalEvents ();
 					foreach (Event internalEvent in internalEvents.Items) {
 						result.Add (new GoogleAppointment (internalEvent: internalEvent, service: service, calendarId: calendarId));
 					}
-					return result.ToArray ();
 				} catch (Exception ex) {
 					Log.Error (ex);
-					return new GoogleAppointment[]{ };
 				}
+				return result.ToArray ();
 			}
 		}
 

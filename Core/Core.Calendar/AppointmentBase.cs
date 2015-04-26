@@ -57,7 +57,8 @@ namespace Core.Calendar
 			AppointmentBase other = obj as AppointmentBase;
 			if (obj == null)
 				return false;
-			return other.Title == Title && other.StartDate == StartDate;
+			return other.Title == Title && other.StartDate == StartDate && other.EndDate == EndDate
+			&& other.Organizer == Organizer && other.Body == Body && other.Location == Location && other.IsAllDayEvent == IsAllDayEvent;
 		}
 
 		public override int GetHashCode ()

@@ -33,6 +33,18 @@ namespace Core.Calendar
 			UID = "";
 		}
 
+		public void CopyTo (AppointmentBase other)
+		{
+			other.Title = Title;
+			other.Organizer = Organizer;
+			other.StartDate = StartDate;
+			other.EndDate = EndDate;
+			other.Body = Body;
+			other.Location = Location;
+			other.IsAllDayEvent = IsAllDayEvent;
+			// don't copy UID!
+		}
+
 		public override string ToString ()
 		{
 			return string.Format ("[AppointmentBase: Title={0}, Organizer={1}, StartDate={2}, EndDate={3}, Body={4}, Location={5}, IsAllDayEvent={6}, UID={7}]", Title, Organizer, StartDate, EndDate, Body != null ? Body.Length : 0, Location, IsAllDayEvent, UID);

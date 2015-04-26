@@ -61,15 +61,18 @@ namespace Core.Calendar.Google
 
 		Events ListInternalEvents ()
 		{
-			Events request = null;
 			var lr = service.Events.List (calendarId);
 
-			lr.TimeMin = DateTime.Now.AddDays (-9999); //five days in the past
-			lr.TimeMax = DateTime.Now.AddDays (9999); //five days in the future
+			//lr.TimeMin = DateTime.Now.AddDays (-9999); //five days in the past
+			//lr.TimeMax = DateTime.Now.AddDays (9999); //five days in the future
+
+			lr.MaxResults = 2499;
+			lr.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+			lr.ShowDeleted = true;
 
 			Log.Debug ("TimeMin: ", lr.TimeMin.ToString (), ", TimeMax: ", lr.TimeMax.ToString ());
 
-			request = lr.Execute ();
+			Events request = lr.Execute ();
 			return request;
 		}
 

@@ -86,8 +86,8 @@ namespace Core.Calendar.Google
 			Events request = null;
 			var lr = service.Events.List (calendarId);
 
-			lr.TimeMin = DateTime.Now.AddDays (-360); //five days in the past
-			lr.TimeMax = DateTime.Now.AddDays (360); //five days in the future
+			lr.TimeMin = DateTime.Now.AddDays (-9999); //five days in the past
+			lr.TimeMax = DateTime.Now.AddDays (9999); //five days in the future
 
 			request = lr.Execute ();
 			return request;

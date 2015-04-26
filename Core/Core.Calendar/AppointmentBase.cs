@@ -37,6 +37,21 @@ namespace Core.Calendar
 		{
 			return string.Format ("[AppointmentBase: Title={0}, Organizer={1}, StartDate={2}, EndDate={3}, Body={4}, Location={5}, IsAllDayEvent={6}, UID={7}]", Title, Organizer, StartDate, EndDate, Body != null ? Body.Length : 0, Location, IsAllDayEvent, UID);
 		}
+
+		public override bool Equals (object obj)
+		{
+			if (obj == null)
+				return false;
+			AppointmentBase other = obj as AppointmentBase;
+			if (obj == null)
+				return false;
+			return other.Title == Title && other.StartDate == StartDate;
+		}
+
+		public override int GetHashCode ()
+		{
+			return (Title + StartDate.ToString ("yyyy-MM-ddTHH:mm:ss.fff")).GetHashCode ();
+		}
 	}
 
 }

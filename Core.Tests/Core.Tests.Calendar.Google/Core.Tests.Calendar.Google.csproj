@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2EBEDE28-9645-4A48-BCDA-1013090277BD}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>Core.Common</RootNamespace>
-    <AssemblyName>Core.Platform</AssemblyName>
+    <ProjectGuid>{122998F6-7FB5-4F2F-BC66-05A6482C7122}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Core.Tests.Calendar.Google</RootNamespace>
+    <AssemblyName>Core.Tests.Calendar.Google</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -25,39 +25,20 @@
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <Externalconsole>true</Externalconsole>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="IO\ConfigHelper.cs" />
-    <Compile Include="IO\Logging.cs" />
-    <Compile Include="IO\NonBlockingConsole.cs" />
-    <Compile Include="IO\NonBlockingFile.cs" />
-    <Compile Include="IO\Storage.cs" />
-    <Compile Include="Net\Networking.cs" />
-    <Compile Include="System\BindingRedirect.cs" />
-    <Compile Include="System\ExceptionHelper.cs" />
-    <Compile Include="System\ObjectExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="IO\" />
-    <Folder Include="Net\" />
-    <Folder Include="System\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Core.Portable\Core.Portable.csproj">
-      <Project>{6E2D2753-B286-441D-AC3B-8E0CA2549C15}</Project>
-      <Name>Core.Portable</Name>
+    <ProjectReference Include="..\..\Core\Core.Calendar.Google\Core.Calendar.Google.csproj">
+      <Project>{128D877C-DECA-4EA7-A34D-12E7E38E69C5}</Project>
+      <Name>Core.Calendar.Google</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

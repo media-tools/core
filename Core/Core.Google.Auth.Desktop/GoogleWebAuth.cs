@@ -1,10 +1,11 @@
 ﻿using System;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Util.Store;
+using Core.Calendar.Google;
 
 namespace Core.Google.Auth.Desktop
 {
-	public class GoogleWebAuth
+	public class GoogleWebAuth : IGoogleAuth
 	{
 		internal readonly string ClientId;
 		internal readonly string ClientSecret;

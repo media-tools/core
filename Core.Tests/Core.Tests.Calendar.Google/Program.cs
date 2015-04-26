@@ -26,13 +26,14 @@ namespace Core.Tests.Calendar.Google
 				}
 			}
 
-			public UserCredential UserCredential {
+			public IGoogleAuth Auth {
 				get {
 					throw new NotImplementedException ();
 				}
 			}
 
 			#endregion
+
 
 		}
 	}

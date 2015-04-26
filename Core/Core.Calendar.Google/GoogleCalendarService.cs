@@ -24,7 +24,7 @@ namespace Core.Calendar.Google
 		{
 
 			service = new CalendarService (new BaseClientService.Initializer () {
-				HttpClientInitializer = config.UserCredential,
+				HttpClientInitializer = config.Auth.Authorize (googleUser: config.GoogleUser),
 				ApplicationName = ApplicationName,
 			});
 

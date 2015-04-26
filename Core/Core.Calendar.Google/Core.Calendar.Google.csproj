@@ -69,6 +69,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GoogleCalendarService.cs" />
     <Compile Include="IGoogleConfig.cs" />
+    <Compile Include="IGoogleAuth.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

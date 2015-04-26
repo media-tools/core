@@ -8,7 +8,7 @@ namespace Core.Calendar.Google
 	{
 		string GoogleUser { get; }
 
-		UserCredential UserCredential { get; }
+		IGoogleAuth Auth { get; }
 	}
 }
 

@@ -7,6 +7,8 @@ namespace Core.Tests.Calendar.Google
 	{
 		public static void Main (string[] args)
 		{
+			GoogleBindingRedirect.Apply ();
+
 			GoogleCalendarService google = new GoogleCalendarService (new TestConfig ());
 		}
 

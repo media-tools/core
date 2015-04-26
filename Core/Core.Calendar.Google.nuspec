@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Core.Calendar.Google</id>
-    <version>0.1.9</version>
+    <version>0.1.10</version>
     <authors>tobiasschulz</authors>
     <owners>tobiasschulz</owners>
     <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
@@ -26,6 +26,7 @@
 
     <file src="Core.Calendar.Google/bin/$configuration$/Core.Calendar.Google.dll" target="lib/net40/" />
     <file src="Core.Calendar.Google/bin/$configuration$/Core.Calendar.Google.dll.config" target="lib/net40/" />
+    <file src="Core.Calendar.Google/bin/$configuration$/Core.Calendar.Google.dll.mdb" target="lib/net40/" />
     <file src="Core.Calendar.Google/bin/$configuration$/System.Net.Http.Primitives.dll" target="lib/net40/" />
     <file src="Core.Calendar.Google/bin/$configuration$/System.Net.Http.Extensions.dll" target="lib/net40/" />
   </files>

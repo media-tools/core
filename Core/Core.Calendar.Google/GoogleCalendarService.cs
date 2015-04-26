@@ -67,6 +67,8 @@ namespace Core.Calendar.Google
 			lr.TimeMin = DateTime.Now.AddDays (-9999); //five days in the past
 			lr.TimeMax = DateTime.Now.AddDays (9999); //five days in the future
 
+			Log.Debug ("TimeMin: ", lr.TimeMin.ToString (), ", TimeMax: ", lr.TimeMax.ToString ());
+
 			request = lr.Execute ();
 			return request;
 		}

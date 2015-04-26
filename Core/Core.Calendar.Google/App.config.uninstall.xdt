@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
-    <startup>
-        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.0" xdt:Transform="Remove" />
+    <startup xdt:Transform="Remove">
+        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.0" />
     </startup>
     <runtime>
 		<assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">

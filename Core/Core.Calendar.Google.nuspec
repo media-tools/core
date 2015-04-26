@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Core.Calendar.Google</id>
-    <version>0.1.22</version>
+    <version>0.1.23</version>
     <authors>tobiasschulz</authors>
     <owners>tobiasschulz</owners>
     <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
@@ -17,7 +17,7 @@
       <dependency id="Core.Calendar" version="0.1.0" />
       <dependency id="Newtonsoft.Json" version="6.0.8" />
       <dependency id="Google.Apis.Calendar.v3" version="1.9.0.1220" />
-      <dependency id="Microsoft.Net.Http" version="2.2.29" />
+<!--      <dependency id="Microsoft.Net.Http" version="2.2.29" /> -->
     </dependencies>
   </metadata>
   <files>

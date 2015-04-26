@@ -67,7 +67,7 @@ namespace Core.Calendar.Google
 			//lr.TimeMax = DateTime.Now.AddDays (9999); //five days in the future
 
 			lr.MaxResults = 2499;
-			lr.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+			//lr.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
 			lr.ShowDeleted = true;
 
 			Log.Debug ("TimeMin: ", lr.TimeMin.ToString (), ", TimeMax: ", lr.TimeMax.ToString ());

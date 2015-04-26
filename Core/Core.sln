@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Calendar.Google", "Cor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Tests.Calendar.Google", "..\Core.Tests\Core.Tests.Calendar.Google\Core.Tests.Calendar.Google.csproj", "{122998F6-7FB5-4F2F-BC66-05A6482C7122}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Google.Auth.Desktop", "Core.Google.Auth.Desktop\Core.Google.Auth.Desktop.csproj", "{6C233EAE-D707-4218-A73D-0A5E68A2EED8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{2EBEDE28-9645-4A48-BCDA-1013090277BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EBEDE28-9645-4A48-BCDA-1013090277BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EBEDE28-9645-4A48-BCDA-1013090277BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C233EAE-D707-4218-A73D-0A5E68A2EED8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C233EAE-D707-4218-A73D-0A5E68A2EED8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C233EAE-D707-4218-A73D-0A5E68A2EED8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C233EAE-D707-4218-A73D-0A5E68A2EED8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6E2D2753-B286-441D-AC3B-8E0CA2549C15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6E2D2753-B286-441D-AC3B-8E0CA2549C15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E2D2753-B286-441D-AC3B-8E0CA2549C15}.Release|Any CPU.ActiveCfg = Release|Any CPU

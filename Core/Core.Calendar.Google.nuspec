@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Core.Calendar.Google</id>
-    <version>0.1.18</version>
+    <version>0.1.19</version>
     <authors>tobiasschulz</authors>
     <owners>tobiasschulz</owners>
     <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
@@ -25,8 +25,11 @@
     <file src="Core.Calendar.Google/App.config.install.xdt" target="content/" />
     <file src="Core.Calendar.Google/App.config.uninstall.xdt" target="content/" />
 
-    <file src="Core.Calendar.Google/bin/$configuration$/Core.Calendar.Google.dll" target="lib/net45/" />
-    <file src="Core.Calendar.Google/bin/$configuration$/Core.Calendar.Google.dll.mdb" target="lib/net45/" />
+    <file src="packages/Microsoft.Net.Http.*/lib/portable-net40+sl4+win8+wp71+wpa81/System.Net.Http.*" target="lib/portable-net45+win/" />
+    <file src="Core.Calendar.Google/bin/$configuration$/Core.Calendar.Google.dll" target="lib/portable-net45+win/" />
+
     <file src="packages/Microsoft.Net.Http.*/lib/portable-net40+sl4+win8+wp71+wpa81/System.Net.Http.*" target="lib/net45/" />
+    <file src="Core.Calendar.Google/bin/$configuration$/Core.Calendar.Google.dll" target="lib/net45/" />
+    <file src="Core.Google.Auth.Desktop/bin/$configuration$/Core.Google.Auth.Desktop.dll" target="lib/net45/" />
   </files>
 </package>

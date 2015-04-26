@@ -43,6 +43,7 @@
     <Compile Include="IEditableAppointment.cs" />
     <Compile Include="IEditableCalendar.cs" />
     <Compile Include="ICalendar.cs" />
+    <Compile Include="IAppointment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

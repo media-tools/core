@@ -4,7 +4,7 @@ using DDay.iCal.Serialization.iCalendar;
 
 namespace Core.Calendar
 {
-	public class AppointmentBase
+	public class AppointmentBase : IAppointment
 	{
 		public string Title { get; set; }
 
@@ -33,7 +33,7 @@ namespace Core.Calendar
 			UID = "";
 		}
 
-		public void CopyTo (AppointmentBase other)
+		public void CopyTo (IAppointment other)
 		{
 			other.Title = Title;
 			other.Organizer = Organizer;
@@ -54,11 +54,17 @@ namespace Core.Calendar
 		{
 			if (obj == null)
 				return false;
-			AppointmentBase other = obj as AppointmentBase;
-			if (obj == null)
+			IAppointment other = obj as IAppointment;
+			return Equals (other: other);
+		}
+
+		public bool Equals (IAppointment other)
+		{
+			if (other == null)
 				return false;
-			return other.Title == Title && other.StartDate == StartDate && other.EndDate == EndDate
-			&& other.Organizer == Organizer && other.Body == Body && other.Location == Location && other.IsAllDayEvent == IsAllDayEvent;
+			else
+				return other.Title == Title && other.StartDate == StartDate && other.EndDate == EndDate
+				&& other.Organizer == Organizer && other.Body == Body && other.Location == Location && other.IsAllDayEvent == IsAllDayEvent;
 		}
 
 		public override int GetHashCode ()

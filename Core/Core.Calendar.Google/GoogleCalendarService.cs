@@ -57,7 +57,7 @@ namespace Core.Calendar.Google
 				try {
 					var request = service.Events.Delete (calendarId: calendarId, eventId: e.Id);
 					request.Execute ();
-					PortableThread.Sleep (1000);
+					//PortableThread.Sleep (1000);
 				} catch (Exception ex) {
 					Log.Error (ex);
 				}

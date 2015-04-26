@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Core.Calendar.Google</id>
-    <version>0.1.3</version>
+    <version>0.1.4</version>
     <authors>tobiasschulz</authors>
     <owners>tobiasschulz</owners>
     <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
@@ -25,6 +25,7 @@
     <file src="Core.Calendar.Google/App.config.uninstall.xdt" target="content/" />
 
     <file src="Core.Calendar.Google/bin/$configuration$/Core.Calendar.Google.dll" target="lib/net45/" />
+    <file src="Core.Calendar.Google/bin/$configuration$/Core.Calendar.Google.dll.config" target="lib/net45/" />
     <file src="Core.Calendar.Google/bin/$configuration$/System.Net.Http.Primitives.dll" target="lib/net45/" />
     <file src="Core.Calendar.Google/bin/$configuration$/System.Net.Http.Extensions.dll" target="lib/net45/" />
   </files>

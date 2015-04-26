@@ -5,7 +5,7 @@ using Core.Common;
 
 namespace Core.Calendar.Google
 {
-	public class GoogleAppointment : AppointmentBase, IUpdatableAppointment, IDeletableAppointment
+	public class GoogleAppointment : AppointmentBase, IEditableAppointment
 	{
 		private readonly Event internalEvent;
 		private readonly CalendarService service;
@@ -33,7 +33,7 @@ namespace Core.Calendar.Google
 			}
 		}
 
-		#region IUpdatableAppointment implementation
+		#region IEditableAppointment implementation
 
 		public void Update ()
 		{
@@ -45,10 +45,6 @@ namespace Core.Calendar.Google
 				Log.Error (ex);
 			}
 		}
-
-		#endregion
-
-		#region IDeletableAppointment implementation
 
 		public void Delete ()
 		{

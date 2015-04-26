@@ -40,8 +40,8 @@
     <Compile Include="AppointmentBase.cs" />
     <Compile Include="CalendarBase.cs" />
     <Compile Include="ICalFormat.cs" />
-    <Compile Include="IUpdatableAppointment.cs" />
-    <Compile Include="IDeletableAppointment.cs" />
+    <Compile Include="IEditableAppointment.cs" />
+    <Compile Include="IEditableCalendar.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

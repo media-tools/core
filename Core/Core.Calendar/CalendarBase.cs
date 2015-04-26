@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Core.Calendar
 {
-	public abstract class CalendarBase<AppointmentType> where AppointmentType : AppointmentBase
+	public abstract class CalendarBase
 	{
-		public abstract IEnumerable<AppointmentType> Appointments { get; }
+		public abstract IEnumerable<AppointmentBase> Appointments { get; }
 
 		public CalendarBase ()
 		{

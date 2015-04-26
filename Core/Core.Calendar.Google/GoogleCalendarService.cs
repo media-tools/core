@@ -12,7 +12,7 @@ using Core.Calendar;
 
 namespace Core.Calendar.Google
 {
-	public class GoogleCalendarService : CalendarBase<GoogleAppointment>
+	public class GoogleCalendarService : CalendarBase, IEditableCalendar
 	{
 		private const string RedirectUri = "urn:ietf:wg:oauth:2.0:oob";
 		private const string ApplicationName = "AtractanthaAureolanata";
@@ -49,7 +49,7 @@ namespace Core.Calendar.Google
 
 		public void Clear ()
 		{
-			GoogleAppointment[] existingEvents = Appointments.ToArray ();
+			GoogleAppointment[] existingEvents = Appointments.OfType<GoogleAppointment> ().ToArray ();
 
 			foreach (GoogleAppointment app in existingEvents) {
 				Log.Debug ("delete: ", app);
@@ -76,7 +76,7 @@ namespace Core.Calendar.Google
 			return request;
 		}
 
-		public override IEnumerable<GoogleAppointment> Appointments {
+		public override IEnumerable<AppointmentBase> Appointments {
 			get {
 				try {
 					List<GoogleAppointment> result = new List<GoogleAppointment> ();
@@ -92,6 +92,8 @@ namespace Core.Calendar.Google
 			}
 		}
 
+		#region IEditableCalendar implementation
+
 		public void AddAppointment (AppointmentBase appointment)
 		{
 			try {
@@ -101,6 +103,7 @@ namespace Core.Calendar.Google
 			}
 		}
 
+		#endregion
 
 		void UpdateEvents (IEnumerable<Event> events, Event update)
 		{

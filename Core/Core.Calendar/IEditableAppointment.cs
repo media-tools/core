@@ -2,9 +2,11 @@
 
 namespace Core.Calendar
 {
-	public interface IUpdatableAppointment
+	public interface IEditableAppointment
 	{
 		void Update ();
+
+		void Delete ();
 	}
 }
 

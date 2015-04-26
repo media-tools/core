@@ -7,12 +7,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Platform", "Core.Platf
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Calendar", "Core.Calendar\Core.Calendar.csproj", "{DAE4783E-9B3D-4EFA-A521-87B8F0E410D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Calendar.Google", "Core.Calendar.Google\Core.Calendar.Google.csproj", "{128D877C-DECA-4EA7-A34D-12E7E38E69C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{128D877C-DECA-4EA7-A34D-12E7E38E69C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{128D877C-DECA-4EA7-A34D-12E7E38E69C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{128D877C-DECA-4EA7-A34D-12E7E38E69C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{128D877C-DECA-4EA7-A34D-12E7E38E69C5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2EBEDE28-9645-4A48-BCDA-1013090277BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2EBEDE28-9645-4A48-BCDA-1013090277BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EBEDE28-9645-4A48-BCDA-1013090277BD}.Release|Any CPU.ActiveCfg = Release|Any CPU

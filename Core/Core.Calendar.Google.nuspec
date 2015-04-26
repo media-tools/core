@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>Core.Calendar.Google</id>
+    <version>0.1.1</version>
+    <authors>tobiasschulz</authors>
+    <owners>tobiasschulz</owners>
+    <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
+    <projectUrl>https://github.com/media-tools/core/</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/media-tools/core/master/Core/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A reusable Google Calendar synchronisation implementation for .NET applications</description>
+    <releaseNotes>an open source project which provides a reusable Google Calendar synchronisation implementation in .NET applications.</releaseNotes>
+    <tags>Utilities Common Core Calendar Google</tags>
+    <dependencies>
+      <dependency id="Core.Common" version="0.1.0" />
+      <dependency id="Core.Calendar" version="0.1.0" />
+      <dependency id="Newtonsoft.Json" version="6.0.8" />
+      <dependency id="Google.Apis.Calendar.v3" version="1.9.0.1220" />
+      <dependency id="Microsoft.Net.Http" version="2.2.29" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="Core.Calendar.Google/App.config.install.xdt" target="content/" />
+    <file src="Core.Calendar.Google/App.config.uninstall.xdt" target="content/" />
+
+    <file src="Core.Calendar.Google/bin/$configuration$/Core.Calendar.Google.dll" target="lib/net45/" />
+    <file src="Core.Calendar.Google/bin/$configuration$/System.Net.Http.Primitives.dll" target="lib/net45/" />
+    <file src="Core.Calendar.Google/bin/$configuration$/System.Net.Http.Extensions.dll" target="lib/net45/" />
+  </files>
+</package>

@@ -42,6 +42,7 @@
     <Compile Include="ICalFormat.cs" />
     <Compile Include="IEditableAppointment.cs" />
     <Compile Include="IEditableCalendar.cs" />
+    <Compile Include="ICalendar.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

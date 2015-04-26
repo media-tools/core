@@ -2,7 +2,7 @@
 
 namespace Core.Calendar
 {
-	public interface IEditableCalendar
+	public interface IEditableCalendar : ICalendar
 	{
 		void AddAppointment (AppointmentBase appointment);
 	}

@@ -36,10 +36,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Core.Calendar.Google\Core.Calendar.Google.csproj">
-      <Project>{128D877C-DECA-4EA7-A34D-12E7E38E69C5}</Project>
-      <Name>Core.Calendar.Google</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\Core.Portable\Core.Portable.csproj">
       <Project>{6E2D2753-B286-441D-AC3B-8E0CA2549C15}</Project>
       <Name>Core.Portable</Name>
@@ -47,6 +43,10 @@
     <ProjectReference Include="..\..\Core\Core.Platform\Core.Platform.csproj">
       <Project>{2EBEDE28-9645-4A48-BCDA-1013090277BD}</Project>
       <Name>Core.Platform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Core.Calendar.Google\Core.Calendar.Google.csproj">
+      <Project>{128D877C-DECA-4EA7-A34D-12E7E38E69C5}</Project>
+      <Name>Core.Calendar.Google</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

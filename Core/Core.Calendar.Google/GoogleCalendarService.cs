@@ -14,8 +14,6 @@ namespace Core.Calendar.Google
 {
 	public class GoogleCalendarService
 	{
-		private readonly string ClientId = StringHelper.Base64Decode ("MTUxMjM0ODM1NjE5LXA3b2ZwbTI3NXBqamlqZjVwOTcwbzk0ZWEzM2VubjE1LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29t");
-		private readonly string ClientSecret = StringHelper.Base64Decode ("X21XdFpRMEJxS21zdFhjNnVVcTVzaHJR");
 		private const string RedirectUri = "urn:ietf:wg:oauth:2.0:oob";
 		private const string ApplicationName = "AtractanthaAureolanata";
 
@@ -24,15 +22,9 @@ namespace Core.Calendar.Google
 
 		public GoogleCalendarService (IGoogleConfig config)
 		{
-			UserCredential credential = GoogleWebAuthorizationBroker.AuthorizeAsync (
-				                            new ClientSecrets { ClientId = ClientId, ClientSecret = ClientSecret },
-				                            new[] { CalendarService.Scope.Calendar },
-				                            config.GoogleUser, CancellationToken.None, 
-				                            new FileDataStore ("Drive.Auth.Store"))
-				.Result;
 
 			service = new CalendarService (new BaseClientService.Initializer () {
-				HttpClientInitializer = credential,
+				HttpClientInitializer = config.UserCredential,
 				ApplicationName = ApplicationName,
 			});
 
@@ -65,7 +57,7 @@ namespace Core.Calendar.Google
 				try {
 					var request = service.Events.Delete (calendarId: calendarId, eventId: e.Id);
 					request.Execute ();
-					Thread.Sleep (1000);
+					PortableThread.Sleep (1000);
 				} catch (Exception ex) {
 					Log.Error (ex);
 				}
@@ -136,7 +128,7 @@ namespace Core.Calendar.Google
 				try {
 					var request = service.Events.Update (body: e, calendarId: calendarId, eventId: e.Id);
 					request.Execute ();
-					Thread.Sleep (1000);
+					PortableThread.Sleep (1000);
 				} catch (Exception ex) {
 					Log.Error (ex);
 				}

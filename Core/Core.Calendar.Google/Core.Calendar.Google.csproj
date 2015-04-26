@@ -83,7 +83,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Import Project="..\packages\Baseclass.Contrib.Nuget.Output.1.0.7\build\net40\Baseclass.Contrib.Nuget.Output.targets" Condition="Exists('..\packages\Baseclass.Contrib.Nuget.Output.1.0.7\build\net40\Baseclass.Contrib.Nuget.Output.targets')" />
   <ItemGroup>
     <None Include="App.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

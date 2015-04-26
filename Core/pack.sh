@@ -1,6 +1,9 @@
 # git
 git pull
 
+# nuget restore
+nuget restore
+
 # build
 xbuild /p:Configuration=Release Core.sln
 

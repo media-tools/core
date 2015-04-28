@@ -26,6 +26,12 @@ namespace Core.Tests.Calendar.Google
 				}
 			}
 
+			public string CalendarName {
+				get {
+					throw new NotImplementedException ();
+				}
+			}
+
 			public IGoogleAuth Auth {
 				get {
 					throw new NotImplementedException ();

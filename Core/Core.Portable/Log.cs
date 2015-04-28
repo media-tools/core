@@ -36,7 +36,7 @@ namespace Core.Common
 		public static Action<Type, IEnumerable<string>> LogHandler = (t, s) => {
 		};
 
-		public static int Indent { get; set; } = 0;
+		public static int Indent { get; set; }
 
 		public static void Debug (params object[] messages)
 		{

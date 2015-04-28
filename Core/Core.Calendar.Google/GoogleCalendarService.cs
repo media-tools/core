@@ -33,7 +33,7 @@ namespace Core.Calendar.Google
 			Log.Indent++;
 			foreach (CalendarListEntry entry in calendars) {
 				Log.Info (entry.Summary + " - " + entry.Id);
-				if (entry.Summary.ToLower ().Contains ("stundenplan")) {
+				if (entry.Summary.ToLower ().Contains (config.CalendarName.ToLower ())) {
 					calendarId = entry.Id;
 					Log.Indent++;
 					Log.Info ("We'll use this one!");

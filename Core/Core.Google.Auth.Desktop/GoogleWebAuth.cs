@@ -2,6 +2,7 @@
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Util.Store;
 using Core.Calendar.Google;
+using System.IO;
 
 namespace Core.Google.Auth.Desktop
 {
@@ -18,6 +19,7 @@ namespace Core.Google.Auth.Desktop
 
 		public UserCredential Authorize (string googleUser)
 		{
+			string appName = Path.GetFileNameWithoutExtension (System.Reflection.Assembly.GetEntryAssembly ().Location);
 			return GoogleWebAuthorizationBroker.AuthorizeAsync (
 				new ClientSecrets {
 					ClientId = ClientId,
@@ -25,7 +27,7 @@ namespace Core.Google.Auth.Desktop
 				},
 				new[] { "https://www.googleapis.com/auth/calendar" },
 				googleUser, System.Threading.CancellationToken.None, 
-				new FileDataStore ("Drive.Auth.Store")
+				new FileDataStore (appName)
 			).Result;
 		}
 	}

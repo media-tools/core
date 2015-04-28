@@ -9,6 +9,8 @@ namespace Core.Calendar.Google
 		string GoogleUser { get; }
 
 		IGoogleAuth Auth { get; }
+
+		string CalendarName { get; }
 	}
 }
 

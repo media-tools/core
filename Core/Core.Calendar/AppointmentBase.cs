@@ -66,7 +66,7 @@ namespace Core.Calendar
 			else
 				return other.Title == Title && StringHelper.FormatSortable (other.StartDate) == StringHelper.FormatSortable (StartDate)
 				&& StringHelper.FormatSortable (other.EndDate) == StringHelper.FormatSortable (EndDate)
-				&& other.Body == Body && other.Location == Location && other.IsAllDayEvent == IsAllDayEvent;
+				&& (other.Body ?? "") == (Body ?? "") && (other.Location ?? "") == (Location ?? "") && other.IsAllDayEvent == IsAllDayEvent;
 		}
 
 		public override int GetHashCode ()

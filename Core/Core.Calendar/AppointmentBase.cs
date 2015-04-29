@@ -64,7 +64,7 @@ namespace Core.Calendar
 				return false;
 			else
 				return other.Title == Title && other.StartDate == StartDate && other.EndDate == EndDate
-				&& other.Organizer == Organizer && other.Body == Body && other.Location == Location && other.IsAllDayEvent == IsAllDayEvent;
+				&& other.Body == Body && other.Location == Location && other.IsAllDayEvent == IsAllDayEvent;
 		}
 
 		public override int GetHashCode ()

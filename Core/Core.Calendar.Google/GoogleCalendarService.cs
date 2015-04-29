@@ -72,6 +72,8 @@ namespace Core.Calendar.Google
 				//lr.TimeMax = DateTime.Now.AddDays (9999); //five days in the future
 
 				lr.MaxResults = 100;
+				if (!string.IsNullOrWhiteSpace (pageToken))
+					lr.PageToken = pageToken;
 				//lr.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
 				//lr.ShowDeleted = true;
 
@@ -79,10 +81,10 @@ namespace Core.Calendar.Google
 
 				Events request = lr.Execute ();
 				results.AddRange (request.Items);
-				Log.Debug (results.Count);
+				Log.Debug (results.Count, requ);
 
 				pageToken = request.NextPageToken;
-			} while (pageToken != null);
+			} while (!string.IsNullOrWhiteSpace (pageToken));
 			Log.Indent--;
 			return results;
 		}

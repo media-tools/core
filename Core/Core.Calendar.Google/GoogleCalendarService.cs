@@ -81,7 +81,7 @@ namespace Core.Calendar.Google
 
 				Events request = lr.Execute ();
 				results.AddRange (request.Items);
-				Log.Debug (results.Count, requ);
+				Log.Debug (results.Count, " (accessRole: ", request.AccessRole, ")");
 
 				pageToken = request.NextPageToken;
 			} while (!string.IsNullOrWhiteSpace (pageToken));

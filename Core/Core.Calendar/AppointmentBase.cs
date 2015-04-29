@@ -1,6 +1,7 @@
 using System;
 using DDay.iCal;
 using DDay.iCal.Serialization.iCalendar;
+using Core.Common;
 
 namespace Core.Calendar
 {
@@ -63,13 +64,14 @@ namespace Core.Calendar
 			if (other == null)
 				return false;
 			else
-				return other.Title == Title && other.StartDate == StartDate && other.EndDate == EndDate
+				return other.Title == Title && StringHelper.FormatSortable (other.StartDate) == StringHelper.FormatSortable (StartDate)
+				&& StringHelper.FormatSortable (other.EndDate) == StringHelper.FormatSortable (EndDate)
 				&& other.Body == Body && other.Location == Location && other.IsAllDayEvent == IsAllDayEvent;
 		}
 
 		public override int GetHashCode ()
 		{
-			return (Title + StartDate.ToString ("yyyy-MM-ddTHH:mm:ss.fff")).GetHashCode ();
+			return (Title + StringHelper.FormatSortable (StartDate)).GetHashCode ();
 		}
 	}
 

@@ -49,4 +49,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\Core.Portable\Core.Portable.csproj">
+      <Project>{6E2D2753-B286-441D-AC3B-8E0CA2549C15}</Project>
+      <Name>Core.Portable</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

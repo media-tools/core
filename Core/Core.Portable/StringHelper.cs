@@ -14,6 +14,11 @@ namespace Core.Common
 			byte[] buffer = Convert.FromBase64String (str);
 			return System.Text.Encoding.UTF8.GetString (buffer, 0, buffer.Length);
 		}
+
+		public static string FormatSortable (DateTime date)
+		{
+			return date.ToString ("yyyy-MM-ddTHH:mm:ss.fff");
+		}
 	}
 }
 

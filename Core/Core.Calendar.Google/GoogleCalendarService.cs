@@ -71,7 +71,7 @@ namespace Core.Calendar.Google
 				//lr.TimeMin = DateTime.Now.AddDays (-9999); //five days in the past
 				//lr.TimeMax = DateTime.Now.AddDays (9999); //five days in the future
 
-				lr.MaxResults = 100;
+				lr.MaxResults = 1999;
 				if (!string.IsNullOrWhiteSpace (pageToken))
 					lr.PageToken = pageToken;
 				//lr.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;

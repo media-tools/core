@@ -59,29 +59,36 @@ namespace Core.Calendar.Google
 			}
 		}
 
-		Events ListInternalEvents ()
+		List<Event> ListInternalEvents ()
 		{
-			var lr = service.Events.List (calendarId);
+			List<Event> results = new List<Event> ();
+			string pageToken = null;
+			do {
+				var lr = service.Events.List (calendarId);
 
-			//lr.TimeMin = DateTime.Now.AddDays (-9999); //five days in the past
-			//lr.TimeMax = DateTime.Now.AddDays (9999); //five days in the future
+				//lr.TimeMin = DateTime.Now.AddDays (-9999); //five days in the past
+				//lr.TimeMax = DateTime.Now.AddDays (9999); //five days in the future
 
-			lr.MaxResults = 2499;
-			//lr.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
-			//lr.ShowDeleted = true;
+				lr.MaxResults = 100;
+				//lr.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+				//lr.ShowDeleted = true;
 
-			//Log.Debug ("TimeMin: ", lr.TimeMin.ToString (), ", TimeMax: ", lr.TimeMax.ToString ());
+				//Log.Debug ("TimeMin: ", lr.TimeMin.ToString (), ", TimeMax: ", lr.TimeMax.ToString ());
 
-			Events request = lr.Execute ();
-			return request;
+				Events request = lr.Execute ();
+				results.AddRange (request.Items);
+
+				pageToken = request.NextPageToken;
+			} while (pageToken != null);
+			return results;
 		}
 
 		public override IEnumerable<AppointmentBase> Appointments {
 			get {
 				List<GoogleAppointment> result = new List<GoogleAppointment> ();
 				try {
-					Events internalEvents = ListInternalEvents ();
-					foreach (Event internalEvent in internalEvents.Items) {
+					List<Event> internalEvents = ListInternalEvents ();
+					foreach (Event internalEvent in internalEvents) {
 						result.Add (new GoogleAppointment (internalEvent: internalEvent, service: service, calendarId: calendarId));
 					}
 				} catch (Exception ex) {

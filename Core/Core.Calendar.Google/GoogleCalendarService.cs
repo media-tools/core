@@ -63,6 +63,8 @@ namespace Core.Calendar.Google
 		{
 			List<Event> results = new List<Event> ();
 			string pageToken = null;
+			Log.Debug ("Google Calendar: request events from calendar \"", calendarId, "\"");
+			Log.Indent++;
 			do {
 				var lr = service.Events.List (calendarId);
 
@@ -77,9 +79,11 @@ namespace Core.Calendar.Google
 
 				Events request = lr.Execute ();
 				results.AddRange (request.Items);
+				Log.Debug (results.Count);
 
 				pageToken = request.NextPageToken;
 			} while (pageToken != null);
+			Log.Indent--;
 			return results;
 		}
 

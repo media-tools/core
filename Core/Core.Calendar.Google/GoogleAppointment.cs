@@ -65,10 +65,12 @@ namespace Core.Calendar.Google
 				to.StartDate = from.Start.DateTime.Value;
 			if (from.End != null && from.End.DateTime.HasValue)
 				to.EndDate = from.End.DateTime.Value;
-			to.Body = from.Description;
-			to.Title = from.Summary;
-			to.Location = from.Location;
+			to.Body = from.Description ?? "";
+			to.Title = from.Summary ?? "";
+			to.Location = from.Location ?? "";
 			to.UID = from.ICalUID;
+			if (from.Start != null)
+				to.IsAllDayEvent = !string.IsNullOrWhiteSpace (from.Start.Date);
 		}
 
 		private static void Copy (AppointmentBase from, Event to)

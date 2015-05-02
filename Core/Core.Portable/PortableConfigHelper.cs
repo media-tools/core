@@ -29,32 +29,25 @@ using System.IO;
 
 namespace Core.Common
 {
-	public static class ConfigHelper
+	public static class PortableConfigHelper
 	{
-		public static Config OpenConfig<Config> (string fullPath) where Config : class, new()
+		public static Config ReadConfig<Config> (ref string content) where Config : class, new()
 		{
-			string dirname = Path.GetDirectoryName (fullPath);
-			if (!string.IsNullOrEmpty (dirname)) {
-				Directory.CreateDirectory (dirname);
-			}
-			File.AppendAllText (fullPath, "");
+			JsonSerializerSettings serSettings = new JsonSerializerSettings ();
+			serSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver ();
 
-			string content = File.ReadAllText (fullPath);
-			Config stuff = PortableConfigHelper.ReadConfig<Config> (content: ref content);
-			File.WriteAllText (fullPath, content);
+			Config stuff = JsonConvert.DeserializeObject<Config> (content, serSettings) ?? new Config ();
+			content = JsonConvert.SerializeObject (stuff, Formatting.Indented, serSettings) + "\n";
 			return stuff;
 		}
 
-		public static void SaveConfig<Config> (string fullPath, Config stuff) where Config : class, new()
+		public static string WriteConfig<Config> (Config stuff) where Config : class, new()
 		{
-			string dirname = Path.GetDirectoryName (fullPath);
-			if (!string.IsNullOrEmpty (dirname)) {
-				Directory.CreateDirectory (dirname);
-			}
-			File.AppendAllText (fullPath, "");
+			JsonSerializerSettings serSettings = new JsonSerializerSettings ();
+			serSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver ();
 
-			string content = PortableConfigHelper.WriteConfig (stuff: stuff);
-			File.WriteAllText (fullPath, content);
+			string content = JsonConvert.SerializeObject (stuff, Formatting.Indented, serSettings) + "\n";
+			return content;
 		}
 	}
 }

@@ -37,6 +37,8 @@
     <Compile Include="StringHelper.cs" />
     <Compile Include="PortableThread.cs" />
     <Compile Include="PortableConfigHelper.cs" />
+    <Compile Include="PortableLogging.cs" />
+    <Compile Include="BlockingDebugConsole.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

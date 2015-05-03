@@ -45,17 +45,17 @@ namespace Core.Common
 
 		public static void Info (params object[] messages)
 		{
-			output (Type.DEBUG, messages);
+			output (Type.INFO, messages);
 		}
 
 		public static void Warning (params object[] messages)
 		{
-			output (Type.DEBUG, messages);
+			output (Type.WARNING, messages);
 		}
 
 		public static void Error (params object[] messages)
 		{
-			output (Type.DEBUG, messages);
+			output (Type.ERROR, messages);
 		}
 
 		public static void _Test (params object[] messages)

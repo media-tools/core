@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Core.Markdown</id>
-    <version>0.1.3</version>
+    <version>0.1.4</version>
     <authors>tobiasschulz</authors>
     <owners>tobiasschulz</owners>
     <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
@@ -19,6 +19,8 @@
   </metadata>
   <files>
     <file src="Core.Markdown/bin/$configuration$/Core.Markdown.dll" target="lib/portable-net45+win/" />
+
+    <file src="Core.Markdown/bin/$configuration$/Core.Markdown.dll" target="lib/portable-win81/" />
 
     <file src="Core.Markdown/bin/$configuration$/Core.Markdown.dll" target="lib/portable-net45+sl50+win+wp80/" />
 

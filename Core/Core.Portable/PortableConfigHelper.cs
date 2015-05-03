@@ -26,27 +26,32 @@
 //
 using Newtonsoft.Json;
 using System.IO;
+using Newtonsoft.Json.Converters;
 
 namespace Core.Common
 {
 	public static class PortableConfigHelper
 	{
+		private static readonly JsonSerializerSettings SerializerSettings;
+
+		static PortableConfigHelper ()
+		{
+			SerializerSettings = new JsonSerializerSettings () {
+				ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver (),
+				Converters = { new StringEnumConverter { CamelCaseText = true } },
+			};
+		}
+
 		public static Config ReadConfig<Config> (ref string content) where Config : class, new()
 		{
-			JsonSerializerSettings serSettings = new JsonSerializerSettings ();
-			serSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver ();
-
-			Config stuff = JsonConvert.DeserializeObject<Config> (content, serSettings) ?? new Config ();
-			content = JsonConvert.SerializeObject (stuff, Formatting.Indented, serSettings) + "\n";
+			Config stuff = JsonConvert.DeserializeObject<Config> (content, SerializerSettings) ?? new Config ();
+			content = JsonConvert.SerializeObject (stuff, Formatting.Indented, SerializerSettings) + "\n";
 			return stuff;
 		}
 
 		public static string WriteConfig<Config> (Config stuff) where Config : class, new()
 		{
-			JsonSerializerSettings serSettings = new JsonSerializerSettings ();
-			serSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver ();
-
-			string content = JsonConvert.SerializeObject (stuff, Formatting.Indented, serSettings) + "\n";
+			string content = JsonConvert.SerializeObject (stuff, Formatting.Indented, SerializerSettings) + "\n";
 			return content;
 		}
 	}

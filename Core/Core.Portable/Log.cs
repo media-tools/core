@@ -58,6 +58,11 @@ namespace Core.Common
 			output (Type.DEBUG, messages);
 		}
 
+		public static void _Test (params object[] messages)
+		{
+			output (Type._TEST, messages);
+		}
+
 		public static void Trace (params object[] messages)
 		{
 			output (Type.TRACE, messages);
@@ -88,7 +93,8 @@ namespace Core.Common
 			INFO,
 			WARNING,
 			ERROR,
-			FATAL_ERROR
+			FATAL_ERROR,
+			_TEST
 		}
 	}
 }

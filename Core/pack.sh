@@ -20,7 +20,8 @@ rm -rf nuget-out
 mkdir nuget-out
 for x in *.nuspec
 do
-	nuget pack "$x" -Prop Configuration=Debug -OutputDirectory nuget-out
+	# Windows Store allows only Release configuration!!!!
+	nuget pack "$x" -Prop Configuration=Release -OutputDirectory nuget-out
 done
 
 # git

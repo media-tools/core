@@ -53,19 +53,24 @@ namespace Core.Common
 			output (Type.WARNING, messages);
 		}
 
-		public static void Error (params object[] messages)
-		{
-			output (Type.ERROR, messages);
-		}
-
 		public static void _Test (params object[] messages)
 		{
 			output (Type._TEST, messages);
 		}
 
+		public static void Toast (params object[] messages)
+		{
+			output (Type.TOAST, messages);
+		}
+
 		public static void Trace (params object[] messages)
 		{
 			output (Type.TRACE, messages);
+		}
+
+		public static void Error (params object[] messages)
+		{
+			output (Type.ERROR, messages);
 		}
 
 		public static void FatalError (params object[] messages)
@@ -94,7 +99,8 @@ namespace Core.Common
 			WARNING,
 			ERROR,
 			FATAL_ERROR,
-			_TEST
+			TOAST,
+			_TEST,
 		}
 	}
 }

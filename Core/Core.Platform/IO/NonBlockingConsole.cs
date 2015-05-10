@@ -36,13 +36,18 @@ namespace Core.Common
 
 		static NonBlockingConsole ()
 		{
+			bool exiting = false;
 			var thread = new Thread (
 				             () => {
-					while (true)
+					while (!exiting)
 						Console.WriteLine (m_Queue.Take ());
 				});
 			thread.IsBackground = true;
 			thread.Start ();
+			AppDomain.CurrentDomain.ProcessExit += new EventHandler ((s, e) => {
+				exiting = true;
+				thread.Join ();
+			}); 
 		}
 
 		public static void WriteLine (string value)

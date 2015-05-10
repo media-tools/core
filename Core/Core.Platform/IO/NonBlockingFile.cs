@@ -35,22 +35,40 @@ namespace Core.Common
 	{
 		private readonly BlockingCollection<string> m_Queue = new BlockingCollection<string> ();
 
+		private bool running;
+		private Thread thread;
+		private StreamWriter writer;
+
 		public NonBlockingFile (string fileName)
 		{
 			try {
 				Directory.CreateDirectory (Path.GetDirectoryName (fileName));
 
-				var writer = new StreamWriter (fileName, true);
+				writer = new StreamWriter (fileName, true);
 
-				var thread = new Thread (
-					             () => {
-						while (true) {
+				thread = new Thread (
+					() => {
+						while (running) {
 							writer.WriteLine (m_Queue.Take ());
 							writer.Flush ();
 						}
 					});
 				thread.IsBackground = true;
 				thread.Start ();
+			} catch (IOException ex) {
+				Console.WriteLine (ex);
+			}
+		}
+
+		public void Finish ()
+		{
+			running = false;
+			thread.Abort ();
+			try {
+				while (m_Queue.Count > 0) {
+					writer.WriteLine (m_Queue.Take ());
+					writer.Flush ();
+				}
 			} catch (IOException ex) {
 				Console.WriteLine (ex);
 			}

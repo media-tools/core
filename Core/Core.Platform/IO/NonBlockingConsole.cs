@@ -34,20 +34,26 @@ namespace Core.Common
 	{
 		private static readonly BlockingCollection<string> m_Queue = new BlockingCollection<string> ();
 
+		private static bool running;
+		private static Thread thread;
+
 		static NonBlockingConsole ()
 		{
-			bool exiting = false;
-			var thread = new Thread (
-				             () => {
-					while (!exiting)
+			thread = new Thread (
+				() => {
+					while (running)
 						Console.WriteLine (m_Queue.Take ());
 				});
 			thread.IsBackground = true;
 			thread.Start ();
-			AppDomain.CurrentDomain.ProcessExit += new EventHandler ((s, e) => {
-				exiting = true;
-				thread.Join ();
-			}); 
+		}
+
+		public static void Finish ()
+		{
+			running = false;
+			thread.Abort ();
+			while (m_Queue.Count > 0)
+				Console.WriteLine (m_Queue.Take ());
 		}
 
 		public static void WriteLine (string value)

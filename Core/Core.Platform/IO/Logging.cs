@@ -31,6 +31,8 @@ namespace Core.Common
 {
 	public static class Logging
 	{
+		private static NonBlockingFile logfile;
+
 		public static void Enable ()
 		{
 			Log.LogHandler += (type, messageLines) => {
@@ -39,10 +41,10 @@ namespace Core.Common
 				}
 			};
 
-			NonBlockingFile logfile = new NonBlockingFile (Storage.DefaultLogFile);
+			logfile = new NonBlockingFile (Storage.DefaultLogFile);
 			Log.LogHandler += (type, messageLines) => {
 				foreach (string message in messageLines) {
-					logfile.WriteLine (DateTime.Now.ToString("yyyyMMdd-HHmmss") + " [" + type + "] " + message);
+					logfile.WriteLine (DateTime.Now.ToString ("yyyyMMdd-HHmmss") + " [" + type + "] " + message);
 				}
 			};
 
@@ -50,6 +52,12 @@ namespace Core.Common
 					MessageBox.Show (message, "Fatal Error");
 					Application.Exit ();
 				} else {*/
+		}
+
+		public static void Finish ()
+		{
+			NonBlockingConsole.Finish ();
+			logfile.Finish ();
 		}
 	}
 }

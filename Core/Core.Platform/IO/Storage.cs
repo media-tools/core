@@ -37,14 +37,20 @@ namespace Core.Common
 
 		private static string getLocation (string name, string extension)
 		{
-			string appData = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
-			string appName = Path.GetFileNameWithoutExtension (System.Reflection.Assembly.GetEntryAssembly ().Location);
 			string fileName = name + "." + extension;
-			
-			string fullPath = Path.Combine (appData, appName, fileName);
 
-			Console.WriteLine (fullPath);
-			return fullPath;
+			try {
+				string appData = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
+				string appName = Path.GetFileNameWithoutExtension (System.Reflection.Assembly.GetEntryAssembly ().Location);
+
+				string fullPath = Path.Combine (appData, appName, fileName);
+
+				Console.WriteLine (fullPath);
+				return fullPath;
+			} catch (NullReferenceException ex) {
+				Log.Error (ex);
+				return fileName;
+			}
 		}
 	}
 }

@@ -49,7 +49,7 @@ namespace Core.Common
 				return fullPath;
 			} catch (NullReferenceException ex) {
 				Log.Error (ex);
-				return fileName;
+				return Path.Combine (".", fileName);
 			}
 		}
 	}

@@ -10,6 +10,11 @@ namespace Core.Common
 		{
 			return source.Skip (Math.Max (0, source.Count () - N));
 		}
+
+		public static string Join<T> (this IEnumerable<T> enumerable, string delimiter)
+		{
+			return string.Join (delimiter, enumerable.Select (e => e.ToString ()).ToArray ());
+		}
 	}
 }
 

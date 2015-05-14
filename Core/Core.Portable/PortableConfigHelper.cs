@@ -27,6 +27,7 @@
 using Newtonsoft.Json;
 using System.IO;
 using Newtonsoft.Json.Converters;
+using System.IO.Compression;
 
 namespace Core.Common
 {

@@ -28,7 +28,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading;
 
-namespace Core.Common
+namespace Core.IO
 {
 	public static class NonBlockingConsole
 	{

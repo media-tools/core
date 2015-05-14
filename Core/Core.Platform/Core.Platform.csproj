@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{2EBEDE28-9645-4A48-BCDA-1013090277BD}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Core.Common</RootNamespace>
+    <RootNamespace>Core</RootNamespace>
     <AssemblyName>Core.Platform</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -41,15 +41,15 @@
     <Compile Include="IO\NonBlockingFile.cs" />
     <Compile Include="IO\Storage.cs" />
     <Compile Include="Net\Networking.cs" />
-    <Compile Include="System\BindingRedirect.cs" />
-    <Compile Include="System\ExceptionHelper.cs" />
-    <Compile Include="System\ObjectExtensions.cs" />
+    <Compile Include="Common\BindingRedirect.cs" />
+    <Compile Include="Common\ExceptionHelper.cs" />
+    <Compile Include="Common\ObjectExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="IO\" />
     <Folder Include="Net\" />
-    <Folder Include="System\" />
+    <Folder Include="Common\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 
-namespace Core.Common
+namespace Core.Portable
 {
-	public static class PortableThread
+	public static class Thread
 	{
 		/*public static void Sleep (TimeSpan timeSpan)
 		{

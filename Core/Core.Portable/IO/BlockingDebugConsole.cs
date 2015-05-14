@@ -1,5 +1,5 @@
 ﻿//
-// Networking.cs
+// NonBlockingConsole.cs
 //
 // Author:
 //       Tobias Schulz <tobiasschulz.code@outlook.de>
@@ -24,36 +24,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 //
-using Newtonsoft.Json;
-using System.IO;
-using Newtonsoft.Json.Converters;
-using System.IO.Compression;
+using System;
+using System.Collections.Concurrent;
+using System.Threading;
+using System.Diagnostics;
 
-namespace Core.Common
+namespace Core.IO
 {
-	public static class PortableConfigHelper
+	public static class BlockingDebugConsole
 	{
-		private static readonly JsonSerializerSettings SerializerSettings;
+		//private static readonly BlockingCollection<string> m_Queue = new BlockingCollection<string> ();
 
-		static PortableConfigHelper ()
+		static BlockingDebugConsole ()
 		{
-			SerializerSettings = new JsonSerializerSettings () {
-				ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver (),
-				Converters = { new StringEnumConverter { CamelCaseText = true } },
-			};
 		}
 
-		public static Config ReadConfig<Config> (ref string content) where Config : class, new()
+		public static void WriteLine (string value)
 		{
-			Config stuff = JsonConvert.DeserializeObject<Config> (content, SerializerSettings) ?? new Config ();
-			content = JsonConvert.SerializeObject (stuff, Formatting.Indented, SerializerSettings) + "\n";
-			return stuff;
-		}
-
-		public static string WriteConfig<Config> (Config stuff) where Config : class, new()
-		{
-			string content = JsonConvert.SerializeObject (stuff, Formatting.Indented, SerializerSettings) + "\n";
-			return content;
+			Debug.WriteLine (value);
 		}
 	}
 }

@@ -27,7 +27,7 @@
 using Newtonsoft.Json;
 using System.IO;
 
-namespace Core.Common
+namespace Core.IO
 {
 	public static class ConfigHelper
 	{

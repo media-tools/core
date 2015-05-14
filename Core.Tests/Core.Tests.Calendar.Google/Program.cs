@@ -4,6 +4,7 @@ using Core.Common;
 using System.Reflection;
 using System.Globalization;
 using Google.Apis.Auth.OAuth2;
+using Core.IO;
 
 namespace Core.Tests.Calendar.Google
 {

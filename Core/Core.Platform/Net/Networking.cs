@@ -25,7 +25,7 @@
 // THE SOFTWARE.
 //
 
-namespace Core.Common
+namespace Core.Net
 {
 	public static class Networking
 	{

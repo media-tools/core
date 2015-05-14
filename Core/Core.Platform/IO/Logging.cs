@@ -26,8 +26,9 @@
 //
 
 using System;
+using Core.Common;
 
-namespace Core.Common
+namespace Core.IO
 {
 	public static class Logging
 	{

@@ -6,7 +6,7 @@
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProjectGuid>{6E2D2753-B286-441D-AC3B-8E0CA2549C15}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Core.Common</RootNamespace>
+    <RootNamespace>Core</RootNamespace>
     <AssemblyName>Core.Portable</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>
@@ -33,13 +33,23 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Log.cs" />
-    <Compile Include="StringHelper.cs" />
-    <Compile Include="PortableThread.cs" />
-    <Compile Include="PortableConfigHelper.cs" />
-    <Compile Include="PortableLogging.cs" />
-    <Compile Include="BlockingDebugConsole.cs" />
-    <Compile Include="CollectionExtensions.cs" />
+    <Compile Include="Tar\DataWriter.cs" />
+    <Compile Include="Tar\IArchiveDataWriter.cs" />
+    <Compile Include="Tar\ITarHeader.cs" />
+    <Compile Include="Tar\LegacyTarWriter.cs" />
+    <Compile Include="Tar\TarException.cs" />
+    <Compile Include="Tar\TarHeader.cs" />
+    <Compile Include="Tar\TarReader.cs" />
+    <Compile Include="Tar\TarWriter.cs" />
+    <Compile Include="Tar\UsTarHeader.cs" />
+    <Compile Include="Net\IPAddress.cs" />
+    <Compile Include="Portable\Thread.cs" />
+    <Compile Include="IO\PortableConfigHelper.cs" />
+    <Compile Include="Common\Log.cs" />
+    <Compile Include="IO\PortableLogging.cs" />
+    <Compile Include="IO\BlockingDebugConsole.cs" />
+    <Compile Include="Common\CollectionExtensions.cs" />
+    <Compile Include="Common\StringHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
@@ -49,5 +59,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tar\" />
+    <Folder Include="Net\" />
+    <Folder Include="Portable\" />
+    <Folder Include="IO\" />
+    <Folder Include="Common\" />
   </ItemGroup>
 </Project>

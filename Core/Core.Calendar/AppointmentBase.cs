@@ -2,6 +2,7 @@ using System;
 using DDay.iCal;
 using DDay.iCal.Serialization.iCalendar;
 using Core.Common;
+using Core.Portable;
 
 namespace Core.Calendar
 {

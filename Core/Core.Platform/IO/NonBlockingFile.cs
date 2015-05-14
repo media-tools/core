@@ -29,7 +29,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.IO;
 
-namespace Core.Common
+namespace Core.IO
 {
 	public class NonBlockingFile
 	{

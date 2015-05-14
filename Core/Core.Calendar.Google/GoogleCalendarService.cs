@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Common;
 using Core.Calendar;
+using Core.Portable;
 
 namespace Core.Calendar.Google
 {
@@ -55,7 +56,7 @@ namespace Core.Calendar.Google
 				Log.Debug ("delete: ", app);
 
 				app.Delete ();
-				PortableThread.Sleep (1000);
+				Thread.Sleep (1000);
 			}
 		}
 
@@ -129,7 +130,7 @@ namespace Core.Calendar.Google
 				try {
 					var request = service.Events.Update (body: e, calendarId: calendarId, eventId: e.Id);
 					request.Execute ();
-					PortableThread.Sleep (1000);
+					Thread.Sleep (1000);
 				} catch (Exception ex) {
 					Log.Error (ex);
 				}

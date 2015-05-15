@@ -23,7 +23,7 @@ namespace Core.Tar
 
 		public EntryType EntryType { get; set; }
 
-		private static byte[] spaces = Encoding.UTF8.GetBytes ("        ");
+		private static readonly byte[] spaces = Encoding.UTF8.GetBytes ("        ");
 
 		public virtual string FileName {
 			get {

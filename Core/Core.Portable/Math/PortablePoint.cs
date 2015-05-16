@@ -86,6 +86,22 @@ namespace Core.Math
 
 			return String.Format ("{0},{1}", X.ToString (format, provider), Y.ToString (format, provider));
 		}
+
+		public T To<T> () where T : new()
+		{
+			T result = new T ();
+			(result as dynamic).X = X;
+			(result as dynamic).Y = Y;
+			return result;
+		}
+
+		public static PortablePoint From<T> (T origin)
+		{
+			PortablePoint result = new PortablePoint ();
+			result.X = (origin as dynamic).X;
+			result.Y = (origin as dynamic).Y;
+			return result;
+		}
 	}
 }
 

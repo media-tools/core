@@ -107,7 +107,13 @@ namespace Core.Tar
 
 					} else {
 						builder.Append ($"{escapeSingle}{b:X2}");
-						lineLength += 3;
+
+						if (Convert.ToChar (b) == '\n') {
+							lineLength = 0;
+							builder.Append ('\n');
+						} else {
+							lineLength += 3;
+						}
 					}
 
 					if (lineLength >= maxLineLength) {

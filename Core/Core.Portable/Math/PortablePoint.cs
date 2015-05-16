@@ -1,16 +1,19 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace Core.Math
 {
 	public struct PortablePoint : IFormattable
 	{
-		internal static PortablePoint Zero = new PortablePoint (0, 0);
-
-		public double X { get; set; }
-
-		public double Y { get; set; }
+		public static PortablePoint Zero { get { return new PortablePoint (0, 0); } }
 
 		public static double EPSILON = double.Epsilon;
+
+		[JsonProperty ("x")]
+		public double X { get; set; }
+
+		[JsonProperty ("x")]
+		public double Y { get; set; }
 
 		public PortablePoint (double x, double y)
 		{
@@ -53,7 +56,7 @@ namespace Core.Math
 
 		public static bool operator != (PortablePoint point1, PortablePoint point2)
 		{
-			return System.Math.Abs (point1.X - point2.X) > EPSILON || System.Math.Abs (point1.Y - point2.Y) > EPSILON;
+			return !(point1 == point2);
 		}
 
 		/*internal static PortablePoint FromString (string str)
@@ -89,9 +92,9 @@ namespace Core.Math
 
 		public T To<T> () where T : new()
 		{
-			T result = new T ();
-			(result as dynamic).X = X;
-			(result as dynamic).Y = Y;
+			dynamic result = new T ();
+			result.X = X;
+			result.Y = Y;
 			return result;
 		}
 

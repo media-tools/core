@@ -53,6 +53,7 @@
     <Compile Include="Common\CollectionExtensions.cs" />
     <Compile Include="Common\StringHelper.cs" />
     <Compile Include="Tar\TarIO.cs" />
+    <Compile Include="Common\ReadableEncoding.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

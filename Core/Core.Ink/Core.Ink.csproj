@@ -4,12 +4,12 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{6E2D2753-B286-441D-AC3B-8E0CA2549C15}</ProjectGuid>
+    <ProjectGuid>{1774AAC2-7557-4452-AA9F-E787A1401EFD}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Core</RootNamespace>
-    <AssemblyName>Core.Portable</AssemblyName>
+    <RootNamespace>Core.Ink</RootNamespace>
+    <AssemblyName>Core.Ink</AssemblyName>
+    <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,8 +20,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <NoStdLib>true</NoStdLib>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -30,33 +28,19 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <NoStdLib>true</NoStdLib>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tar\DataWriter.cs" />
-    <Compile Include="Tar\IArchiveDataWriter.cs" />
-    <Compile Include="Tar\ITarHeader.cs" />
-    <Compile Include="Tar\LegacyTarWriter.cs" />
-    <Compile Include="Tar\TarException.cs" />
-    <Compile Include="Tar\TarHeader.cs" />
-    <Compile Include="Tar\TarReader.cs" />
-    <Compile Include="Tar\TarWriter.cs" />
-    <Compile Include="Tar\UsTarHeader.cs" />
-    <Compile Include="Net\IPAddress.cs" />
-    <Compile Include="Portable\Thread.cs" />
-    <Compile Include="IO\PortableConfigHelper.cs" />
-    <Compile Include="Common\Log.cs" />
-    <Compile Include="IO\PortableLogging.cs" />
-    <Compile Include="IO\BlockingDebugConsole.cs" />
-    <Compile Include="Common\CollectionExtensions.cs" />
-    <Compile Include="Common\StringHelper.cs" />
-    <Compile Include="Tar\TarIO.cs" />
-    <Compile Include="Common\ReadableEncoding.cs" />
-    <Compile Include="Math\PortablePoint.cs" />
+    <Compile Include="SerializedCanvas.cs" />
+    <Compile Include="SerializedStroke.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\Core.Portable\Core.Portable.csproj">
+      <Project>{6E2D2753-B286-441D-AC3B-8E0CA2549C15}</Project>
+      <Name>Core.Portable</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\portable-net45+wp80+win8+wpa81+aspnetcore50\Newtonsoft.Json.dll</HintPath>
@@ -64,13 +48,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tar\" />
-    <Folder Include="Net\" />
-    <Folder Include="Portable\" />
-    <Folder Include="IO\" />
-    <Folder Include="Common\" />
-    <Folder Include="Math\" />
   </ItemGroup>
 </Project>

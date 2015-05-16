@@ -21,12 +21,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Markdown", "Core.Markd
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Tests.TarTest", "..\Core.Tests\Core.Tests.TarTest\Core.Tests.TarTest.csproj", "{EFE45A19-B47E-46E3-B761-D4B224A27D47}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.UnitTests.Common", "..\Core.Unittests\Core.UnitTests.Common\Core.UnitTests.Common.csproj", "{0411DCAC-6339-40EA-B691-1E960C97CE5E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0411DCAC-6339-40EA-B691-1E960C97CE5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0411DCAC-6339-40EA-B691-1E960C97CE5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0411DCAC-6339-40EA-B691-1E960C97CE5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0411DCAC-6339-40EA-B691-1E960C97CE5E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{122998F6-7FB5-4F2F-BC66-05A6482C7122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{122998F6-7FB5-4F2F-BC66-05A6482C7122}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{122998F6-7FB5-4F2F-BC66-05A6482C7122}.Release|Any CPU.ActiveCfg = Release|Any CPU

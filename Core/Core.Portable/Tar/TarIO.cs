@@ -19,8 +19,29 @@ namespace Core.Tar
 					tar.Write (inStream, file.BinaryContent.Length, file.Name);
 				}
 			}
-			byte[] tarContent = outStream.ToArray ();
-			return StringEncoding.Encode (tarContent);
+			byte[] binaryContent = outStream.ToArray ();
+			string content = StringEncoding.Encode (binaryContent);
+			return content;
+		}
+
+		public static File[] Read (string content)
+		{
+			byte[] binaryContent = StringEncoding.Decode (content);
+
+			List<File> result = new List<File> ();
+			MemoryStream inStream = new MemoryStream (binaryContent);
+			var tar = new TarReader (inStream);
+
+			while (tar.MoveNext (false)) {
+				string path = tar.FileInfo.FileName;
+				Log.Debug ("path: ", path);
+				MemoryStream outStream = new MemoryStream ();
+				tar.Read (outStream);
+				File file = File.FromByteArray (name: path, content: outStream.ToArray ());
+				result.Add (file);
+			}
+
+			return result.ToArray ();
 		}
 
 		public static class StringEncoding
@@ -126,20 +147,28 @@ namespace Core.Tar
 
 						char e1 = characters [i++];
 						if (e1 == '{') {
-							int times = 0;
+							string timesStr = "";
 							while (i + 1 < characters.Length) {
-								char t = characters [i++];
+								char t = characters [i];
 								if (Char.IsDigit (t)) {
-									times = times * 10 + Convert.ToInt32 (t);
+									timesStr += t;
+									i++;
+								} else {
+									break;
 								}
 							}
-							char e2 = characters [i++];
-							if (e2 == '}') {
-								for (int t = 0; t < times; ++t) {
-									bytes.Add (b);
+							int times;
+							if (int.TryParse (s: timesStr, result: out times)) {
+								char e2 = characters [i++];
+								if (e2 == '}') {
+									for (int t = 0; t < times; ++t) {
+										bytes.Add (b);
+									}
+								} else {
+									throw new ArgumentException ($"TarIO.StringEncoding.Decode: Invalid character: '{e2}', expected: '}}'");
 								}
 							} else {
-								throw new ArgumentException ($"TarIO.StringEncoding.Decode: Invalid character: '{e2}', expected: '}'");
+								throw new ArgumentException ($"TarIO.StringEncoding.Decode: Invalid integer: '{timesStr}'");
 							}
 						} else {
 							throw new ArgumentException ($"TarIO.StringEncoding.Decode: Invalid character: '{e1}', expected: '{{'");

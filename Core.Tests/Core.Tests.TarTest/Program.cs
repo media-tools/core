@@ -13,7 +13,10 @@ namespace Core.Tests.TarTest
 
 			Log.Info ("Hello World!");
 			string encoded = TarIO.Write (TarIO.File.FromString ("test.txt", "fuck\r\nfuck"));
-			Log.Info (encoded);
+			Log.Info ("encoded: ", encoded);
+
+			string reencoded = TarIO.StringEncoding.Encode (TarIO.StringEncoding.Decode (encoded));
+			Log.Info ("reencoded: ", reencoded);
 
 			Logging.Finish ();
 		}

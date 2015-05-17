@@ -9,10 +9,8 @@ namespace Core.Math
 
 		public static double EPSILON = double.Epsilon;
 
-		[JsonProperty ("x")]
 		public double X { get; set; }
 
-		[JsonProperty ("x")]
 		public double Y { get; set; }
 
 		public PortablePoint (double x, double y)

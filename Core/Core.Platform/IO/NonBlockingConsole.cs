@@ -27,38 +27,124 @@
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
+using System.Text;
+using Core.Platform;
 
 namespace Core.IO
 {
 	public static class NonBlockingConsole
 	{
-		private static readonly BlockingCollection<string> m_Queue = new BlockingCollection<string> ();
+		private static readonly BlockingCollection<string> queueOutput = new BlockingCollection<string> ();
+		private static readonly BlockingCollection<ConsoleKeyInfo> queueInput = new BlockingCollection<ConsoleKeyInfo> ();
 
 		private static bool running;
-		private static Thread thread;
+		private static readonly Thread threadOutput;
+		private static readonly Thread threadInput;
+		private static readonly object lockObject = new object ();
+
+		public static bool IsInputOpen { get; private set; } = false;
 
 		static NonBlockingConsole ()
 		{
-			thread = new Thread (
+			running = true;
+			threadOutput = new Thread (
 				() => {
-					while (running)
-						Console.WriteLine (m_Queue.Take ());
+					string item;
+					while (running) {
+						if (queueOutput.TryTake (out item, 50)) {
+							lock (lockObject) {
+								Console.WriteLine (item);
+							}
+						}
+					}
 				});
-			thread.IsBackground = true;
-			thread.Start ();
+			threadOutput.IsBackground = true;
+			threadOutput.Start ();
+
+			threadInput = new Thread (
+				() => {
+					while (running) {
+						while (Console.KeyAvailable) {
+							lock (lockObject) {
+								queueInput.Add (Console.ReadKey (true));
+							}
+						}
+						Thread.Sleep (50);
+					}
+				});
+			threadInput.IsBackground = true;
+			threadInput.Start ();
+
+			IsInputOpen = SystemInfo.IsInteractive;
 		}
 
 		public static void Finish ()
 		{
 			running = false;
-			thread.Abort ();
-			while (m_Queue.Count > 0)
-				Console.WriteLine (m_Queue.Take ());
+			threadOutput.Abort ();
+			while (queueOutput.Count > 0)
+				Console.WriteLine (queueOutput.Take ());
+
+			IsInputOpen = false;
 		}
 
 		public static void WriteLine (string value)
 		{
-			m_Queue.Add (value);
+			queueOutput.Add (value);
+		}
+
+		public static bool TryReadKey (out ConsoleKeyInfo result)
+		{
+			while (IsInputOpen) {
+				if (queueInput.TryTake (out result, 50)) {
+					return true;
+				}
+			}
+			result = default(ConsoleKeyInfo);
+			return false;
+		}
+
+		public static bool TryReadLine (out string result)
+		{
+			var buf = new StringBuilder ();
+			while (IsInputOpen) {
+				ConsoleKeyInfo key;
+				if (TryReadKey (result: out key)) {
+					//Console.WriteLine (key.Key + " " + key.Modifiers);
+
+					// Ctrl-D
+					if (key.Key == ConsoleKey.D && key.Modifiers == ConsoleModifiers.Control) {
+						result = null;
+						IsInputOpen = false;
+						return false;
+					}
+					// F4 ? WTF ?
+					else if (key.Key == ConsoleKey.F4) {
+						result = null;
+						IsInputOpen = false;
+						return false;
+					}
+					// Enter
+					else if (key.Key == ConsoleKey.Enter) {
+						result = buf.ToString ();
+						System.Console.Write (Environment.NewLine);
+						return true;
+					}
+					// Backspace
+					else if (key.Key == ConsoleKey.Backspace && buf.Length > 0) {
+						buf.Remove (buf.Length - 1, 1);
+						System.Console.Write ("\b \b");
+					}
+					// normal character
+					else if (key.KeyChar != 0) {
+						buf.Append (key.KeyChar);
+						System.Console.Write (key.KeyChar);
+					}
+				}
+			}
+
+			result = buf.ToString ();
+			return !string.IsNullOrEmpty (result);
 		}
 	}
 }

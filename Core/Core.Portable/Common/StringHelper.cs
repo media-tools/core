@@ -1,4 +1,5 @@
 ﻿using System;
+using Core.IO;
 
 namespace Core.Common
 {
@@ -18,6 +19,21 @@ namespace Core.Common
 		public static string FormatSortable (DateTime date)
 		{
 			return date.ToString ("yyyy-MM-ddTHH:mm:ss.fff");
+		}
+
+		public static string UppercaseFirst (this string str)
+		{
+			if (string.IsNullOrEmpty (str)) {
+				return string.Empty;
+			}
+			char[] a = str.ToCharArray ();
+			a [0] = char.ToUpper (a [0]);
+			return new string (a);
+		}
+
+		public static string ToJson (this object obj)
+		{
+			return PortableConfigHelper.WriteConfig (obj);
 		}
 	}
 }

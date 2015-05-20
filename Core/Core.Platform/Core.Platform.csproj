@@ -44,12 +44,15 @@
     <Compile Include="Common\BindingRedirect.cs" />
     <Compile Include="Common\ExceptionHelper.cs" />
     <Compile Include="Common\ObjectExtensions.cs" />
+    <Compile Include="Platform\FileAssociation.cs" />
+    <Compile Include="Platform\SystemInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="IO\" />
     <Folder Include="Net\" />
     <Folder Include="Common\" />
+    <Folder Include="Platform\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

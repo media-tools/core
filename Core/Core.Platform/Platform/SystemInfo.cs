@@ -1,5 +1,6 @@
 ﻿using System;
 using Core.Common;
+using System.IO;
 
 namespace Core.Platform
 {
@@ -24,12 +25,19 @@ namespace Core.Platform
 
 		private static bool isConsoleSizeZero { 
 			get {
-				return 0 == (Console.WindowHeight + Console.WindowWidth);
+				try {
+					return 0 == (Console.WindowHeight + Console.WindowWidth);
+				} catch (IOException ex) {
+					isConsoleInvalid = true;
+					return true;
+				}
 			}
 		}
 
+		private static bool isConsoleInvalid = false;
+
 		public static bool IsInteractive {
-			get { return !isConsoleSizeZero; }
+			get { return !isConsoleInvalid && !isConsoleSizeZero; }
 		}
 	}
 }

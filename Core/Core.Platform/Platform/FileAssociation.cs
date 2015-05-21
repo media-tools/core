@@ -17,19 +17,19 @@ namespace Core.Platform
 			internal static void setAssociation (string[] extensions, string description, string exePath, string iconPath)
 			{
 				foreach (string extension in extensions) {
-					RegistryKey key = Registry.ClassesRoot.CreateSubKey (extension);
+					RegistryKey key = classes.CreateSubKey (extension);
 					key.SetValue ("", description);
 					key.Close ();
 				}
 
 				if (exePath != null) {
-					RegistryKey key = Registry.ClassesRoot.CreateSubKey (description + @"\Shell\Open\command");
+					RegistryKey key = classes.CreateSubKey (description + @"\Shell\Open\command");
 					key.SetValue ("", "\"" + exePath + "\" \"%L\"");
 					key.Close ();
 				}
 
 				if (iconPath != null) {
-					RegistryKey key = Registry.ClassesRoot.CreateSubKey (description + @"\DefaultIcon");
+					RegistryKey key = classes.CreateSubKey (description + @"\DefaultIcon");
 					key.SetValue ("", iconPath);
 					key.Close ();
 				}

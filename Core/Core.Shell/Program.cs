@@ -34,9 +34,9 @@ namespace Core.Shell
 				}
 			}
 			// run script
-			if (args.Length == 1 && !string.IsNullOrWhiteSpace (args [1])) {
+			if (args.Length == 1 && !string.IsNullOrWhiteSpace (args [0])) {
 				try {
-					shell.RunScript (code: File.ReadAllText (args [1]));
+					shell.RunScript (code: File.ReadAllText (args [0]));
 				} catch (Exception ex) {
 					Log.Error (ex);
 				}
@@ -76,7 +76,13 @@ namespace Core.Shell
 
 		void fixFileAssociations ()
 		{
-			FileAssociation.SetAssociation (extensions: new[]{ ".sh", ".coresh", ".bash" }, description: "Shell Script", exePath: SystemInfo.ApplicationPath, iconPath: null);
+			FileAssociation.SetAssociation (
+				extensions: new[]{ ".sh", ".coresh", ".bash" },
+				id: "ShellScript",
+				description: "Shell Script",
+				exePath: SystemInfo.ApplicationPath,
+				iconPath: Path.Combine (Path.GetDirectoryName (SystemInfo.ApplicationPath), "icon.ico")
+			);
 		}
 
 		void output (string text)

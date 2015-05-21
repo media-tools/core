@@ -11,16 +11,26 @@ namespace Core.Shell
 	{
 		public static void Main (string[] args)
 		{
-			Core.IO.Logging.Enable ();
+			Logging.Enable ();
 
 			new MainClass ().Run (args);
 
-			Core.IO.Logging.Finish ();
+			Logging.Finish ();
 		}
 
 		public void Run (string[] args)
 		{
 			fixFileAssociations ();
+
+			OptionSet optionSet = new OptionSet ();
+
+			optionSet.Add ("h|help|?", "Prints out the options.", option => setHelp (option != null));
+			optionSet.Add ("d|debug", "Show debugging messages.", option => Log.DEBUG_ENABLED = option != null);
+			optionSet.Add ("<>", option => {
+				Log.Error ("Invalid parameter: ", option);
+				Log.Message ();
+				setHelp (true);
+			});
 
 			UnixShell shell = new UnixShell ();
 			shell.Output = output;

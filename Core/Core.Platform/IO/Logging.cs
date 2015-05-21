@@ -37,15 +37,21 @@ namespace Core.IO
 		public static void Enable ()
 		{
 			Log.LogHandler += (type, messageLines) => {
-				foreach (string message in messageLines) {
-					NonBlockingConsole.WriteLine ("[" + type + "] " + message);
+				if (Targets.StandardOutput) {
+					foreach (string message in messageLines) {
+						NonBlockingConsole.WriteLine ("[" + type + "] " + message);
+					}
 				}
 			};
 
-			logfile = new NonBlockingFile (Storage.DefaultLogFile);
 			Log.LogHandler += (type, messageLines) => {
-				foreach (string message in messageLines) {
-					logfile.WriteLine (DateTime.Now.ToString ("yyyyMMdd-HHmmss") + " [" + type + "] " + message);
+				if (Targets.DefaultLogFile) {
+					if (logfile == null) {
+						logfile = new NonBlockingFile (Storage.DefaultLogFile);
+					}
+					foreach (string message in messageLines) {
+						logfile.WriteLine (DateTime.Now.ToString ("yyyyMMdd-HHmmss") + " [" + type + "] " + message);
+					}
 				}
 			};
 
@@ -59,6 +65,13 @@ namespace Core.IO
 		{
 			NonBlockingConsole.Finish ();
 			logfile.Finish ();
+		}
+
+		public static class Targets
+		{
+			public static bool StandardOutput { get; set; } = true;
+
+			public static bool DefaultLogFile { get; set; } = true;
 		}
 	}
 }

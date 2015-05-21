@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.UnitTests.Common", "..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Ink", "Core.Ink\Core.Ink.csproj", "{1774AAC2-7557-4452-AA9F-E787A1401EFD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Options-PCL", "Mono.Options-PCL\Mono.Options-PCL.csproj", "{807E6868-2F7F-4CC3-8482-284C606834E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{6E2D2753-B286-441D-AC3B-8E0CA2549C15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E2D2753-B286-441D-AC3B-8E0CA2549C15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E2D2753-B286-441D-AC3B-8E0CA2549C15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{807E6868-2F7F-4CC3-8482-284C606834E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{807E6868-2F7F-4CC3-8482-284C606834E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{807E6868-2F7F-4CC3-8482-284C606834E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{807E6868-2F7F-4CC3-8482-284C606834E4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DAE4783E-9B3D-4EFA-A521-87B8F0E410D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DAE4783E-9B3D-4EFA-A521-87B8F0E410D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAE4783E-9B3D-4EFA-A521-87B8F0E410D9}.Release|Any CPU.ActiveCfg = Release|Any CPU

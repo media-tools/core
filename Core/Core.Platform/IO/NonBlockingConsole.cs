@@ -41,6 +41,8 @@ namespace Core.IO
 		private static readonly Thread threadOutput;
 		private static readonly Thread threadInput;
 		private static readonly object lockObject = new object ();
+		private static bool runningOutput;
+		private static bool runningInput;
 
 		public static bool IsInputOpen { get; private set; } = false;
 
@@ -49,6 +51,7 @@ namespace Core.IO
 			running = true;
 			threadOutput = new Thread (
 				() => {
+					runningOutput = true;
 					string item;
 					while (running) {
 						if (queueOutput.TryTake (out item, 50)) {
@@ -57,12 +60,14 @@ namespace Core.IO
 							}
 						}
 					}
+					runningOutput = false;
 				});
 			threadOutput.IsBackground = true;
 			threadOutput.Start ();
 
 			threadInput = new Thread (
 				() => {
+					runningInput = true;
 					while (running) {
 						while (Console.KeyAvailable) {
 							lock (lockObject) {
@@ -71,6 +76,7 @@ namespace Core.IO
 						}
 						Thread.Sleep (50);
 					}
+					runningInput = false;
 				});
 			threadInput.IsBackground = true;
 			threadInput.Start ();
@@ -81,11 +87,16 @@ namespace Core.IO
 		public static void Finish ()
 		{
 			running = false;
-			threadOutput.Abort ();
-			while (queueOutput.Count > 0)
-				Console.WriteLine (queueOutput.Take ());
-
+			for (int i = 10; i >= 0 && (runningInput || runningOutput); i--) {
+				Thread.Sleep (30);
+			}
 			IsInputOpen = false;
+
+			threadOutput.Abort ();
+			while (queueOutput.Count > 0) {
+				Console.WriteLine (queueOutput.Take ());
+			}
+			threadInput.Abort ();
 		}
 
 		public static void WriteLine (string value)

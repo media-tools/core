@@ -46,7 +46,7 @@ namespace Core.IO
 
 				string fullPath = Path.Combine (appData, appName, fileName);
 
-				Console.WriteLine (fullPath);
+				//Console.WriteLine (fullPath);
 				return fullPath;
 			} catch (NullReferenceException ex) {
 				Log.Error (ex);

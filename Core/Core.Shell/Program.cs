@@ -1,9 +1,11 @@
 ﻿using System;
-using Core.Shell.Common;
-using Core.Platform;
 using System.IO;
 using Core.Common;
 using Core.IO;
+using Core.Platform;
+using Core.Shell.Common;
+using Mono.Options;
+using System.Collections.Generic;
 
 namespace Core.Shell
 {
@@ -22,50 +24,97 @@ namespace Core.Shell
 		{
 			fixFileAssociations ();
 
-			OptionSet optionSet = new OptionSet ();
+			Logging.Targets.StandardOutput = false;
 
-			optionSet.Add ("h|help|?", "Prints out the options.", option => setHelp (option != null));
-			optionSet.Add ("d|debug", "Show debugging messages.", option => Log.DEBUG_ENABLED = option != null);
-			optionSet.Add ("<>", option => {
-				Log.Error ("Invalid parameter: ", option);
-				Log.Message ();
-				setHelp (true);
+			// option values
+			bool help = false;
+			Mode mode = Mode.Interactive;
+			string commandString = null;
+			string scriptFile = null;
+			List<string> parameters = new List<string> ();
+
+			// option parser
+			OptionSet optionSet = new OptionSet ();
+			optionSet.Add ("h|help|?", "Prints out the options.", option => help = (option != null));
+			optionSet.Add ("log|debug", "Show log messages.", option => Logging.Targets.StandardOutput = option != null);
+			optionSet.Add ("c=", "Execute a command string.", option => {
+				mode = Mode.CommandString;
+				commandString = option;
 			});
+			optionSet.Add ("<>", option => {
+				if (mode != Mode.CommandString && scriptFile == null) {
+					mode = Mode.ScriptFile;
+					scriptFile = option;
+					Log.Warning ("Script file: ", option);
+				} else {
+					parameters.Add (option);
+					Log.Warning ("Parameter: ", option);
+				}
+			});
+			try {
+				optionSet.Parse (args);
+			} catch (OptionException) {
+				help = true;
+			}
+
+			// need help ?
+			if (help) {
+				printOptions (optionSet);
+				return;
+			}
 
 			UnixShell shell = new UnixShell ();
 			shell.Output = output;
 
 			// run code line
-			if (args.Length == 2 && args [0] == "-c" && !string.IsNullOrWhiteSpace (args [1])) {
+			if (mode == Mode.CommandString) {
 				try {
-					shell.RunScript (code: args [1]);
+					shell.RunScript (code: commandString);
 				} catch (Exception ex) {
 					Log.Error (ex);
 				}
 			}
 			// run script
-			if (args.Length == 1 && !string.IsNullOrWhiteSpace (args [0])) {
+			if (mode == Mode.ScriptFile) {
 				try {
-					shell.RunScript (code: File.ReadAllText (args [0]));
+					shell.RunScript (code: File.ReadAllText (scriptFile));
 				} catch (Exception ex) {
 					Log.Error (ex);
 				}
 			}
-			// run test code
-			else if (!SystemInfo.IsInteractive) {//  if (Console.In.Peek () == -1) {
-				test (shell);
-			}
 			// run interactively
-			else {
-				string line;
-				while (NonBlockingConsole.IsInputOpen) {
-					while (NonBlockingConsole.TryReadLine (result: out line)) {
-						if (!string.IsNullOrWhiteSpace (line)) {
-							shell.Interactive (line: line);
+			if (mode == Mode.Interactive) {
+				
+				// run test code if there is no interactive console
+				if (!SystemInfo.IsInteractive) {
+					Logging.Targets.StandardOutput = true;
+					test (shell);
+				}
+
+				// run interactively
+				else {
+					string line;
+					while (NonBlockingConsole.IsInputOpen) {
+						while (NonBlockingConsole.TryReadLine (result: out line)) {
+							if (!string.IsNullOrWhiteSpace (line)) {
+								shell.Interactive (line: line);
+							}
 						}
 					}
 				}
 			}
+		}
+
+		private void printOptions (OptionSet optionSet)
+		{
+			optionSet.WriteOptionDescriptions (Console.Out);
+		}
+
+		public enum Mode
+		{
+			Interactive,
+			CommandString,
+			ScriptFile,
 		}
 
 		void test (UnixShell shell)

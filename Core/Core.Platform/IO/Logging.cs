@@ -64,7 +64,9 @@ namespace Core.IO
 		public static void Finish ()
 		{
 			NonBlockingConsole.Finish ();
-			logfile.Finish ();
+			if (logfile != null) {
+				logfile.Finish ();
+			}
 		}
 
 		public static class Targets

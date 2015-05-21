@@ -1,6 +1,7 @@
 ﻿using System;
 using Core.Common;
 using Core.IO;
+using Core.Portable;
 
 namespace Core.Shell.Common
 {
@@ -13,6 +14,17 @@ namespace Core.Shell.Common
 
 		public UnixShell ()
 		{
+		}
+
+		public string Prompt {
+			get {
+				string user = UserInfo.FullNameAndMail;
+				string mail = UserInfo.UserMail ?? UserInfo.UserAtHostName;
+				string wd = executer.State.WorkingDirectory;
+				//return $"┌┼───┤ {user} ├───┤ 23:35:27 ├────────────┤ {wd} ├──── \n"	+ "└┼─$─┤► ";
+				string prompt = $"{mail} {wd} $ ";
+				return prompt;
+			}
 		}
 
 		public void Interactive (string line)

@@ -63,6 +63,8 @@ namespace Core.Shell
 				return;
 			}
 
+			UserInfoDesktop.Assign ();
+
 			UnixShell shell = new UnixShell ();
 			shell.Output = output;
 
@@ -94,13 +96,16 @@ namespace Core.Shell
 				// run interactively
 				else {
 					string line;
+					NonBlockingConsole.Write (shell.Prompt);
 					while (NonBlockingConsole.IsInputOpen) {
 						while (NonBlockingConsole.TryReadLine (result: out line)) {
 							if (!string.IsNullOrWhiteSpace (line)) {
 								shell.Interactive (line: line);
 							}
+							NonBlockingConsole.Write (shell.Prompt);
 						}
 					}
+					NonBlockingConsole.WriteLine (string.Empty);
 				}
 			}
 		}

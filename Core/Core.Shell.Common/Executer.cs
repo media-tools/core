@@ -5,14 +5,17 @@ namespace Core.Shell.Common
 {
 	public class Executer
 	{
+		public ExecutionState State { get; private set; } = new ExecutionState ();
+
 		public Executer ()
 		{
 		}
 
 		public void Execute (ScriptBlock block)
 		{
-			ExecutionState state = new ExecutionState ();
-			ExecuteBlock (block, ref state);
+			ExecutionState _state = State;
+			ExecuteBlock (block, ref _state);
+			State = _state;
 		}
 
 		void ExecuteBlock (Block block, ref ExecutionState state)

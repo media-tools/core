@@ -17,6 +17,8 @@ namespace Core.Shell.Common
 		public bool IsAborted { get { return IsFatalError; } }
 
 		public bool IsExitSuccess { get { return ExitCode == EXIT_SUCCESS; } }
+
+		public string WorkingDirectory { get; set; }
 	}
 
 }

@@ -56,7 +56,7 @@ namespace Core.IO
 					while (running) {
 						if (queueOutput.TryTake (out item, 50)) {
 							lock (lockObject) {
-								Console.WriteLine (item);
+								Console.Write (item);
 							}
 						}
 					}
@@ -99,9 +99,14 @@ namespace Core.IO
 			threadInput.Abort ();
 		}
 
-		public static void WriteLine (string value)
+		public static void Write (string value)
 		{
 			queueOutput.Add (value);
+		}
+
+		public static void WriteLine (string value)
+		{
+			queueOutput.Add (value + "\n");
 		}
 
 		public static bool TryReadKey (out ConsoleKeyInfo result)

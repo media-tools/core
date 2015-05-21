@@ -57,6 +57,7 @@
     <Compile Include="Math\PortablePoint.cs" />
     <Compile Include="Common\ExceptionExtensions.cs" />
     <Compile Include="Mono.Options-PCL.cs" />
+    <Compile Include="Portable\UserInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

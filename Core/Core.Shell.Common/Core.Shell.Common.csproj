@@ -36,8 +36,13 @@
     <Compile Include="Block.cs" />
     <Compile Include="Blocks.cs" />
     <Compile Include="Executer.cs" />
-    <Compile Include="ExecutionState.cs" />
-    <Compile Include="Command.cs" />
+    <Compile Include="Commands\BuiltinCommandSubsystem.cs" />
+    <Compile Include="Commands\CommandSubsystem.cs" />
+    <Compile Include="Commands\BuiltinCommand.cs" />
+    <Compile Include="Commands\Builtins\TrueFalse.cs" />
+    <Compile Include="Commands\Builtins\Echo.cs" />
+    <Compile Include="CommandExecutor.cs" />
+    <Compile Include="ExecutionEnvironment.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
@@ -64,5 +69,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Commands\" />
+    <Folder Include="Commands\Builtins\" />
   </ItemGroup>
 </Project>

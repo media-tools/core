@@ -1,11 +1,12 @@
 ﻿using System;
 using Core.Common;
+using System.Linq;
 
 namespace Core.Shell.Common
 {
 	public class Executer
 	{
-		public ExecutionState State { get; private set; } = new ExecutionState ();
+		public ExecutionEnvironment Environment { get; private set; } = new ExecutionEnvironment ();
 
 		public Executer ()
 		{
@@ -13,14 +14,14 @@ namespace Core.Shell.Common
 
 		public void Execute (ScriptBlock block)
 		{
-			ExecutionState _state = State;
+			ExecutionEnvironment _state = Environment;
 			ExecuteBlock (block, ref _state);
-			State = _state;
+			Environment = _state;
 		}
 
-		void ExecuteBlock (Block block, ref ExecutionState state)
+		void ExecuteBlock (Block block, ref ExecutionEnvironment env)
 		{
-			if (state.IsAborted)
+			if (env.IsAborted)
 				return;
 			
 			var simpleBlock = block as ISimpleBlock;
@@ -28,29 +29,29 @@ namespace Core.Shell.Common
 			var commandBlock = block as ICommandBlock;
 
 			if (simpleBlock != null) {
-				ExecuteSimpleBlock (simpleBlock, ref state);
+				ExecuteSimpleBlock (simpleBlock, ref env);
 			} else if (conditionalBlock != null) {
-				ExecuteConditionalBlock (conditionalBlock, ref state);
+				ExecuteConditionalBlock (conditionalBlock, ref env);
 			} else if (commandBlock != null) {
-				ExecuteCommandBlock (commandBlock, ref state);
+				ExecuteCommandBlock (commandBlock, ref env);
 			} else {
 				Log.Error ("Unknown block: ", block);
 			}
 		}
 
-		void ExecuteSimpleBlock (ISimpleBlock block, ref ExecutionState state)
+		void ExecuteSimpleBlock (ISimpleBlock block, ref ExecutionEnvironment env)
 		{
-			if (state.IsAborted)
+			if (env.IsAborted)
 				return;
 			
 			foreach (Block subBlock in block.Content) {
-				if (state.IsAborted)
+				if (env.IsAborted)
 					break;
-				ExecuteBlock (block: subBlock, state: ref state);
+				ExecuteBlock (block: subBlock, env: ref env);
 			}
 		}
 
-		void ExecuteConditionalBlock (IConditionalBlock block, ref ExecutionState state)
+		void ExecuteConditionalBlock (IConditionalBlock block, ref ExecutionEnvironment env)
 		{
 			Log.Debug ("Condition block: ");
 			Log.Indent++;
@@ -69,15 +70,15 @@ namespace Core.Shell.Common
 
 			if (block.Condition.Length == 0) {
 				Log.Error ("Condition is empty!");
-				state.IsFatalError = true;
+				env.IsFatalError = true;
 				return;
 			}
 
 			foreach (ICommandBlock command in block.Condition) {
-				ExecuteCommandBlock (block: command, state: ref state);
+				ExecuteCommandBlock (block: command, env: ref env);
 			}
 
-			if (state.IsExitSuccess) {
+			if (true) {//env.StackTrace.Last ().State.IsExitSuccess) {
 				Log.Debug ("Condition: Success!");
 
 
@@ -88,13 +89,26 @@ namespace Core.Shell.Common
 			}
 		}
 
-		void ExecuteCommandBlock (ICommandBlock block, ref ExecutionState state)
+		void ExecuteCommandBlock (ICommandBlock block, ref ExecutionEnvironment env)
 		{
-			if (!string.IsNullOrWhiteSpace (block.ContentString)) {
-				Log.Debug ("Execute command: ", block.ContentString);
-				Command command = new Command (block);
-				command.Execute (state: ref state);
-			}
+			Log.Warning ("Execute command: ", block.ContentString);
+			CommandExecutor commandExecutor = new CommandExecutor (block);
+			commandExecutor.Execute (state: ref env);
+			/*
+			try {
+				System.Diagnostics.Debug.WriteLine ("fuck");
+				Log.Debug ("Execute command: ", block.ContentString, (!string.IsNullOrWhiteSpace (block.ContentString)));
+				if (!string.IsNullOrWhiteSpace (block.ContentString)) {
+					Log.Debug ("Execute command: ", block.ContentString);
+					CommandExecutor commandExecutor = new CommandExecutor (block);
+					commandExecutor.Execute (state: ref env);
+					Log.Debug ("test");
+				}
+				Log.Debug ("test");
+			} catch (Exception ex) {
+				Log.Error (ex);
+				env.IsFatalError = true;
+			}*/
 		}
 	}
 }

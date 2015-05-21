@@ -66,7 +66,7 @@ namespace Core.Shell
 			UserInfoDesktop.Assign ();
 
 			UnixShell shell = new UnixShell ();
-			shell.Output = output;
+			shell.Environment.Output = output;
 
 			// run code line
 			if (mode == Mode.CommandString) {
@@ -151,7 +151,7 @@ namespace Core.Shell
 
 		void output (string text)
 		{
-			Console.Write (text);
+			NonBlockingConsole.Write (text);
 		}
 	}
 }

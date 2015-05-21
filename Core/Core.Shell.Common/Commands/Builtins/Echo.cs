@@ -5,11 +5,27 @@ namespace Core.Shell.Common.Commands.Builtins
 {
 	public class Echo : BuiltinCommand
 	{
-		public override string ExecutableName { get { return "echo"; } }
+		bool printNewline;
+
+		public Echo ()
+		{
+			ExecutableName = "echo";
+			UseOptions = true;
+
+			optionSet.Add ("n", "No newline.", option => printNewline = option == null);
+		}
+
+		protected override void ResetInternalState ()
+		{
+			printNewline = true;
+		}
 
 		protected override void ExecuteInternal ()
 		{
-			Output (string.Join (" ", parameters.Select (p => p ?? "null")));
+			Output.Write (string.Join (" ", parameters.Select (p => p ?? "null")));
+			if (printNewline) {
+				Output.WriteLine ();
+			}
 			state.ExitCode = 0;
 		}
 	}

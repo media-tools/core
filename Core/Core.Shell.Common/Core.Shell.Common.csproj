@@ -43,6 +43,7 @@
     <Compile Include="Commands\Builtins\Echo.cs" />
     <Compile Include="CommandExecutor.cs" />
     <Compile Include="ExecutionEnvironment.cs" />
+    <Compile Include="RedirectableTextWriter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

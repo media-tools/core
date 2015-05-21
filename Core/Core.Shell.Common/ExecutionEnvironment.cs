@@ -6,7 +6,7 @@ namespace Core.Shell.Common
 {
 	public class ExecutionEnvironment
 	{
-		public Action<string> Output = s => new ArgumentException ("UnixShell.Output must not be null!").ThrowAction<string> ();
+		public RedirectableTextWriter Output { get; } = new RedirectableTextWriter ();
 
 		public List<StackTraceElement> StackTrace { get; set; } = new List<StackTraceElement> {
 			new StackTraceElement {

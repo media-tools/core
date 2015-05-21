@@ -66,7 +66,7 @@ namespace Core.Shell
 			UserInfoDesktop.Assign ();
 
 			UnixShell shell = new UnixShell ();
-			shell.Environment.Output = output;
+			shell.Environment.Output.Stream = output;
 
 			// run code line
 			if (mode == Mode.CommandString) {

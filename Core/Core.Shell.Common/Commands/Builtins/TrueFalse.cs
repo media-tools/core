@@ -4,7 +4,10 @@ namespace Core.Shell.Common.Commands.Builtins
 {
 	public class True : BuiltinCommand
 	{
-		public override string ExecutableName { get { return "true"; } }
+		public True ()
+		{
+			ExecutableName = "true";
+		}
 
 		protected override void ExecuteInternal ()
 		{
@@ -14,7 +17,10 @@ namespace Core.Shell.Common.Commands.Builtins
 
 	public class False : BuiltinCommand
 	{
-		public override string ExecutableName { get { return "false"; } }
+		public False ()
+		{
+			ExecutableName = "false";
+		}
 
 		protected override void ExecuteInternal ()
 		{

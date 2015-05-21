@@ -1,4 +1,5 @@
 ﻿using System;
+using Mono.Options;
 
 namespace Core.Shell.Common.Commands
 {
@@ -38,22 +39,39 @@ namespace Core.Shell.Common.Commands
 
 	public interface ICommand
 	{
-		Action<string> Output { get; set; }
+		RedirectableTextWriter Output { get; }
 
 		void Execute (string[] parameters, ExecutionEnvironment env);
 	}
 
 	public abstract class AbstractCommand : ICommand
 	{
-		public Action<string> Output { get; set; }
+		// the default output stream
+		public RedirectableTextWriter Output { get; } = new RedirectableTextWriter();
 
-		public abstract string ExecutableName { get; }
+		// the default executable name
+		public string ExecutableName { get; protected set; } = "unknown";
+
+		// Mono.Options
+		protected OptionSet optionSet = new OptionSet ();
+		protected bool UseOptions = false;
+		protected bool printHelp = false;
+
+		// Parameters
+		protected string[] parameters;
+
+		// State
+		protected ExecutionState state;
+
+		// Environment
+		protected ExecutionEnvironment env;
+
+		protected AbstractCommand ()
+		{
+			optionSet.Add ("h|help|?", "Prints out the options.", option => printHelp = (option != null));
+		}
 
 		#region ICommand implementation
-
-		protected string[] parameters;
-		protected ExecutionState state;
-		protected ExecutionEnvironment env;
 
 		public void Execute (string[] parameters, ExecutionEnvironment env)
 		{
@@ -61,9 +79,23 @@ namespace Core.Shell.Common.Commands
 			this.state = new ExecutionState ();
 			this.env = env;
 
-			Output = env.Output;
+			Output.Stream = env.Output.Stream;
 
-			ExecuteInternal ();
+			ResetInternalState ();
+			if (UseOptions) {
+				parseOptions ();
+			}
+
+
+			// need help ?
+			if (printHelp) {
+				printOptions ();
+				return;
+			}
+			// execute the command
+			else {
+				ExecuteInternal ();
+			}
 
 			StackTraceElement element = new StackTraceElement {
 				Executable = ExecutableName,
@@ -75,9 +107,27 @@ namespace Core.Shell.Common.Commands
 			env.StackTrace.Add (element);
 		}
 
+		private void printOptions ()
+		{
+			optionSet.WriteOptionDescriptions (env.Output);
+		}
+
+		private void parseOptions ()
+		{
+			try {
+				optionSet.Parse (parameters);
+			} catch (OptionException) {
+				printHelp = true;
+			}
+		}
+
 		#endregion
 
 		protected abstract void ExecuteInternal ();
+
+		protected virtual void ResetInternalState ()
+		{
+		}
 	}
 }
 

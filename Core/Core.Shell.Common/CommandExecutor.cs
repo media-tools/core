@@ -9,7 +9,7 @@ namespace Core.Shell.Common
 {
 	public class CommandExecutor
 	{
-		public string Executable { get; private set; }
+		public string ExecutableName { get; private set; }
 
 		public string[] Params { get; private set; }
 
@@ -17,7 +17,7 @@ namespace Core.Shell.Common
 		{
 			string cmd = block.ContentString;
 			string[] p = parameterize (cmd).Where (s => s != null).ToArray ();
-			Executable = p [0];
+			ExecutableName = p [0];
 			Params = p.Skip (1).ToArray ();
 		}
 
@@ -58,11 +58,20 @@ namespace Core.Shell.Common
 
 		public void Execute (ExecutionEnvironment env)
 		{
-			if (CommandSubsystems.ContainsCommand (commandName: Executable)) {
-				ICommand command = CommandSubsystems.GetCommand (commandName: Executable);
+			if (CommandSubsystems.ContainsCommand (commandName: ExecutableName)) {
+				ICommand command = CommandSubsystems.GetCommand (commandName: ExecutableName);
 				command.Execute (parameters: Params, env: env);
 			} else {
 				Log.Error ("No such command!");
+
+				StackTraceElement element = new StackTraceElement {
+					Executable = ExecutableName,
+					Parameters = Params,
+					State = new ExecutionState {
+						ExitCode = 127
+					}
+				};
+				env.StackTrace.Add (element);
 			}
 		}
 	}

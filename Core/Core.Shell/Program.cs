@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Core.Common;
 using Core.IO;
 using Core.Platform;
+using Core.Portable;
 using Core.Shell.Common;
 using Mono.Options;
-using System.Collections.Generic;
 
 namespace Core.Shell
 {
@@ -63,7 +64,7 @@ namespace Core.Shell
 				return;
 			}
 
-			UserInfoDesktop.Assign ();
+			PlatformInfoDesktop.Assign ();
 
 			UnixShell shell = new UnixShell ();
 			shell.Environment.Output.Stream = output;
@@ -95,6 +96,7 @@ namespace Core.Shell
 
 				// run interactively
 				else {
+					shell.PrintWelcome ();
 					string line;
 					NonBlockingConsole.Write (shell.Prompt);
 					while (NonBlockingConsole.IsInputOpen) {

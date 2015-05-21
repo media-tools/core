@@ -27,6 +27,7 @@
 
 using System;
 using Core.Common;
+using Core.Platform;
 
 namespace Core.IO
 {
@@ -38,6 +39,8 @@ namespace Core.IO
 
 		public static void Enable ()
 		{
+			PlatformInfoDesktop.Assign ();
+
 			Log.LogHandler += (type, messageLines) => {
 				//foreach (string message in messageLines) Console.WriteLine (message);
 				if (Targets.StandardOutput) {

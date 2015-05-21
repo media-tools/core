@@ -28,7 +28,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Text;
-using Core.Platform;
 
 namespace Core.IO
 {
@@ -81,7 +80,7 @@ namespace Core.IO
 			threadInput.IsBackground = true;
 			threadInput.Start ();
 
-			IsInputOpen = SystemInfo.IsInteractive;
+			IsInputOpen = Core.Portable.SystemInfo.IsInteractive;
 		}
 
 		public static void Finish ()

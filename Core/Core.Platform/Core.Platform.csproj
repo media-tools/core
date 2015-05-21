@@ -45,9 +45,8 @@
     <Compile Include="Common\ExceptionHelper.cs" />
     <Compile Include="Common\ObjectExtensions.cs" />
     <Compile Include="Platform\FileAssociation.cs" />
-    <Compile Include="Platform\SystemInfo.cs" />
-    <Compile Include="Platform\UserInfoDesktop.cs" />
     <Compile Include="Platform\Windows\WindowsRegistry.cs" />
+    <Compile Include="Platform\PlatformInfoDesktop.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

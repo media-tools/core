@@ -14,14 +14,12 @@ namespace Core.Shell.Common
 
 		public void Execute (ScriptBlock block)
 		{
-			ExecutionEnvironment _state = Environment;
-			ExecuteBlock (block, ref _state);
-			Environment = _state;
+			ExecuteBlock (block);
 		}
 
-		void ExecuteBlock (Block block, ref ExecutionEnvironment env)
+		void ExecuteBlock (Block block)
 		{
-			if (env.IsAborted)
+			if (Environment.IsAborted)
 				return;
 			
 			var simpleBlock = block as ISimpleBlock;
@@ -29,29 +27,29 @@ namespace Core.Shell.Common
 			var commandBlock = block as ICommandBlock;
 
 			if (simpleBlock != null) {
-				ExecuteSimpleBlock (simpleBlock, ref env);
+				ExecuteSimpleBlock (simpleBlock);
 			} else if (conditionalBlock != null) {
-				ExecuteConditionalBlock (conditionalBlock, ref env);
+				ExecuteConditionalBlock (conditionalBlock);
 			} else if (commandBlock != null) {
-				ExecuteCommandBlock (commandBlock, ref env);
+				ExecuteCommandBlock (commandBlock);
 			} else {
 				Log.Error ("Unknown block: ", block);
 			}
 		}
 
-		void ExecuteSimpleBlock (ISimpleBlock block, ref ExecutionEnvironment env)
+		void ExecuteSimpleBlock (ISimpleBlock block)
 		{
-			if (env.IsAborted)
+			if (Environment.IsAborted)
 				return;
 			
 			foreach (Block subBlock in block.Content) {
-				if (env.IsAborted)
+				if (Environment.IsAborted)
 					break;
-				ExecuteBlock (block: subBlock, env: ref env);
+				ExecuteBlock (block: subBlock);
 			}
 		}
 
-		void ExecuteConditionalBlock (IConditionalBlock block, ref ExecutionEnvironment env)
+		void ExecuteConditionalBlock (IConditionalBlock block)
 		{
 			Log.Debug ("Condition block: ");
 			Log.Indent++;
@@ -70,12 +68,12 @@ namespace Core.Shell.Common
 
 			if (block.Condition.Length == 0) {
 				Log.Error ("Condition is empty!");
-				env.IsFatalError = true;
+				Environment.IsFatalError = true;
 				return;
 			}
 
 			foreach (ICommandBlock command in block.Condition) {
-				ExecuteCommandBlock (block: command, env: ref env);
+				ExecuteCommandBlock (block: command);
 			}
 
 			if (true) {//env.StackTrace.Last ().State.IsExitSuccess) {
@@ -89,11 +87,11 @@ namespace Core.Shell.Common
 			}
 		}
 
-		void ExecuteCommandBlock (ICommandBlock block, ref ExecutionEnvironment env)
+		void ExecuteCommandBlock (ICommandBlock block)
 		{
 			Log.Warning ("Execute command: ", block.ContentString);
-			CommandExecutor commandExecutor = new CommandExecutor (block);
-			commandExecutor.Execute (state: ref env);
+			CommandExecutor commandExecutor = new CommandExecutor (block: block);
+			commandExecutor.Execute (env: Environment);
 			/*
 			try {
 				System.Diagnostics.Debug.WriteLine ("fuck");

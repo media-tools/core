@@ -40,7 +40,7 @@ namespace Core.Shell.Common.Commands
 	{
 		Action<string> Output { get; set; }
 
-		void Execute (string[] parameters, ref ExecutionEnvironment state);
+		void Execute (string[] parameters, ExecutionEnvironment env);
 	}
 
 	public abstract class AbstractCommand : ICommand
@@ -55,11 +55,13 @@ namespace Core.Shell.Common.Commands
 		protected ExecutionState state;
 		protected ExecutionEnvironment env;
 
-		public void Execute (string[] parameters, ref ExecutionEnvironment env)
+		public void Execute (string[] parameters, ExecutionEnvironment env)
 		{
 			this.parameters = parameters;
 			this.state = new ExecutionState ();
 			this.env = env;
+
+			Output = env.Output;
 
 			ExecuteInternal ();
 

@@ -37,8 +37,7 @@ namespace Core.IO
 		public static void Enable ()
 		{
 			Log.LogHandler += (type, messageLines) => {
-				foreach (string message in messageLines)
-					Console.WriteLine (message);
+				//foreach (string message in messageLines) Console.WriteLine (message);
 				if (Targets.StandardOutput) {
 					foreach (string message in messageLines) {
 						NonBlockingConsole.WriteLine ("[" + type + "] " + message);

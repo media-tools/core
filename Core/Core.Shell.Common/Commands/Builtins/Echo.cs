@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Core.Shell.Common.Commands.Builtins
 {
@@ -8,7 +9,7 @@ namespace Core.Shell.Common.Commands.Builtins
 
 		protected override void ExecuteInternal ()
 		{
-			Output (string.Join (" ", parameters));
+			Output (string.Join (" ", parameters.Select (p => p ?? "null")));
 			state.ExitCode = 0;
 		}
 	}

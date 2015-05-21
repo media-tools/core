@@ -34,13 +34,15 @@ namespace Core.IO
 	{
 		private static NonBlockingFile logfile;
 
+		internal static readonly int LOG_TYPE_LENGTH = 7 + 2;
+
 		public static void Enable ()
 		{
 			Log.LogHandler += (type, messageLines) => {
 				//foreach (string message in messageLines) Console.WriteLine (message);
 				if (Targets.StandardOutput) {
 					foreach (string message in messageLines) {
-						NonBlockingConsole.WriteLine ("[" + type + "] " + message);
+						NonBlockingConsole.WriteLine (string.Format ("{0} {1}", formatType (type), message));
 					}
 				}
 			};
@@ -51,7 +53,7 @@ namespace Core.IO
 						logfile = new NonBlockingFile (Storage.DefaultLogFile);
 					}
 					foreach (string message in messageLines) {
-						logfile.WriteLine (DateTime.Now.ToString ("yyyyMMdd-HHmmss") + " [" + type + "] " + message);
+						logfile.WriteLine (string.Format ("{0:yyyyMMdd-HHmmss} {1} {2}", DateTime.Now, formatType (type), message));
 					}
 				}
 			};
@@ -60,6 +62,11 @@ namespace Core.IO
 					MessageBox.Show (message, "Fatal Error");
 					Application.Exit ();
 				} else {*/
+		}
+
+		static string formatType (Log.Type type)
+		{
+			return string.Format ("[{0}]", type).PadRight (LOG_TYPE_LENGTH);
 		}
 
 		public static void Finish ()

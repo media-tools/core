@@ -31,9 +31,13 @@ namespace Core.Common
 			return new string (a);
 		}
 
-		public static string ToJson (this object obj)
+		public static string ToJson (this object obj, bool inline = false)
 		{
-			return PortableConfigHelper.WriteConfig (obj);
+			string result = PortableConfigHelper.WriteConfig (stuff: obj, inline: inline);
+			if (inline) {
+				result = result.TrimEnd ('\r', '\n');
+			}
+			return result;
 		}
 	}
 }

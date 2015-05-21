@@ -49,7 +49,7 @@ namespace Core.Shell.Common
 			}
 		}
 
-		void ExecuteConditionalBlock (IConditionalBlock block)
+		bool ExecuteConditionalBlock (IConditionalBlock block)
 		{
 			Log.Debug ("Condition block: ");
 			Log.Indent++;
@@ -69,44 +69,63 @@ namespace Core.Shell.Common
 			if (block.Condition.Length == 0) {
 				Log.Error ("Condition is empty!");
 				Environment.IsFatalError = true;
-				return;
+				return false;
 			}
 
 			foreach (ICommandBlock command in block.Condition) {
 				ExecuteCommandBlock (block: command);
 			}
 
-			if (true) {//env.StackTrace.Last ().State.IsExitSuccess) {
+			bool wasConditionSuccessful = Environment.StackTrace.Last ().State.IsExitSuccess;
+
+			if (wasConditionSuccessful) {
 				Log.Debug ("Condition: Success!");
 
-
+				Log.Indent++;
+				foreach (Block thenBlock in block.ThenBlock) {
+					ExecuteBlock (block: thenBlock);
+				}
+				Log.Indent--;
 
 			} else {
 				Log.Debug ("Condition: Failure!");
 
+				Log.Indent++;
+				foreach (Block elifOrElseBlock in block.ElseBlock) {
+					// if it's an ELIF block
+					if (elifOrElseBlock.Type == BlockType.ELIF) {
+						bool wasElifSuccessful = ExecuteConditionalBlock (elifOrElseBlock as ElifBlock);
+						if (wasElifSuccessful) {
+							break;
+						}
+					}
+					// if it's an ELSE block
+					else if (elifOrElseBlock.Type == BlockType.ELSE) {
+						ExecuteBlock (block: elifOrElseBlock);
+					}
+					// WTF?
+					else {
+						throw new ArgumentException ("This should never happen! ElseBlock is neither ELIF nor ELSE!");
+					}
+				}
+				Log.Indent--;
 			}
+
+			return wasConditionSuccessful;
 		}
 
 		void ExecuteCommandBlock (ICommandBlock block)
 		{
-			Log.Warning ("Execute command: ", block.ContentString);
-			CommandExecutor commandExecutor = new CommandExecutor (block: block);
-			commandExecutor.Execute (env: Environment);
-			/*
 			try {
-				System.Diagnostics.Debug.WriteLine ("fuck");
-				Log.Debug ("Execute command: ", block.ContentString, (!string.IsNullOrWhiteSpace (block.ContentString)));
 				if (!string.IsNullOrWhiteSpace (block.ContentString)) {
-					Log.Debug ("Execute command: ", block.ContentString);
+					Log.Debug ("Execute: \"", block.ContentString, "\"");
 					CommandExecutor commandExecutor = new CommandExecutor (block);
-					commandExecutor.Execute (state: ref env);
-					Log.Debug ("test");
+					commandExecutor.Execute (env: Environment);
 				}
-				Log.Debug ("test");
 			} catch (Exception ex) {
 				Log.Error (ex);
-				env.IsFatalError = true;
-			}*/
+				Environment.IsFatalError = true;
+			}
 		}
 	}
 }

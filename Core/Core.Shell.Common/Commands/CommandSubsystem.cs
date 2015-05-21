@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Core.Common;
 using Mono.Options;
 
 namespace Core.Shell.Common.Commands
@@ -58,7 +61,7 @@ namespace Core.Shell.Common.Commands
 		protected bool printHelp = false;
 
 		// Parameters
-		protected string[] parameters;
+		protected List<string> parameters = new List<string> ();
 
 		// State
 		protected ExecutionState state;
@@ -69,21 +72,26 @@ namespace Core.Shell.Common.Commands
 		protected AbstractCommand ()
 		{
 			optionSet.Add ("h|help|?", "Prints out the options.", option => printHelp = (option != null));
+			optionSet.Add ("<>", parameters.Add);
 		}
 
 		#region ICommand implementation
 
 		public void Execute (string[] parameters, ExecutionEnvironment env)
 		{
-			this.parameters = parameters;
+			Log.Debug ("Execute: ", ExecutableName, " ", parameters.ToJson (inline: true));
+			Output.Stream = env.Output.Stream;
+
+			this.parameters.Clear ();
 			this.state = new ExecutionState ();
 			this.env = env;
 
-			Output.Stream = env.Output.Stream;
-
 			ResetInternalState ();
+
 			if (UseOptions) {
-				parseOptions ();
+				parseOptions (parameters: parameters);
+			} else {
+				this.parameters.AddRange (parameters);
 			}
 
 
@@ -112,7 +120,7 @@ namespace Core.Shell.Common.Commands
 			optionSet.WriteOptionDescriptions (env.Output);
 		}
 
-		private void parseOptions ()
+		private void parseOptions (string[] parameters)
 		{
 			try {
 				optionSet.Parse (parameters);

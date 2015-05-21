@@ -50,9 +50,9 @@ namespace Core.IO
 			return stuff;
 		}
 
-		public static string WriteConfig<Config> (Config stuff) where Config : class, new()
+		public static string WriteConfig<Config> (Config stuff, bool inline = false) where Config : class, new()
 		{
-			string content = JsonConvert.SerializeObject (stuff, Formatting.Indented, SerializerSettings) + "\n";
+			string content = JsonConvert.SerializeObject (stuff, inline ? Formatting.None : Formatting.Indented, SerializerSettings) + "\n";
 			return content;
 		}
 	}

@@ -41,14 +41,16 @@ namespace Core.IO
 		{
 			PlatformInfoDesktop.Assign ();
 
-			Log.LogHandler += (type, messageLines) => {
-				//foreach (string message in messageLines) Console.WriteLine (message);
-				if (Targets.StandardOutput) {
-					foreach (string message in messageLines) {
-						NonBlockingConsole.WriteLine (string.Format ("{0} {1}", formatType (type), message));
+			if (!Core.Portable.SystemInfo.IsRunningFromNUnit) {
+				Log.LogHandler += (type, messageLines) => {
+					//foreach (string message in messageLines) Console.WriteLine (message);
+					if (Targets.StandardOutput) {
+						foreach (string message in messageLines) {
+							NonBlockingConsole.WriteLine (string.Format ("{0} {1}", formatType (type), message));
+						}
 					}
-				}
-			};
+				};
+			}
 
 			Log.LogHandler += (type, messageLines) => {
 				if (Targets.DefaultLogFile) {

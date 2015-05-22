@@ -5,11 +5,13 @@ namespace Core.Portable
 {
 	public static class SystemInfo
 	{
-		public static void Assign (ModernOperatingSystem operatingSystem, string applicationPath, Func<bool> isInteractive)
+		public static void Assign (ModernOperatingSystem operatingSystem, string applicationPath,
+		                           Func<bool> isInteractive, bool isRunningFromNUnit)
 		{
 			SystemInfo._operatingSystem = operatingSystem;
 			SystemInfo.ApplicationPath = applicationPath;
 			SystemInfo._isInteractive = isInteractive;
+			SystemInfo.IsRunningFromNUnit = isRunningFromNUnit;
 		}
 
 
@@ -17,6 +19,8 @@ namespace Core.Portable
 		{
 			return Type.GetType ("Mono.Runtime") != null;
 		}
+
+		public static bool IsRunningFromNUnit { get; private set; }
 
 		private static ModernOperatingSystem _operatingSystem = ModernOperatingSystem.Undefined;
 

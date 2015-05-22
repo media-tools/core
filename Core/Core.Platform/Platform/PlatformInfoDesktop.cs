@@ -2,15 +2,23 @@
 using Core.Portable;
 using Core.Platform.Windows;
 using System.IO;
+using System.Linq;
+using Core.Common;
 
 namespace Core.Platform
 {
 	public static class PlatformInfoDesktop
 	{
+		private static bool done = false;
+
 		public static void Assign ()
 		{
-			assignSystemInfo ();
-			assignUserInfo ();
+			if (!done) {
+				assignSystemInfo ();
+				assignUserInfo ();
+				done = true;
+			}
+			Console.WriteLine ("PlatformInfoDesktop.Assign finished!");
 		}
 
 		private static void assignSystemInfo ()
@@ -22,21 +30,28 @@ namespace Core.Platform
 				os = ModernOperatingSystem.WindowsDesktop;
 			}
 
+			string applicationPath = System.Reflection.Assembly.GetEntryAssembly ()?.Location;
+
 			SystemInfo.Assign (
 				operatingSystem: os,
-				applicationPath: System.Reflection.Assembly.GetEntryAssembly ().Location,
-				isInteractive: IsInteractive
+				applicationPath: applicationPath,
+				isInteractive: IsInteractive,
+				isRunningFromNUnit: isRunningFromNUnit
 			);
 		}
 
 
 		private static bool isConsoleSizeZero { 
 			get {
-				try {
-					return 0 == (Console.WindowHeight + Console.WindowWidth);
-				} catch (IOException ex) {
-					isConsoleInvalid = true;
+				if (isRunningFromNUnit) { 
 					return true;
+				} else {
+					try {
+						return 0 == (Console.WindowHeight + Console.WindowWidth);
+					} catch (IOException ex) {
+						isConsoleInvalid = true;
+						return true;
+					}
 				}
 			}
 		}
@@ -45,8 +60,12 @@ namespace Core.Platform
 
 		private static bool IsInteractive ()
 		{
-			return !isConsoleInvalid && !isConsoleSizeZero;
+			return !isRunningFromNUnit && !isConsoleInvalid && !isConsoleSizeZero;
 		}
+
+		private static readonly bool isRunningFromNUnit = 
+			AppDomain.CurrentDomain.GetAssemblies ().Any (
+				a => a.FullName.ToLowerInvariant ().StartsWith ("nunit.framework"));
 
 		private static void assignUserInfo ()
 		{

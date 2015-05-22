@@ -47,55 +47,72 @@ namespace Core.IO
 
 		static NonBlockingConsole ()
 		{
-			running = true;
-			threadOutput = new Thread (
-				() => {
-					runningOutput = true;
-					string item;
-					while (running) {
-						if (queueOutput.TryTake (out item, 50)) {
-							lock (lockObject) {
-								Console.Write (item);
+			// unit tests
+			if (Core.Portable.SystemInfo.IsRunningFromNUnit) {
+				running = false;
+				IsInputOpen = false;
+			}
+			// normal program
+			else {
+				running = true;
+				threadOutput = new Thread (
+					() => {
+						runningOutput = true;
+						string item;
+						while (running) {
+							if (queueOutput.TryTake (out item, 50)) {
+								lock (lockObject) {
+									Console.Write (item);
+								}
 							}
 						}
-					}
-					runningOutput = false;
-				});
-			threadOutput.IsBackground = true;
-			threadOutput.Start ();
+						runningOutput = false;
+					});
+				threadOutput.IsBackground = true;
+				threadOutput.Start ();
 
-			threadInput = new Thread (
-				() => {
-					runningInput = true;
-					while (running) {
-						while (Console.KeyAvailable) {
-							lock (lockObject) {
-								queueInput.Add (Console.ReadKey (true));
+				threadInput = new Thread (
+					() => {
+						runningInput = true;
+						while (running) {
+							while (Console.KeyAvailable) {
+								lock (lockObject) {
+									queueInput.Add (Console.ReadKey (true));
+								}
 							}
+							Thread.Sleep (50);
 						}
-						Thread.Sleep (50);
-					}
-					runningInput = false;
-				});
-			threadInput.IsBackground = true;
-			threadInput.Start ();
+						runningInput = false;
+					});
+				threadInput.IsBackground = true;
+				threadInput.Start ();
 
-			IsInputOpen = Core.Portable.SystemInfo.IsInteractive;
+				IsInputOpen = Core.Portable.SystemInfo.IsInteractive;
+			}
 		}
 
 		public static void Finish ()
 		{
-			running = false;
-			for (int i = 10; i >= 0 && (runningInput || runningOutput); i--) {
-				Thread.Sleep (30);
+			// unit tests
+			if (Core.Portable.SystemInfo.IsRunningFromNUnit) {
+				running = false;
+				IsInputOpen = false;
 			}
-			IsInputOpen = false;
+			// normal program
+			else {
+				
+				running = false;
+				for (int i = 10; i >= 0 && (runningInput || runningOutput); i--) {
+					Thread.Sleep (30);
+				}
+				IsInputOpen = false;
 
-			threadOutput.Abort ();
-			while (queueOutput.Count > 0) {
-				Console.WriteLine (queueOutput.Take ());
+				threadOutput.Abort ();
+				while (queueOutput.Count > 0) {
+					Console.WriteLine (queueOutput.Take ());
+				}
+				threadInput.Abort ();
 			}
-			threadInput.Abort ();
 		}
 
 		public static void Write (string value)

@@ -36,7 +36,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IO\ConfigHelper.cs" />
-    <Compile Include="IO\Logging.cs" />
     <Compile Include="IO\NonBlockingConsole.cs" />
     <Compile Include="IO\NonBlockingFile.cs" />
     <Compile Include="IO\Storage.cs" />
@@ -46,7 +45,8 @@
     <Compile Include="Common\ObjectExtensions.cs" />
     <Compile Include="Platform\FileAssociation.cs" />
     <Compile Include="Platform\Windows\WindowsRegistry.cs" />
-    <Compile Include="Platform\PlatformInfoDesktop.cs" />
+    <Compile Include="Platform\DesktopPlatform.cs" />
+    <Compile Include="Platform\UnitTestPlatform.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

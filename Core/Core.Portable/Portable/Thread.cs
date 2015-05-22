@@ -15,7 +15,7 @@ namespace Core.Portable
 
 		public static void Sleep (int milliseconds)
 		{
-			System.Threading.Tasks.Task.Delay (3000).Wait ();
+			System.Threading.Tasks.Task.Delay (milliseconds).Wait ();
 		}
 	}
 }

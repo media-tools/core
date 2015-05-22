@@ -14,18 +14,18 @@ namespace Core.Shell
 	{
 		public static void Main (string[] args)
 		{
-			Logging.Enable ();
+			DesktopPlatform.Start ();
 
 			new MainClass ().Run (args);
 
-			Logging.Finish ();
+			DesktopPlatform.Finish ();
 		}
 
 		public void Run (string[] args)
 		{
 			fixFileAssociations ();
-
-			Logging.Targets.StandardOutput = false;
+			
+			DesktopPlatform.LogTargets.StandardOutput = false;
 
 			// option values
 			bool help = false;
@@ -37,7 +37,7 @@ namespace Core.Shell
 			// option parser
 			OptionSet optionSet = new OptionSet ();
 			optionSet.Add ("h|help|?", "Prints out the options.", option => help = (option != null));
-			optionSet.Add ("log|debug", "Show log messages.", option => Logging.Targets.StandardOutput = option != null);
+			optionSet.Add ("log|debug", "Show log messages.", option => DesktopPlatform.LogTargets.StandardOutput = option != null);
 			optionSet.Add ("c=", "Execute a command string.", option => {
 				mode = Mode.CommandString;
 				commandString = option;
@@ -64,10 +64,9 @@ namespace Core.Shell
 				return;
 			}
 
-			PlatformInfoDesktop.Assign ();
-
 			UnixShell shell = new UnixShell ();
 			shell.Environment.Output.Stream = output;
+			shell.Environment.Error.Stream = output;
 
 			// run code line
 			if (mode == Mode.CommandString) {
@@ -90,7 +89,7 @@ namespace Core.Shell
 				
 				// run test code if there is no interactive console
 				if (!SystemInfo.IsInteractive) {
-					Logging.Targets.StandardOutput = true;
+					DesktopPlatform.LogTargets.StandardOutput = true;
 					test (shell);
 				}
 

@@ -44,6 +44,8 @@ namespace Core.Shell.Common.Commands
 	{
 		RedirectableTextWriter Output { get; }
 
+		RedirectableTextWriter Error { get; }
+
 		void Execute (string[] parameters, ExecutionEnvironment env);
 	}
 
@@ -51,6 +53,8 @@ namespace Core.Shell.Common.Commands
 	{
 		// the default output stream
 		public RedirectableTextWriter Output { get; } = new RedirectableTextWriter();
+		// the default error stream
+		public RedirectableTextWriter Error { get; } = new RedirectableTextWriter();
 
 		// the default executable name
 		public string ExecutableName { get; protected set; } = "unknown";
@@ -81,6 +85,7 @@ namespace Core.Shell.Common.Commands
 		{
 			Log.Debug ("Execute: ", ExecutableName, " ", parameters.ToJson (inline: true));
 			Output.Stream = env.Output.Stream;
+			Error.Stream = env.Error.Stream;
 
 			this.parameters.Clear ();
 			this.state = new ExecutionState ();

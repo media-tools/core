@@ -8,6 +8,8 @@ namespace Core.Shell.Common
 	{
 		public RedirectableTextWriter Output { get; } = new RedirectableTextWriter ();
 
+		public RedirectableTextWriter Error { get; } = new RedirectableTextWriter ();
+
 		public List<StackTraceElement> StackTrace { get; set; } = new List<StackTraceElement> {
 			new StackTraceElement {
 				Executable = "root",

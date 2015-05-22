@@ -2,6 +2,7 @@
 using System;
 using Core.Shell.Common;
 using Core.Common;
+using Core.Platform;
 
 namespace Core.UnitTests.Shell
 {
@@ -11,13 +12,13 @@ namespace Core.UnitTests.Shell
 		[TestFixtureSetUp ()]
 		public void Setup ()
 		{
-			Core.IO.Logging.Enable ();
+			UnitTestPlatform.Start ();
 		}
 
 		[TestFixtureTearDown ()]
 		public void TearDown ()
 		{
-			Core.IO.Logging.Finish ();
+			UnitTestPlatform.Finish ();
 		}
 
 		[Test ()]
@@ -26,7 +27,7 @@ namespace Core.UnitTests.Shell
 			string code, expectedOutput;
 
 			code = @"
-				echo -n test;echo test2
+				echo -n test1;echo test2
 				echo test7 a  ""b c d"" """" ''      'c' abc;
 				if true;
 				then
@@ -37,7 +38,7 @@ namespace Core.UnitTests.Shell
 					echo test6; echo test7
 				fi
 			";
-			expectedOutput = @"";
+			expectedOutput = "test1test2\ntest7 a b c d   c abc\ntest4\n";
 			Assert.AreEqual (expected: expectedOutput, actual: captureOutput (code), message: "code: " + expectedOutput);
 			
 		}
@@ -48,12 +49,15 @@ namespace Core.UnitTests.Shell
 
 			UnixShell shell = new UnixShell ();
 			shell.Environment.Output.Stream = line => result += line;
+			shell.Environment.Error.Stream = line => result += line;
 
 			try {
 				shell.RunScript (code: code);
 			} catch (Exception ex) {
 				Log.Error (ex);
 			}
+
+			result = result.Replace (Environment.NewLine, "\n");
 
 			return result;
 		}

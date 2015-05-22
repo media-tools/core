@@ -3,6 +3,7 @@ using System;
 using Core.Common;
 using System.Text;
 using Core.Tar;
+using Core.Platform;
 
 namespace Core.UnitTests.Common
 {
@@ -12,13 +13,13 @@ namespace Core.UnitTests.Common
 		[TestFixtureSetUp ()]
 		public void Setup ()
 		{
-			Core.IO.Logging.Enable ();
+			UnitTestPlatform.Start ();
 		}
 
 		[TestFixtureTearDown ()]
 		public void TearDown ()
 		{
-			Core.IO.Logging.Finish ();
+			UnitTestPlatform.Finish ();
 		}
 
 		[Test ()]

@@ -1,10 +1,6 @@
 ﻿using System;
 using Core.Calendar.Google;
-using Core.Common;
-using System.Reflection;
-using System.Globalization;
-using Google.Apis.Auth.OAuth2;
-using Core.IO;
+using Core.Platform;
 
 namespace Core.Tests.Calendar.Google
 {
@@ -12,9 +8,11 @@ namespace Core.Tests.Calendar.Google
 	{
 		public static void Main (string[] args)
 		{
-			Logging.Enable ();
+			DesktopPlatform.Start ();
 
 			GoogleCalendarService google = new GoogleCalendarService (new TestConfig ());
+
+			DesktopPlatform.Finish ();
 		}
 
 		public class TestConfig : IGoogleConfig

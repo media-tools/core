@@ -148,12 +148,16 @@ namespace Core.Platform
 
 		public string UserFullName {
 			get {
+				// linux
 				if (PlatformInfo.System.OperatingSystem == ModernOperatingSystem.Linux) {
 					string home = Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
 					return (FileHelper.Instance as LinuxFileHelper).GetOwner_Linux (home).RealName.Trim (',');
-				} else {
-					WindowsIdentity wi = WindowsIdentity.GetCurrent ();
-					return wi.Name;
+				}
+				// windows
+				else {
+					//WindowsIdentity wi = WindowsIdentity.GetCurrent ();
+					//return wi.Name;
+					return UserShortName;
 				}
 			}
 		}

@@ -15,7 +15,7 @@
     <tags>mono posix linux unix</tags>
   </metadata>
   <files>
-    <file src="/usr/lib/mono/4.5/Mono.Posix.dll" target="lib/net45/" />
+    <file src="Mono.Posix-4.5/Mono.Posix.dll" target="lib/net45/" />
   </files>
 </package>
 

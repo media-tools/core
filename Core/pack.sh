@@ -18,7 +18,7 @@ xbuild /p:Configuration=Debug Core.sln
 # nuget version
 for x in *.nuspec
 do
-	echo $IGNORE_NUSPEC | grep "$x" >/dev/null && (
+	echo $IGNORE_NUSPEC | grep "$x" >/dev/null || (
 		perl -pi.bak -e 's/<version>([0-9]+)\.([0-9]+)\.([0-9]+)<\/version>/"<version>$1.$2.".($3+1)."<\/version>"/ge; ' "$x"
 	)
 done
@@ -29,8 +29,10 @@ rm -rf nuget-out
 mkdir nuget-out
 for x in *.nuspec
 do
-	# Windows Store allows only Release configuration!!!!
-	nuget pack "$x" -Prop Configuration=Release -OutputDirectory nuget-out
+	echo $IGNORE_NUSPEC | grep "$x" >/dev/null || (
+		# Windows Store allows only Release configuration!!!!
+		nuget pack "$x" -Prop Configuration=Release -OutputDirectory nuget-out
+	)
 done
 
 # git

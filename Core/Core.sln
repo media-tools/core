@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.UnitTests.Shell", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Shell.Platform", "Core.Shell.Platform\Core.Shell.Platform.csproj", "{A286F6DE-1F31-4A5E-8DDE-BA9395952057}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Shell.Platform.Linux", "Core.Shell.Platform.Linux\Core.Shell.Platform.Linux.csproj", "{0A92BE74-857E-4CEA-9CCE-D4062B5C2D11}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{0411DCAC-6339-40EA-B691-1E960C97CE5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0411DCAC-6339-40EA-B691-1E960C97CE5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0411DCAC-6339-40EA-B691-1E960C97CE5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A92BE74-857E-4CEA-9CCE-D4062B5C2D11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A92BE74-857E-4CEA-9CCE-D4062B5C2D11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A92BE74-857E-4CEA-9CCE-D4062B5C2D11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A92BE74-857E-4CEA-9CCE-D4062B5C2D11}.Release|Any CPU.Build.0 = Release|Any CPU
 		{122998F6-7FB5-4F2F-BC66-05A6482C7122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{122998F6-7FB5-4F2F-BC66-05A6482C7122}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{122998F6-7FB5-4F2F-BC66-05A6482C7122}.Release|Any CPU.ActiveCfg = Release|Any CPU

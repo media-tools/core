@@ -10,17 +10,17 @@ namespace Core.Shell.Platform.FileSystems
 			for (char prefix = 'c'; prefix <= 'z'; prefix++) {
 				AddPrefix (prefix + ":/");
 			}
-			DefaultRootDirectory = new RegularDirectory ("c:/", "");
+			DefaultRootDirectory = new WindowsDirectory ("c:/", "", this);
 		}
 
 		protected override VirtualFile File (string prefix, string path)
 		{
-			return new RegularFile (prefix: prefix, path: path);
+			return new WindowsFile (prefix: prefix, path: path, fileSystem: this);
 		}
 
 		protected override VirtualDirectory Directory (string prefix, string path)
 		{
-			return new RegularDirectory (prefix: prefix, path: path);
+			return new WindowsDirectory (prefix: prefix, path: path, fileSystem: this);
 		}
 	}
 }

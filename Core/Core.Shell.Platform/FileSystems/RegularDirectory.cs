@@ -3,21 +3,23 @@ using Core.Shell.Common.FileSystems;
 
 namespace Core.Shell.Platform.FileSystems
 {
-	public class RegularDirectory : VirtualDirectory
+	public abstract class RegularDirectory : VirtualDirectory
 	{
 		public string RealPath { get; private set; }
 
-		public override string VirtualPrefix { get { return virtualPrefix; } }
+		public override string VirtualPrefix { get { return prefix; } }
 
-		public override string VirtualPath { get { return virtualPath; } }
+		public override string VirtualPath { get { return path; } }
 
-		readonly string virtualPrefix;
-		readonly string virtualPath;
+		private readonly string prefix;
+		private readonly string path;
+		protected readonly RegularFileSystem fileSystem;
 
-		public RegularDirectory (string prefix, string path)
+		protected RegularDirectory (string prefix, string path, RegularFileSystem fileSystem)
 		{
-			virtualPrefix = prefix;
-			virtualPath = path;
+			this.fileSystem = fileSystem;
+			this.prefix = prefix;
+			this.path = path;
 			RealPath = prefix + path;
 		}
 
@@ -28,14 +30,14 @@ namespace Core.Shell.Platform.FileSystems
 
 		public VirtualNode GetChildDirectory (string name)
 		{
-			string childPath = FileSystemHelper.CombinePath (virtualPath, name);
-			return new RegularDirectory (virtualPrefix, childPath);
+			string childPath = FileSystemHelper.CombinePath (path, name);
+			return fileSystem.Directory (prefix + childPath);
 		}
 
 		public VirtualNode GetChildFile (string name)
 		{
-			string childPath = FileSystemHelper.CombinePath (virtualPath, name);
-			return new RegularFile (virtualPrefix, childPath);
+			string childPath = FileSystemHelper.CombinePath (path, name);
+			return fileSystem.File (prefix + childPath);
 		}
 	}
 }

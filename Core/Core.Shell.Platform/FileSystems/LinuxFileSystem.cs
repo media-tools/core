@@ -8,17 +8,17 @@ namespace Core.Shell.Platform.FileSystems
 		public LinuxFileSystem ()
 		{
 			AddPrefix ("/");
-			DefaultRootDirectory = new RegularDirectory ("/", "");
+			DefaultRootDirectory = new LinuxDirectory ("/", "", this);
 		}
 
 		protected override VirtualFile File (string prefix, string path)
 		{
-			return new RegularFile (prefix: prefix, path: path);
+			return new LinuxFile (prefix: prefix, path: path, fileSystem: this);
 		}
 
 		protected override VirtualDirectory Directory (string prefix, string path)
 		{
-			return new RegularDirectory (prefix: prefix, path: path);
+			return new LinuxDirectory (prefix: prefix, path: path, fileSystem: this);
 		}
 	}
 }

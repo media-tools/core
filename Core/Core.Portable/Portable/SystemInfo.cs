@@ -6,6 +6,7 @@ namespace Core.Portable
 	public static class SystemInfo
 	{
 		public static void Assign (ModernOperatingSystem operatingSystem, string applicationPath,
+		                           string workingDirectory,
 		                           Func<bool> isInteractive, bool isRunningFromNUnit)
 		{
 			SystemInfo._operatingSystem = operatingSystem;
@@ -35,6 +36,8 @@ namespace Core.Portable
 		}
 
 		public static string ApplicationPath { get; private set; }
+
+		public static string WorkingDirectory { get; private set; }
 
 		private static Func<bool> _isInteractive = null;
 

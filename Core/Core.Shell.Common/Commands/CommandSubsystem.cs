@@ -46,7 +46,7 @@ namespace Core.Shell.Common.Commands
 
 		RedirectableTextWriter Error { get; }
 
-		void Execute (string[] parameters, ExecutionEnvironment env);
+		void Execute (string invokedExecutableName, string[] parameters, ExecutionEnvironment env);
 	}
 
 	public abstract class AbstractCommand : ICommand
@@ -64,6 +64,9 @@ namespace Core.Shell.Common.Commands
 		protected bool UseOptions = false;
 		protected bool printHelp = false;
 
+		// the invoked executable name
+		protected string invokedExecutableName;
+
 		// Parameters
 		protected List<string> parameters = new List<string> ();
 
@@ -75,18 +78,19 @@ namespace Core.Shell.Common.Commands
 
 		protected AbstractCommand ()
 		{
-			optionSet.Add ("h|help|?", "Prints out the options.", option => printHelp = (option != null));
+			optionSet.Add ("help|?", "Prints out the options.", option => printHelp = (option != null));
 			optionSet.Add ("<>", parameters.Add);
 		}
 
 		#region ICommand implementation
 
-		public void Execute (string[] parameters, ExecutionEnvironment env)
+		public void Execute (string invokedExecutableName, string[] parameters, ExecutionEnvironment env)
 		{
 			Log.Debug ("Execute: ", ExecutableName, " ", parameters.ToJson (inline: true));
 			Output.Stream = env.Output.Stream;
 			Error.Stream = env.Error.Stream;
 
+			this.invokedExecutableName = invokedExecutableName;
 			this.parameters.Clear ();
 			this.state = new ExecutionState ();
 			this.env = env;

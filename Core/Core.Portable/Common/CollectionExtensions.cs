@@ -17,12 +17,12 @@ namespace Core.Common
 			return string.Join (delimiter, enumerable.Select (e => e.ToString ()).ToArray ());
 		}
 
-		public static T[] Extend<T> (this T[] originalArray, T addItem) where T : class
+		public static T[] Extend<T> (this T[] originalArray, params T[] addItem) where T : class
 		{
 			if (addItem == null) {
 				throw new ArgumentNullException ("addItem");
 			}
-			var arr = new[] { addItem };
+			var arr = addItem;
 			if (originalArray == null) {
 				return arr;
 			}

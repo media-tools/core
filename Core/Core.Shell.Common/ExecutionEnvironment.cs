@@ -1,6 +1,8 @@
 using System;
 using Core.Common;
 using System.Collections.Generic;
+using Core.Shell.Common.FileSystems;
+using Core.Portable;
 
 namespace Core.Shell.Common
 {
@@ -20,11 +22,34 @@ namespace Core.Shell.Common
 			}
 		};
 
-		public string WorkingDirectory { get; set; }
+		public VirtualDirectory WorkingDirectory { get; set; }
 
 		public bool IsFatalError { protected get; set; } = false;
 
 		public bool IsAborted { get { return IsFatalError; } }
+
+		public ExecutionEnvironment ()
+		{
+			WorkingDirectory = findWorkingDirectory ();
+		}
+
+		VirtualDirectory findWorkingDirectory ()
+		{
+			VirtualDirectory dir;
+
+			dir = FileSystemSubsystems.ParseNativePath (SystemInfo.WorkingDirectory) as VirtualDirectory;
+			if (dir != null) {
+				return dir;
+			}
+
+			dir = FileSystemSubsystems.ParseNativePath (SystemInfo.WorkingDirectory) as VirtualDirectory;
+			if (dir != null) {
+				return dir;
+			}
+
+			dir = FileSystemSubsystems.DefaultRootDirectory;
+			return dir;
+		}
 	}
 
 	public class ExecutionState

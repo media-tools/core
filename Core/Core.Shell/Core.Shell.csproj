@@ -48,6 +48,10 @@
       <Project>{2CD72EA9-9238-470E-84E8-F364E8C915E3}</Project>
       <Name>Core.Shell.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Core.Shell.Platform\Core.Shell.Platform.csproj">
+      <Project>{A286F6DE-1F31-4A5E-8DDE-BA9395952057}</Project>
+      <Name>Core.Shell.Platform</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="icon.png">

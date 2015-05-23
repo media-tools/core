@@ -10,6 +10,11 @@ namespace Core.Shell.Common.Commands
 			["false" ] = new Builtins.False (),
 			["echo" ] = new Builtins.Echo (),
 			["sleep" ] = new Builtins.Sleep (),
+			["ls" ] = new Builtins.Ls (),
+			["ll" ] = new Builtins.Ls (),
+			["l" ] = new Builtins.Ls (),
+			["lla" ] = new Builtins.Ls (),
+			["llas" ] = new Builtins.Ls (),
 		};
 
 		public override bool ContainsCommand (string commandName)

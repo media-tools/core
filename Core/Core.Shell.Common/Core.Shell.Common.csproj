@@ -45,6 +45,15 @@
     <Compile Include="ExecutionEnvironment.cs" />
     <Compile Include="RedirectableTextWriter.cs" />
     <Compile Include="Commands\Builtins\Sleep.cs" />
+    <Compile Include="FileSystems\FileSystemSubsystem.cs" />
+    <Compile Include="FileSystems\VirtualFile.cs" />
+    <Compile Include="FileSystems\VirtualIOException.cs" />
+    <Compile Include="FileSystems\VirtualFileReader.cs" />
+    <Compile Include="FileSystems\VirtualFileWriter.cs" />
+    <Compile Include="FileSystems\VirtualDirectoryListing.cs" />
+    <Compile Include="FileSystems\VirtualNode.cs" />
+    <Compile Include="FileSystems\VirtualDirectory.cs" />
+    <Compile Include="Commands\Builtins\Ls.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
@@ -75,5 +84,6 @@
   <ItemGroup>
     <Folder Include="Commands\" />
     <Folder Include="Commands\Builtins\" />
+    <Folder Include="FileSystems\" />
   </ItemGroup>
 </Project>

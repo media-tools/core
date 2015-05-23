@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2EBEDE28-9645-4A48-BCDA-1013090277BD}</ProjectGuid>
+    <ProjectGuid>{A286F6DE-1F31-4A5E-8DDE-BA9395952057}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Core</RootNamespace>
-    <AssemblyName>Core.Platform</AssemblyName>
+    <RootNamespace>Core.Shell.Platform</RootNamespace>
+    <AssemblyName>Core.Shell.Platform</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -29,38 +29,32 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="IO\ConfigHelper.cs" />
-    <Compile Include="IO\NonBlockingConsole.cs" />
-    <Compile Include="IO\NonBlockingFile.cs" />
-    <Compile Include="IO\Storage.cs" />
-    <Compile Include="Net\Networking.cs" />
-    <Compile Include="Common\BindingRedirect.cs" />
-    <Compile Include="Common\ExceptionHelper.cs" />
-    <Compile Include="Common\ObjectExtensions.cs" />
-    <Compile Include="Platform\FileAssociation.cs" />
-    <Compile Include="Platform\Windows\WindowsRegistry.cs" />
-    <Compile Include="Platform\DesktopPlatform.cs" />
-    <Compile Include="Platform\UnitTestPlatform.cs" />
-    <Compile Include="IO\SafeDirectoryEnumerator.cs" />
+    <Compile Include="FileSystems\LinuxFileSystem.cs" />
+    <Compile Include="FileSystems\WindowsFileSystem.cs" />
+    <Compile Include="FileSystems\RegularFileSystems.cs" />
+    <Compile Include="FileSystems\RegularFileSystem.cs" />
+    <Compile Include="FileSystems\RegularFile.cs" />
+    <Compile Include="FileSystems\RegularDirectory.cs" />
+    <Compile Include="FileSystems\RegularFileAccess.cs" />
+    <Compile Include="FileSystems\RegularDirectoryListing.cs" />
+    <Compile Include="FileSystems\RegularFileUtilities.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="IO\" />
-    <Folder Include="Net\" />
-    <Folder Include="Common\" />
-    <Folder Include="Platform\" />
-    <Folder Include="Platform\Windows\" />
+    <Folder Include="FileSystems\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\Core.Shell.Common\Core.Shell.Common.csproj">
+      <Project>{2CD72EA9-9238-470E-84E8-F364E8C915E3}</Project>
+      <Name>Core.Shell.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core.Platform\Core.Platform.csproj">
+      <Project>{2EBEDE28-9645-4A48-BCDA-1013090277BD}</Project>
+      <Name>Core.Platform</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Core.Portable\Core.Portable.csproj">
       <Project>{6E2D2753-B286-441D-AC3B-8E0CA2549C15}</Project>
       <Name>Core.Portable</Name>

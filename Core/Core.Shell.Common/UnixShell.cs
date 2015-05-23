@@ -3,6 +3,7 @@ using Core.Common;
 using Core.IO;
 using Core.Portable;
 using System.Linq;
+using Core.Shell.Common.FileSystems;
 
 namespace Core.Shell.Common
 {
@@ -26,7 +27,7 @@ namespace Core.Shell.Common
 			get {
 				string user = UserInfo.FullNameAndMail;
 				string mail = UserInfo.UserMail ?? UserInfo.UserAtHostName;
-				string wd = executer.Environment.WorkingDirectory;
+				VirtualDirectory wd = executer.Environment.WorkingDirectory;
 				string smiley = executer.Environment.StackTrace.Last ().State.IsExitSuccess
 					? string.Empty //char.ConvertFromUtf32 (0x1F603) // SMILING FACE WITH OPEN MOUTH
 					: char.ConvertFromUtf32 (0x1F627) + " "; // ANGUISHED FACE

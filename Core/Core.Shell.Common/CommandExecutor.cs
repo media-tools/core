@@ -60,7 +60,12 @@ namespace Core.Shell.Common
 		{
 			if (CommandSubsystems.ContainsCommand (commandName: ExecutableName)) {
 				ICommand command = CommandSubsystems.GetCommand (commandName: ExecutableName);
-				command.Execute (parameters: Params, env: env);
+				try {
+					command.Execute (invokedExecutableName: ExecutableName, parameters: Params, env: env);
+				} catch (Exception ex) {
+					Log.Error (ex);
+					env.Output.WriteLine (ex.Message);
+				}
 			} else {
 				Log.Error ("No such command!");
 

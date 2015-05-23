@@ -88,10 +88,12 @@ namespace Core.Platform
 			}
 
 			string applicationPath = System.Reflection.Assembly.GetEntryAssembly ()?.Location;
+			string workingDirectory = Environment.CurrentDirectory;
 
 			SystemInfo.Assign (
 				operatingSystem: os,
 				applicationPath: applicationPath,
+				workingDirectory: workingDirectory,
 				isInteractive: IsInteractive,
 				isRunningFromNUnit: false
 			);
@@ -136,11 +138,14 @@ namespace Core.Platform
 				mail = userShortName + "@" + hostName;
 			}
 
+			string homeDirectory = Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
+
 			UserInfo.Assign (
 				userShortName: userShortName,
 				userFullName: null,
 				hostName: hostName,
-				userMail: mail
+				userMail: mail,
+				homeDirectory: homeDirectory
 			);
 		}
 	}

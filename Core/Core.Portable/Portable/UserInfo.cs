@@ -4,13 +4,14 @@ namespace Core.Portable
 {
 	public static class UserInfo
 	{
-		public static void Assign (string userShortName, string userFullName, string hostName, string userMail)
+		public static void Assign (string userShortName, string userFullName, string hostName, string userMail, string homeDirectory)
 		{
 			UserFullName = userFullName ?? "Unknown User";
 			UserShortName = userShortName ?? "unknown";
 			HostName = hostName ?? "localhost";
 			UserMail = userMail;
 			UserAtHostName = userShortName != null && hostName != null ? string.Format ("{0}@{1}", userShortName, hostName) : userMail ?? "unknown@localhost";
+			HomeDirectory = homeDirectory;
 		}
 
 		public static string UserFullName { get; private set; }
@@ -38,6 +39,8 @@ namespace Core.Portable
 		}
 
 		public static string UserAtHostName { get; private set; }
+
+		public static string HomeDirectory { get; private set; }
 	}
 }
 

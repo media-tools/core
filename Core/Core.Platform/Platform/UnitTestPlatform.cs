@@ -44,6 +44,7 @@ namespace Core.Platform
 			SystemInfo.Assign (
 				operatingSystem: os,
 				applicationPath: null,
+				workingDirectory: "/nonexistent",
 				isInteractive: () => false,
 				isRunningFromNUnit: true
 			);
@@ -52,7 +53,8 @@ namespace Core.Platform
 				userShortName: "testuser",
 				userFullName: "Test User",
 				hostName: "hostname",
-				userMail: "fuckyou@test.com"
+				userMail: "fuckyou@test.com",
+				homeDirectory: "/nonexistent"
 			);
 		}
 

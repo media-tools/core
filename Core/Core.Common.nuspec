@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Core.Common</id>
-    <version>0.1.149</version>
+    <version>0.1.150</version>
     <authors>tobiasschulz</authors>
     <owners>tobiasschulz</owners>
     <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
@@ -33,6 +33,7 @@
 
     <file src="Core.Portable/bin/$configuration$/Core.Portable.dll" target="lib/net45/" />
     <file src="Core.Platform/bin/$configuration$/Core.Platform.dll" target="lib/net45/" />
+    <file src="Core.Platform.Linux/bin/$configuration$/Core.Platform.Linux.dll" target="lib/net45/" />
 
     <file src="Core.Portable/bin/$configuration$/Core.Portable.dll" target="lib/net40/" />
     <file src="Core.Platform/bin/$configuration$/Core.Platform.dll" target="lib/net40/" />

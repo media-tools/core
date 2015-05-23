@@ -7,8 +7,8 @@ git pull
 nuget restore
 
 # build
-xbuild /p:Configuration=Release Core.sln
-xbuild /p:Configuration=Debug Core.sln
+#xbuild /p:Configuration=Release Core.sln
+#xbuild /p:Configuration=Debug Core.sln
 
 # git
 git add --all

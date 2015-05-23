@@ -160,6 +160,27 @@ namespace Core.IO
 		{
 			return string.Empty;
 		}
+
+		public virtual bool IsSymLink (string path)
+		{
+			return false;
+		}
+
+		public virtual bool CreateSymLink (string target, string symLink)
+		{
+			return false;
+		}
+
+		public virtual string ReadSymLink (string path)
+		{
+			return null;
+		}
+
+		public virtual string GetOwner (string path)
+		{
+			string user = File.GetAccessControl (path).GetOwner (typeof(System.Security.Principal.NTAccount)).ToString ();
+			return user;
+		}
 	}
 
 	[Flags ()]
@@ -179,6 +200,36 @@ namespace Core.IO
 		OtherExecute = 1,
 		DefaultPermissions = 438,
 		AllPermissions = 511
+	}
+
+	public struct _UserInfo
+	{
+		public _GroupInfo Group { get; }
+
+		public long GroupId  { get; }
+
+		public string GroupName  { get; }
+
+		public string HomeDirectory { get; }
+
+		public string Password  { get; }
+
+		public string RealName { get; }
+
+		public long UserId { get; }
+
+		public string UserName { get; }
+
+	}
+
+	public struct _GroupInfo
+	{
+		public long GroupId  { get; }
+
+		public string GroupName  { get; }
+
+		public string Password  { get; }
+
 	}
 }
 

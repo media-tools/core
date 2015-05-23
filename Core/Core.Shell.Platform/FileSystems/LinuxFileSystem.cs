@@ -20,6 +20,11 @@ namespace Core.Shell.Platform.FileSystems
 		{
 			return new LinuxDirectory (prefix: prefix, path: path, fileSystem: this);
 		}
+
+		protected override VirtualLink Link (string prefix, string path)
+		{
+			return new LinuxLink (prefix: prefix, path: path, fileSystem: this);
+		}
 	}
 }
 

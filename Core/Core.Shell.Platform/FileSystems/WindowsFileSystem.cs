@@ -22,6 +22,11 @@ namespace Core.Shell.Platform.FileSystems
 		{
 			return new WindowsDirectory (prefix: prefix, path: path, fileSystem: this);
 		}
+
+		protected override VirtualLink Link (string prefix, string path)
+		{
+			return new WindowsLink (prefix: prefix, path: path, fileSystem: this);
+		}
 	}
 }
 

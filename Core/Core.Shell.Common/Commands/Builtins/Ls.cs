@@ -67,10 +67,11 @@ namespace Core.Shell.Common.Commands.Builtins
 		{
 			// drwxrwxr-x  5 tobias tobias 4,0K Mai 21 20:39 
 
-			string permissions, user, group, size, date, time, name;
+			string type, permissions, user, group, size, date, time, name;
 
 			permissions = node.PermissionsString;
 			name = node.VirtualFileName;
+			user = node.Owner;
 
 			VirtualFile file = node as VirtualFile;
 			if (file != null) {

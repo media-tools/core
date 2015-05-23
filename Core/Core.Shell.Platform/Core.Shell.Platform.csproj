@@ -44,6 +44,7 @@
     <Compile Include="FileSystems\LinuxFile.cs" />
     <Compile Include="FileSystems\LinuxPlatform.cs" />
     <Compile Include="FileSystems\WindowsFile.cs" />
+    <Compile Include="FileSystems\RegularLink.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -5,16 +5,20 @@ namespace Core.Shell.Common.FileSystems
 {
 	public abstract class VirtualNode
 	{
-		public abstract string VirtualPrefix { get; }
+		public string VirtualPrefix { get; private set; }
 
-		public abstract string VirtualPath { get; }
+		public string VirtualPath { get; private set; }
 
 		public string VirtualFileName { get { return Path.GetFileName (VirtualPath); } }
 
 		public abstract string PermissionsString { get; }
 
-		protected VirtualNode ()
+		public abstract string Owner { get; }
+
+		protected VirtualNode (string prefix, string path)
 		{
+			VirtualPrefix = prefix;
+			VirtualPath = path;
 		}
 
 		public override string ToString ()

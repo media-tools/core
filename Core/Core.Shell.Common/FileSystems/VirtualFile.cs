@@ -4,7 +4,8 @@ namespace Core.Shell.Common.FileSystems
 {
 	public abstract class VirtualFile : VirtualNode
 	{
-		protected VirtualFile ()
+		protected VirtualFile (string prefix, string path)
+			: base (prefix: prefix, path: path)
 		{
 		}
 

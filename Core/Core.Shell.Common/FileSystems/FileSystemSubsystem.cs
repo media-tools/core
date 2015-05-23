@@ -82,6 +82,11 @@ namespace Core.Shell.Common.FileSystems
 			return getElement (path: path, internalFunc: Directory);
 		}
 
+		public VirtualLink Link (string path)
+		{
+			return getElement (path: path, internalFunc: Link);
+		}
+
 		public VirtualNode Node (string path)
 		{
 			return getElement (path: path, internalFunc: Node);
@@ -101,6 +106,8 @@ namespace Core.Shell.Common.FileSystems
 		protected abstract VirtualFile File (string prefix, string path);
 
 		protected abstract VirtualDirectory Directory (string prefix, string path);
+
+		protected abstract VirtualLink Link (string prefix, string path);
 
 		protected abstract VirtualNode Node (string prefix, string path);
 

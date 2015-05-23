@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using Core.Common;
 using Core.IO;
+using System.Security.Principal;
 
 namespace Core.Platform
 {
@@ -130,6 +131,13 @@ namespace Core.Platform
 
 			string userShortName = Environment.UserName;
 			string hostName = Environment.MachineName;
+
+			//Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
+			//FileHelper.
+
+			//WindowsIdentity
+			//wi = WindowsIdentity.GetCurrent ();
+			//Console.WriteLine ("Identity = " + wi.Owner);
 
 			string mail;
 			if (SystemInfo.OperatingSystem == ModernOperatingSystem.WindowsDesktop) {

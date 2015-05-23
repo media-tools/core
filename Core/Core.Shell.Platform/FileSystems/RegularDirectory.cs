@@ -7,19 +7,12 @@ namespace Core.Shell.Platform.FileSystems
 	{
 		public string RealPath { get; private set; }
 
-		public override string VirtualPrefix { get { return prefix; } }
-
-		public override string VirtualPath { get { return path; } }
-
-		private readonly string prefix;
-		private readonly string path;
 		protected readonly RegularFileSystem fileSystem;
 
 		protected RegularDirectory (string prefix, string path, RegularFileSystem fileSystem)
+			: base (prefix: prefix, path: path)
 		{
 			this.fileSystem = fileSystem;
-			this.prefix = prefix;
-			this.path = path;
 			RealPath = prefix + path;
 		}
 
@@ -30,14 +23,14 @@ namespace Core.Shell.Platform.FileSystems
 
 		public VirtualNode GetChildDirectory (string name)
 		{
-			string childPath = FileSystemHelper.CombinePath (path, name);
-			return fileSystem.Directory (prefix + childPath);
+			string childPath = FileSystemHelper.CombinePath (VirtualPath, name);
+			return fileSystem.Directory (VirtualPrefix + childPath);
 		}
 
 		public VirtualNode GetChildFile (string name)
 		{
-			string childPath = FileSystemHelper.CombinePath (path, name);
-			return fileSystem.File (prefix + childPath);
+			string childPath = FileSystemHelper.CombinePath (VirtualPath, name);
+			return fileSystem.File (VirtualPrefix + childPath);
 		}
 	}
 }

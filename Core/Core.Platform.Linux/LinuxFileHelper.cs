@@ -150,6 +150,59 @@ namespace Core.Platform.Linux
 			}
 		}
 
+		public override bool IsSymLink (string path)
+		{
+			UnixSymbolicLinkInfo i = new UnixSymbolicLinkInfo (path);
+			switch (i.FileType) {
+			case FileTypes.SymbolicLink:
+				return true;
+			case FileTypes.Fifo:
+			case FileTypes.Socket:
+			case FileTypes.BlockDevice:
+			case FileTypes.CharacterDevice:
+			case FileTypes.Directory:
+			case FileTypes.RegularFile:
+			default:
+				return false;
+			}
+		}
+
+		public override bool CreateSymLink (string target, string symLink)
+		{
+			try {
+				UnixFileInfo targetFile = new UnixFileInfo (target);
+				targetFile.CreateSymbolicLink (symLink);
+				return true;
+			} catch (Exception ex) {
+				Log.Error ("Failed to create symbolic link from '", symLink, "' to '", target, "'");
+				Log.Error (ex);
+				return false;
+			}
+		}
+
+		public override string ReadSymLink (string path)
+		{
+			UnixSymbolicLinkInfo i = new UnixSymbolicLinkInfo (path);
+			switch (i.FileType) {
+			case FileTypes.SymbolicLink:
+				try {
+					return i.GetContents ().FullName;
+				} catch (Exception ex) {
+					Log.Error ("Failed to read symbolic link: '", path, "'");
+					Log.Error (ex);
+					return null;
+				}
+			case FileTypes.Fifo:
+			case FileTypes.Socket:
+			case FileTypes.BlockDevice:
+			case FileTypes.CharacterDevice:
+			case FileTypes.Directory:
+			case FileTypes.RegularFile:
+			default:
+				return null;
+			}
+		}
+
 		public LinuxFileAccessPermissions Permissions (string path)
 		{
 			/*
@@ -172,10 +225,23 @@ namespace Core.Platform.Linux
 		string formatPermissions (LinuxFileAccessPermissions p)
 		{
 			char ur = (p & LinuxFileAccessPermissions.UserRead) > 0 ? 'r' : '-';
-			char uw = (p & LinuxFileAccessPermissions.UserRead) > 0 ? 'w' : '-';
-			char ux = (p & LinuxFileAccessPermissions.UserRead) > 0 ? 'x' : '-';
-			string result = $"{ur}{uw}{ux}";
+			char uw = (p & LinuxFileAccessPermissions.UserWrite) > 0 ? 'w' : '-';
+			char ux = (p & LinuxFileAccessPermissions.UserExecute) > 0 ? 'x' : '-';
+			char gr = (p & LinuxFileAccessPermissions.GroupRead) > 0 ? 'r' : '-';
+			char gw = (p & LinuxFileAccessPermissions.GroupWrite) > 0 ? 'w' : '-';
+			char gx = (p & LinuxFileAccessPermissions.GroupExecute) > 0 ? 'x' : '-';
+			char or = (p & LinuxFileAccessPermissions.OtherRead) > 0 ? 'r' : '-';
+			char ow = (p & LinuxFileAccessPermissions.OtherWrite) > 0 ? 'w' : '-';
+			char ox = (p & LinuxFileAccessPermissions.OtherExecute) > 0 ? 'x' : '-';
+			string result = $"{ur}{uw}{ux}{gr}{gw}{gx}{or}{ow}{ox}";
 			return result;
+		}
+
+		public override string GetOwner (string path)
+		{
+			var ufi = new UnixFileInfo (path);
+			UnixGroupInfo u;
+			return ufi.OwnerUser.UserName;
 		}
 	}
 }

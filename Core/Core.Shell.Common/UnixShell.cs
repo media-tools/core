@@ -68,6 +68,8 @@ namespace Core.Shell.Common
 		public void PrintWelcome ()
 		{
 			string ifLinux = PlatformInfo.System.OperatingSystem == ModernOperatingSystem.Linux ? string.Format ("({0})", char.ConvertFromUtf32 (0x1F427)) : string.Empty;
+			string mail = PlatformInfo.User.UserMail ?? "(only supported on Windows 8 or newer)";
+			string smiley = PlatformInfo.System.OperatingSystem == ModernOperatingSystem.Linux ? char.ConvertFromUtf32 (0x1F603) : "\u003A"; 
 
 			Environment.Output.WriteLine ();
 			Environment.Output.WriteLine (@"  +++++++++++++++++++++++++ System Info: +++++++++++++++++++++++++");
@@ -76,11 +78,11 @@ namespace Core.Shell.Common
 			Environment.Output.WriteLine (@"  +  Operating System   =  " + PlatformInfo.System.OperatingSystem + " " + ifLinux);
 			Environment.Output.WriteLine (@"  +  Short User Name    =  " + PlatformInfo.User.UserShortName);
 			Environment.Output.WriteLine (@"  +  Full User Name     =  " + PlatformInfo.User.UserFullName);
-			Environment.Output.WriteLine (@"  +  Email Address      =  " + PlatformInfo.User.UserMail);
+			Environment.Output.WriteLine (@"  +  Email Address      =  " + mail);
 			Environment.Output.WriteLine (@"  +  ");
 			Environment.Output.WriteLine (@"  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 			Environment.Output.WriteLine ();
-			Environment.Output.WriteLine (@"  Welcome to {0}, {1}! {2}", PlatformInfo.User.HostName, PlatformInfo.User.UserShortName, char.ConvertFromUtf32 (0x1F603));
+			Environment.Output.WriteLine (@"  Welcome to {0}, {1}! {2}", PlatformInfo.User.HostName, PlatformInfo.User.UserFullName, smiley);
 			Environment.Output.WriteLine ();
 		}
 	}

@@ -80,6 +80,7 @@ namespace Core.Platform
 		private static void Assign ()
 		{
 			PlatformInfo.System = new DesktopSystemInfo ();
+			PlatformInfo.User = new DesktopUserInfo ();
 		}
 
 	}
@@ -149,7 +150,7 @@ namespace Core.Platform
 			get {
 				if (PlatformInfo.System.OperatingSystem == ModernOperatingSystem.Linux) {
 					string home = Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
-					return (FileHelper.Instance as LinuxFileHelper).GetOwner_Linux (home).RealName;
+					return (FileHelper.Instance as LinuxFileHelper).GetOwner_Linux (home).RealName.Trim (',');
 				} else {
 					WindowsIdentity wi = WindowsIdentity.GetCurrent ();
 					return wi.Name;

@@ -5,7 +5,7 @@ git pull
 nuget restore
 
 # copy Mono.Posix.dll
-cp -a /usr/lib/mono/4.5/Mono.Posix.dll Mono.Posix-4.5/
+cp -f /usr/lib/mono/4.5/Mono.Posix.dll Mono.Posix-4.5/
 
 # build
 xbuild /p:Configuration=Release Core.sln

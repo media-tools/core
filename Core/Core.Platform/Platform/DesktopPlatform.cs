@@ -104,7 +104,7 @@ namespace Core.Platform
 			get {
 				try {
 					return 0 == (Console.WindowHeight + Console.WindowWidth);
-				} catch (IOException ex) {
+				} catch (IOException) {
 					isConsoleInvalid = true;
 					return true;
 				}

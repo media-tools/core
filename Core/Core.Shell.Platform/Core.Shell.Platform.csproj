@@ -43,6 +43,7 @@
     <Compile Include="FileSystems\RegularFileUtilities.cs" />
     <Compile Include="FileSystems\LinuxFile.cs" />
     <Compile Include="FileSystems\LinuxPlatform.cs" />
+    <Compile Include="FileSystems\WindowsFile.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

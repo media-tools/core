@@ -69,13 +69,15 @@ namespace Core.Shell.Common.Commands.Builtins
 
 			string permissions, user, group, size, date, time, name;
 
+			permissions = node.PermissionsString;
+			name = node.VirtualFileName;
+
 			VirtualFile file = node as VirtualFile;
 			if (file != null) {
 			}
 
 			VirtualDirectory directory = node as VirtualDirectory;
 			if (directory != null) {
-
 			}
 
 			Output.WriteLine ($"{permissions} {user} {group} {size} {date} {time} {name}");

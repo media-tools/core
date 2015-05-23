@@ -9,11 +9,13 @@ namespace Core.Shell.Common.FileSystems
 
 		public abstract string VirtualPath { get; }
 
+		public string VirtualFileName { get { return Path.GetFileName (VirtualPath); } }
+
+		public abstract string PermissionsString { get; }
+
 		protected VirtualNode ()
 		{
 		}
-
-		public string VirtualFileName { get { return Path.GetFileName (VirtualPath); } }
 
 		public override string ToString ()
 		{

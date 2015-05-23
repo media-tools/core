@@ -48,6 +48,7 @@
     <Compile Include="Platform\DesktopPlatform.cs" />
     <Compile Include="Platform\UnitTestPlatform.cs" />
     <Compile Include="IO\SafeDirectoryEnumerator.cs" />
+    <Compile Include="IO\FileHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

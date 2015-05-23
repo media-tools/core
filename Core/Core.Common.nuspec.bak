@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Core.Common</id>
-    <version>0.1.141</version>
+    <version>0.1.142</version>
     <authors>tobiasschulz</authors>
     <owners>tobiasschulz</owners>
     <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>

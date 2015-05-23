@@ -35,37 +35,55 @@ namespace Core.Shell.Common.Commands.Builtins
 
 			foreach (VirtualNode node in nodes) {
 				if (useLongFormat) {
-					printLongFormat (node);
+					printNode (node: node, printAction: printNodeLongFormat);
 				} else {
-					printShortFormat (node);
+					printNode (node: node, printAction: printNodeShortFormat);
 				}
 			}
 
 			state.ExitCode = 0;
 		}
 
-		void printLongFormat (VirtualNode node)
-		{
-			throw new NotImplementedException ();
-		}
-
-		void printShortFormat (VirtualNode node)
+		void printNode (VirtualNode node, Action<VirtualNode> printAction)
 		{
 			VirtualFile file = node as VirtualFile;
 			if (file != null) {
-				Output.WriteLine (file);
+				printAction (file);
 			}
 
 			VirtualDirectory directory = node as VirtualDirectory;
-			var list = directory.OpenList ();
 			if (directory != null) {
+				var list = directory.OpenList ();
 				foreach (VirtualDirectory subDirectory in list.ListDirectories()) {
-					Output.WriteLine (subDirectory);
+					printAction (subDirectory);
 				}
 				foreach (VirtualFile subFile in list.ListFiles()) {
-					Output.WriteLine (subFile);
+					printAction (subFile);
 				}
 			}
+		}
+
+		void printNodeLongFormat (VirtualNode node)
+		{
+			// drwxrwxr-x  5 tobias tobias 4,0K Mai 21 20:39 
+
+			string permissions, user, group, size, date, time, name;
+
+			VirtualFile file = node as VirtualFile;
+			if (file != null) {
+			}
+
+			VirtualDirectory directory = node as VirtualDirectory;
+			if (directory != null) {
+
+			}
+
+			Output.WriteLine ($"{permissions} {user} {group} {size} {date} {time} {name}");
+		}
+
+		void printNodeShortFormat (VirtualNode node)
+		{
+			Output.WriteLine (node.VirtualFileName);
 		}
 	}
 }

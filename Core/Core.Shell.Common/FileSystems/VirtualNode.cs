@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 namespace Core.Shell.Common.FileSystems
 {
@@ -11,6 +12,8 @@ namespace Core.Shell.Common.FileSystems
 		protected VirtualNode ()
 		{
 		}
+
+		public string VirtualFileName { get { return Path.GetFileName (VirtualPath); } }
 
 		public override string ToString ()
 		{

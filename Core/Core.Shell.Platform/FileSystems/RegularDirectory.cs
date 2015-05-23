@@ -28,13 +28,13 @@ namespace Core.Shell.Platform.FileSystems
 
 		public VirtualNode GetChildDirectory (string name)
 		{
-			string childPath = $"{virtualPath}/{name}";
+			string childPath = FileSystemHelper.CombinePath (virtualPath, name);
 			return new RegularDirectory (virtualPrefix, childPath);
 		}
 
 		public VirtualNode GetChildFile (string name)
 		{
-			string childPath = $"{virtualPath}/{name}";
+			string childPath = FileSystemHelper.CombinePath (virtualPath, name);
 			return new RegularFile (virtualPrefix, childPath);
 		}
 	}

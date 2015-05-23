@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Core.Common;
+using System.Linq;
 
 namespace Core.Shell.Common.FileSystems
 {
@@ -104,6 +105,18 @@ namespace Core.Shell.Common.FileSystems
 		protected abstract VirtualNode Node (string prefix, string path);
 
 		public abstract VirtualNode ParseNativePath (string nativePath);
+	}
+
+	public static class FileSystemHelper
+	{
+		public static string CombinePath (params string[] parts)
+		{
+			if (parts.Length == 0) {
+				return string.Empty;
+			}
+
+			return string.Join ("/", parts.Where (p => p.Length > 0));
+		}
 	}
 }
 

@@ -9,22 +9,12 @@ namespace Core.Shell.Platform.FileSystems
 		{
 		}
 
-		protected override VirtualFile File (string prefix, string path)
-		{
-			return new RegularFile (prefix: prefix, path: path);
-		}
-
-		protected override VirtualDirectory Directory (string prefix, string path)
-		{
-			return new RegularDirectory (prefix: prefix, path: path);
-		}
-
 		protected override VirtualNode Node (string prefix, string path)
 		{
 			if (RegularFileUtilities.IsDirectory (realPath: prefix + path)) {
-				return new RegularDirectory (prefix, path);
+				return Directory (prefix, path);
 			} else {
-				return new RegularFile (prefix, path);
+				return File (prefix, path);
 			}
 		}
 

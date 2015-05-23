@@ -32,6 +32,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Posix">
+      <HintPath>..\packages\Mono.Posix-4.5.4.5.0\lib\net45\Mono.Posix.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -49,6 +52,7 @@
     <Compile Include="Platform\UnitTestPlatform.cs" />
     <Compile Include="IO\SafeDirectoryEnumerator.cs" />
     <Compile Include="IO\FileHelper.cs" />
+    <Compile Include="Platform\Linux\LinuxFileHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -57,6 +61,7 @@
     <Folder Include="Common\" />
     <Folder Include="Platform\" />
     <Folder Include="Platform\Windows\" />
+    <Folder Include="Platform\Linux\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

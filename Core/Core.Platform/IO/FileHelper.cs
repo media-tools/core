@@ -219,7 +219,6 @@ namespace Core.IO
 		public long UserId { get; }
 
 		public string UserName { get; }
-
 	}
 
 	public struct _GroupInfo

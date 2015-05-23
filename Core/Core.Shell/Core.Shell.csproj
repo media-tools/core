@@ -29,6 +29,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="Mono.Posix" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -51,10 +52,6 @@
     <ProjectReference Include="..\Core.Shell.Platform\Core.Shell.Platform.csproj">
       <Project>{A286F6DE-1F31-4A5E-8DDE-BA9395952057}</Project>
       <Name>Core.Shell.Platform</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Core.Platform.Linux\Core.Platform.Linux.csproj">
-      <Project>{CF1191AD-CA9B-4781-AB2B-D5ABE342C6C6}</Project>
-      <Name>Core.Platform.Linux</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

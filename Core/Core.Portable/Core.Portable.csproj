@@ -58,8 +58,8 @@
     <Compile Include="Common\ExceptionExtensions.cs" />
     <Compile Include="Portable\UserInfo.cs" />
     <Compile Include="Portable\SystemInfo.cs" />
-    <Compile Include="Mono.Options-PCL.cs" />
     <Compile Include="Common\DateTimeExtensions.cs" />
+    <Compile Include="Mono.Options-PCL.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

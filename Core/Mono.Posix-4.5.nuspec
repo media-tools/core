@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Mono.Posix-4.5</id>
-    <version>4.5.0.0</version>
+    <version>4.5.0</version>
     <title>Mono.Posix 4.5</title>
     <authors>Mono development team</authors>
     <owners>tobiasschulz</owners>

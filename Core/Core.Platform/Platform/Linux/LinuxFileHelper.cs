@@ -240,8 +240,13 @@ namespace Core.Platform.Linux
 		public override string GetOwner (string path)
 		{
 			var ufi = new UnixFileInfo (path);
-			UnixGroupInfo u;
 			return ufi.OwnerUser.UserName;
+		}
+
+		public UnixUserInfo GetOwner_Linux (string path)
+		{
+			var ufi = new UnixFileInfo (path);
+			return ufi.OwnerUser;
 		}
 	}
 }

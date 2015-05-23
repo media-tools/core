@@ -37,12 +37,12 @@ namespace Core.Shell.Common
 		{
 			VirtualDirectory dir;
 
-			dir = FileSystemSubsystems.ParseNativePath (SystemInfo.WorkingDirectory) as VirtualDirectory;
+			dir = FileSystemSubsystems.ParseNativePath (PlatformInfo.System.WorkingDirectory) as VirtualDirectory;
 			if (dir != null) {
 				return dir;
 			}
 
-			dir = FileSystemSubsystems.ParseNativePath (SystemInfo.WorkingDirectory) as VirtualDirectory;
+			dir = FileSystemSubsystems.ParseNativePath (PlatformInfo.System.WorkingDirectory) as VirtualDirectory;
 			if (dir != null) {
 				return dir;
 			}

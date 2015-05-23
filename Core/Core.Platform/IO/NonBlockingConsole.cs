@@ -48,7 +48,7 @@ namespace Core.IO
 		static NonBlockingConsole ()
 		{
 			// unit tests
-			if (Core.Portable.SystemInfo.IsRunningFromNUnit) {
+			if (Core.Portable.PlatformInfo.System.IsRunningFromNUnit) {
 				running = false;
 				IsInputOpen = false;
 			}
@@ -87,14 +87,14 @@ namespace Core.IO
 				threadInput.IsBackground = true;
 				threadInput.Start ();
 
-				IsInputOpen = Core.Portable.SystemInfo.IsInteractive;
+				IsInputOpen = Core.Portable.PlatformInfo.System.IsInteractive;
 			}
 		}
 
 		public static void Finish ()
 		{
 			// unit tests
-			if (Core.Portable.SystemInfo.IsRunningFromNUnit) {
+			if (Core.Portable.PlatformInfo.System.IsRunningFromNUnit) {
 				running = false;
 				IsInputOpen = false;
 			}

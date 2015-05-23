@@ -6,6 +6,7 @@ using System.Linq;
 using Core.Common;
 using Core.IO;
 using System.Security.Principal;
+using Core.Platform.Linux;
 
 namespace Core.Platform
 {
@@ -24,7 +25,7 @@ namespace Core.Platform
 
 				Assign ();
 
-				if (!Core.Portable.SystemInfo.IsRunningFromNUnit) {
+				if (!Core.Portable.PlatformInfo.System.IsRunningFromNUnit) {
 					Log.LogHandler += (type, messageLines) => {
 						//foreach (string message in messageLines) Console.WriteLine (message);
 						if (LogTargets.StandardOutput) {
@@ -60,9 +61,12 @@ namespace Core.Platform
 
 		public static void Finish ()
 		{
-			NonBlockingConsole.Finish ();
-			if (logfile != null) {
-				logfile.Finish ();
+			if (isStarted) {
+				isStarted = false;
+				NonBlockingConsole.Finish ();
+				if (logfile != null) {
+					logfile.Finish ();
+				}
 			}
 		}
 
@@ -75,30 +79,52 @@ namespace Core.Platform
 
 		private static void Assign ()
 		{
-			assignSystemInfo ();
-			assignUserInfo ();
+			PlatformInfo.System = new DesktopSystemInfo ();
 		}
 
-		private static void assignSystemInfo ()
-		{
-			ModernOperatingSystem os;
-			if (Environment.OSVersion.Platform == PlatformID.Unix) {
-				os = ModernOperatingSystem.Linux;
-			} else {
-				os = ModernOperatingSystem.WindowsDesktop;
+	}
+
+	public sealed class DesktopSystemInfo : ISystemInfo
+	{
+		#region ISystemInfo implementation
+
+		public ModernOperatingSystem OperatingSystem {
+			get {
+				ModernOperatingSystem os;
+				if (Environment.OSVersion.Platform == PlatformID.Unix) {
+					os = ModernOperatingSystem.Linux;
+				} else {
+					os = ModernOperatingSystem.WindowsDesktop;
+				}
+				return os;
 			}
-
-			string applicationPath = System.Reflection.Assembly.GetEntryAssembly ()?.Location;
-			string workingDirectory = Environment.CurrentDirectory;
-
-			SystemInfo.Assign (
-				operatingSystem: os,
-				applicationPath: applicationPath,
-				workingDirectory: workingDirectory,
-				isInteractive: IsInteractive,
-				isRunningFromNUnit: false
-			);
 		}
+
+		public bool IsRunningFromNUnit {
+			get {
+				return false;
+			}
+		}
+
+		public string ApplicationPath {
+			get {
+				return System.Reflection.Assembly.GetEntryAssembly ()?.Location;
+			}
+		}
+
+		public string WorkingDirectory {
+			get {
+				return Environment.CurrentDirectory;
+			}
+		}
+
+		public bool IsInteractive {
+			get {
+				return !isConsoleInvalid && !isConsoleSizeZero;
+			}
+		}
+
+		#endregion
 
 
 		private static bool isConsoleSizeZero { 
@@ -113,49 +139,57 @@ namespace Core.Platform
 		}
 
 		private static bool isConsoleInvalid = false;
+	}
 
-		private static bool IsInteractive ()
-		{
-			return !isConsoleInvalid && !isConsoleSizeZero;
+	public sealed class DesktopUserInfo : IUserInfo
+	{
+		#region IUserInfo implementation
+
+		public string UserFullName {
+			get {
+				if (PlatformInfo.System.OperatingSystem == ModernOperatingSystem.Linux) {
+					string home = Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
+					return (FileHelper.Instance as LinuxFileHelper).GetOwner_Linux (home).RealName;
+				} else {
+					WindowsIdentity wi = WindowsIdentity.GetCurrent ();
+					return wi.Name;
+				}
+			}
 		}
+
+		public string UserShortName {
+			get {
+				return Environment.UserName;
+			}
+		}
+
+		public string HostName {
+			get {
+				return Environment.MachineName;
+			}
+		}
+
+		public string UserMail {
+			get {
+				string mail = null;
+				if (PlatformInfo.System.OperatingSystem == ModernOperatingSystem.WindowsDesktop) {
+					mail = WindowsRegistry.Windows8EmailAddress ();
+				}
+				return mail;
+			}
+		}
+
+		public string HomeDirectory {
+			get {
+				return Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
+			}
+		}
+
+		#endregion
 
 		//private static readonly bool isRunningFromNUnit =
 		//	AppDomain.CurrentDomain.GetAssemblies ().Any (
 		//		a => a.FullName.ToLowerInvariant ().StartsWith ("nunit.framework"));
-
-		private static void assignUserInfo ()
-		{
-			//Console.WriteLine ("UserName: {0}", Environment.UserName);
-			//Console.WriteLine ("UserDomainName: {0}", Environment.UserDomainName);
-			//Console.WriteLine ("MachineName: {0}", Environment.MachineName);
-
-			string userShortName = Environment.UserName;
-			string hostName = Environment.MachineName;
-
-			//Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
-			//FileHelper.
-
-			//WindowsIdentity
-			//wi = WindowsIdentity.GetCurrent ();
-			//Console.WriteLine ("Identity = " + wi.Owner);
-
-			string mail;
-			if (SystemInfo.OperatingSystem == ModernOperatingSystem.WindowsDesktop) {
-				mail = WindowsRegistry.Windows8EmailAddress ();
-			} else {
-				mail = userShortName + "@" + hostName;
-			}
-
-			string homeDirectory = Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
-
-			UserInfo.Assign (
-				userShortName: userShortName,
-				userFullName: null,
-				hostName: hostName,
-				userMail: mail,
-				homeDirectory: homeDirectory
-			);
-		}
 	}
 }
 

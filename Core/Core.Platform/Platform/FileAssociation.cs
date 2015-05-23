@@ -8,7 +8,7 @@ namespace Core.Platform
 	{
 		public static void SetAssociation (string[] extensions, string id, string description, string exePath, string iconPath)
 		{
-			if (SystemInfo.OperatingSystem == ModernOperatingSystem.WindowsDesktop) {
+			if (PlatformInfo.System.OperatingSystem == ModernOperatingSystem.WindowsDesktop) {
 				WindowsRegistry.SetAssociation (extensions: extensions, id: id, description: description, exePath: exePath, iconPath: iconPath);
 			}
 		}

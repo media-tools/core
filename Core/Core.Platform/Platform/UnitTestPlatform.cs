@@ -15,7 +15,7 @@ namespace Core.Platform
 
 				Assign ();
 
-				if (!Core.Portable.SystemInfo.IsRunningFromNUnit) {
+				if (!Core.Portable.PlatformInfo.System.IsRunningFromNUnit) {
 					Log.LogHandler += (type, messageLines) => {
 						foreach (string message in messageLines) {
 							Console.WriteLine (string.Format ("{0} {1}", formatType (type), message));
@@ -26,6 +26,10 @@ namespace Core.Platform
 			}
 		}
 
+		public static void Finish ()
+		{
+		}
+
 		static object formatType (Log.Type type)
 		{
 			string result = $"[{type}]";
@@ -34,32 +38,86 @@ namespace Core.Platform
 
 		static void Assign ()
 		{
-			ModernOperatingSystem os;
-			if (Environment.OSVersion.Platform == PlatformID.Unix) {
-				os = ModernOperatingSystem.Linux;
-			} else {
-				os = ModernOperatingSystem.WindowsDesktop;
-			}
-
-			SystemInfo.Assign (
-				operatingSystem: os,
-				applicationPath: null,
-				workingDirectory: "/nonexistent",
-				isInteractive: () => false,
-				isRunningFromNUnit: true
-			);
-
-			UserInfo.Assign (
-				userShortName: "testuser",
-				userFullName: "Test User",
-				hostName: "hostname",
-				userMail: "fuckyou@test.com",
-				homeDirectory: "/nonexistent"
-			);
+			var dummy = new UnitTestPlatformInfo ();
+			PlatformInfo.System = dummy;
+			PlatformInfo.User = dummy;
 		}
 
-		public static void Finish ()
+		class UnitTestPlatformInfo : ISystemInfo, IUserInfo
 		{
+			#region ISystemInfo implementation
+
+			public ModernOperatingSystem OperatingSystem {
+				get {
+					ModernOperatingSystem os;
+					if (Environment.OSVersion.Platform == PlatformID.Unix) {
+						os = ModernOperatingSystem.Linux;
+					} else {
+						os = ModernOperatingSystem.WindowsDesktop;
+					}
+					return os;
+				}
+			}
+
+			public bool IsRunningFromNUnit {
+				get {
+					return true;
+				}
+			}
+
+			public string ApplicationPath {
+				get {
+					return null;
+				}
+			}
+
+			public string WorkingDirectory {
+				get {
+					return "/nonexistent";
+				}
+			}
+
+			public bool IsInteractive {
+				get {
+					return false;
+				}
+			}
+
+			#endregion
+
+			#region IUserInfo implementation
+
+			public string UserFullName {
+				get {
+					return "Test User";
+				}
+			}
+
+			public string UserShortName {
+				get {
+					return "testuser";
+				}
+			}
+
+			public string HostName {
+				get {
+					return "hostname";
+				}
+			}
+
+			public string UserMail {
+				get {
+					return "fuckyou@test.com";
+				}
+			}
+
+			public string HomeDirectory {
+				get {
+					return "/nonexistent";
+				}
+			}
+
+			#endregion
 		}
 	}
 }

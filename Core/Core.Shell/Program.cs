@@ -93,7 +93,7 @@ namespace Core.Shell
 			if (mode == Mode.Interactive) {
 				
 				// run test code if there is no interactive console
-				if (!SystemInfo.IsInteractive) {
+				if (!PlatformInfo.System.IsInteractive) {
 					DesktopPlatform.LogTargets.StandardOutput = true;
 					test (shell);
 				}
@@ -150,8 +150,8 @@ namespace Core.Shell
 				extensions: new[]{ ".sh", ".coresh", ".bash" },
 				id: "ShellScript",
 				description: "Shell Script",
-				exePath: SystemInfo.ApplicationPath,
-				iconPath: Path.Combine (Path.GetDirectoryName (SystemInfo.ApplicationPath), "icon.ico")
+				exePath: PlatformInfo.System.ApplicationPath,
+				iconPath: Path.Combine (Path.GetDirectoryName (PlatformInfo.System.ApplicationPath), "icon.ico")
 			);
 		}
 

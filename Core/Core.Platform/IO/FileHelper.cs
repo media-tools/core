@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using Core.Common;
+using Core.Platform.Linux;
 
 namespace Core.IO
 {
@@ -17,18 +18,7 @@ namespace Core.IO
 			if (Environment.OSVersion.Platform.ToString ().StartsWith ("Win"))
 				Instance = new FileHelper ();
 			else {
-				var ufh = Type.GetType (LinuxFullClass);
-				if (ufh == null) {
-					ufh = Type.GetType (LinuxFullClass + ", " + LinuxAssemblyName);
-				}
-				if (ufh == null) {
-					var path = Path.GetDirectoryName (typeof(FileHelper).Assembly.Location);
-					var assembly = Assembly.LoadFile (Path.Combine (path, LinuxAssemblyName + ".dll"));
-					if (assembly == null)
-						throw new Exception (LinuxAssemblyName + ".dll is required when running on a Unix based system");
-					ufh = assembly.GetType (LinuxFullClass);
-				}
-				Instance = (FileHelper)Activator.CreateInstance (ufh);
+				Instance = new LinuxFileHelper ();
 			}
 		}
 

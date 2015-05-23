@@ -10,9 +10,9 @@ namespace Core.Shell.Platform.FileSystems
 		public static void Register ()
 		{
 			FileSystemSubsystem fs = null;
-			if (SystemInfo.OperatingSystem == ModernOperatingSystem.Linux) {
+			if (PlatformInfo.System.OperatingSystem == ModernOperatingSystem.Linux) {
 				fs = new LinuxFileSystem ();
-			} else if (SystemInfo.OperatingSystem == ModernOperatingSystem.WindowsDesktop) {
+			} else if (PlatformInfo.System.OperatingSystem == ModernOperatingSystem.WindowsDesktop) {
 				fs = new WindowsFileSystem ();
 			}
 

@@ -1,3 +1,7 @@
+#!/bin/bash
+
+IGNORE_NUSPEC='Mono.Posix-4.5.nuspec'
+
 # git
 git pull
 
@@ -14,7 +18,9 @@ xbuild /p:Configuration=Debug Core.sln
 # nuget version
 for x in *.nuspec
 do
-	perl -pi.bak -e 's/<version>([0-9]+)\.([0-9]+)\.([0-9]+)<\/version>/"<version>$1.$2.".($3+1)."<\/version>"/ge;' "$x"
+	echo $IGNORE_NUSPEC | grep "$x" >/dev/null && (
+		perl -pi.bak -e 's/<version>([0-9]+)\.([0-9]+)\.([0-9]+)<\/version>/"<version>$1.$2.".($3+1)."<\/version>"/ge; ' "$x"
+	)
 done
 MAIN_VERSION=$(grep "<version>" Core.Common.nuspec | perl -n -e 's/[^0-9.]+//g; print')
 

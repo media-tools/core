@@ -15,9 +15,6 @@ namespace Core.Shell
 	{
 		public static void Main (string[] args)
 		{
-			Mono.Unix.FileAccessPermissions fuck = Mono.Unix.FileAccessPermissions.GroupExecute;
-			Console.WriteLine (fuck);
-
 			DesktopPlatform.Start ();
 
 			new MainClass ().Run (args);

@@ -11,6 +11,10 @@ namespace Core.Shell.Common.Commands.Builtins
 			ExecutableName = "sleep";
 		}
 
+		protected override void ResetInternalState ()
+		{
+		}
+
 		protected override void ExecuteInternal ()
 		{
 			try {

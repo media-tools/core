@@ -24,6 +24,8 @@ namespace Core.Shell.Common
 
 		public VirtualDirectory WorkingDirectory { get; set; }
 
+		public VirtualDirectory HomeDirectory { get; set; }
+
 		public bool IsFatalError { protected get; set; } = false;
 
 		public bool IsAborted { get { return IsFatalError; } }
@@ -31,6 +33,7 @@ namespace Core.Shell.Common
 		public ExecutionEnvironment ()
 		{
 			WorkingDirectory = findWorkingDirectory ();
+			HomeDirectory = findHomeDirectory ();
 		}
 
 		VirtualDirectory findWorkingDirectory ()
@@ -42,12 +45,27 @@ namespace Core.Shell.Common
 				return dir;
 			}
 
-			dir = FileSystemSubsystems.ParseNativePath (PlatformInfo.System.WorkingDirectory) as VirtualDirectory;
+			dir = FileSystemSubsystems.ParseNativePath (PlatformInfo.User.HomeDirectory) as VirtualDirectory;
 			if (dir != null) {
 				return dir;
 			}
 
 			dir = FileSystemSubsystems.DefaultRootDirectory;
+
+			return dir;
+		}
+
+		VirtualDirectory findHomeDirectory ()
+		{
+			VirtualDirectory dir;
+
+			dir = FileSystemSubsystems.ParseNativePath (PlatformInfo.User.HomeDirectory) as VirtualDirectory;
+			if (dir != null) {
+				return dir;
+			}
+
+			dir = FileSystemSubsystems.DefaultRootDirectory;
+
 			return dir;
 		}
 	}

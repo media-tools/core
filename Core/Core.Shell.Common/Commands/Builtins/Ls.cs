@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Core.Shell.Common.FileSystems;
+using Core.Common;
+using System.Collections.Generic;
 
 namespace Core.Shell.Common.Commands.Builtins
 {
@@ -26,22 +28,60 @@ namespace Core.Shell.Common.Commands.Builtins
 
 		protected override void ExecuteInternal ()
 		{
-			useLongFormat |= invokedExecutableName == "ll";
+			useLongFormat |= invokedExecutableName.StartsWith ("ll");
 
-			VirtualNode[] nodes = parameters.Select (FileSystemSubsystems.Node).ToArray ();
-			if (nodes.Length == 0) {
-				nodes = new [] { env.WorkingDirectory };
-			}
+			Log.Debug ("parameters: ", parameters.Join (", "));
+			List<VirtualNode> nodes = resolveParameters ();
+			Log.Debug ("nodes: ", nodes.Join (", "));
 
+			// print the resolved nodes
 			foreach (VirtualNode node in nodes) {
-				if (useLongFormat) {
-					printNode (node: node, printAction: printNodeLongFormat);
-				} else {
-					printNode (node: node, printAction: printNodeShortFormat);
+				if (nodes.Count > 1) {
+					Output.WriteLine (node + ":");
+				}
+
+				try {
+					if (useLongFormat) {
+						printNode (node: node, printAction: printNodeLongFormat);
+					} else {
+						printNode (node: node, printAction: printNodeShortFormat);
+					}
+				} catch (VirtualIOException ex) {
+					Log.Error (ex);
+					Output.WriteLine (ex.Message);
+				}
+
+				if (nodes.Count > 1) {
+					Output.WriteLine ();
 				}
 			}
 
 			state.ExitCode = 0;
+		}
+
+		List<VirtualNode> resolveParameters ()
+		{
+			List<VirtualNode> nodes = new List<VirtualNode> ();
+
+			// if there are command line parameters, resolve them
+			if (parameters.Count > 0) {
+				foreach (string p in parameters) {
+					try {
+						string resolvedPath = FileSystemSubsystems.ResolveRelativePath (env) (p);
+						VirtualNode node = FileSystemSubsystems.Node (resolvedPath);
+						nodes.Add (node);
+					} catch (VirtualIOException ex) {
+						Log.Error (ex);
+						Output.WriteLine (ex.Message);
+					}
+				}
+			}
+			// otherwise, use the current working directory
+			else {
+				nodes.Add (env.WorkingDirectory);
+			}
+
+			return nodes;
 		}
 
 		void printNode (VirtualNode node, Action<VirtualNode> printAction)
@@ -71,7 +111,8 @@ namespace Core.Shell.Common.Commands.Builtins
 
 			permissions = node.PermissionsString;
 			name = node.VirtualFileName;
-			user = node.Owner;
+			user = node.OwnerName;
+			group = node.OwnerName;
 
 			VirtualFile file = node as VirtualFile;
 			if (file != null) {

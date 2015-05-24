@@ -13,13 +13,17 @@ namespace Core.Shell.Common.FileSystems
 
 		public abstract string PermissionsString { get; }
 
-		public abstract string Owner { get; }
+		public abstract string OwnerName { get; }
+
+		public abstract string GroupName { get; }
 
 		protected VirtualNode (string prefix, string path)
 		{
 			VirtualPrefix = prefix;
 			VirtualPath = path;
 		}
+
+		public abstract bool Validate (bool throwExceptions);
 
 		public override string ToString ()
 		{

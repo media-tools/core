@@ -98,7 +98,7 @@ namespace Core.Shell.Common.Commands
 			ResetInternalState ();
 
 			if (UseOptions) {
-				parseOptions (parameters: parameters);
+				parseOptions ();
 			} else {
 				this.parameters.AddRange (parameters);
 			}
@@ -129,7 +129,7 @@ namespace Core.Shell.Common.Commands
 			optionSet.WriteOptionDescriptions (env.Output);
 		}
 
-		private void parseOptions (string[] parameters)
+		private void parseOptions ()
 		{
 			try {
 				optionSet.Parse (parameters);
@@ -142,9 +142,7 @@ namespace Core.Shell.Common.Commands
 
 		protected abstract void ExecuteInternal ();
 
-		protected virtual void ResetInternalState ()
-		{
-		}
+		protected abstract void ResetInternalState ();
 	}
 }
 

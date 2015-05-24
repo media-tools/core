@@ -1,5 +1,6 @@
 ﻿using System;
 using Core.Shell.Common.FileSystems;
+using Core.IO;
 
 namespace Core.Shell.Platform.FileSystems
 {
@@ -14,6 +15,21 @@ namespace Core.Shell.Platform.FileSystems
 		{
 			this.fileSystem = fileSystem;
 			RealPath = prefix + path;
+		}
+
+		public override bool Validate (bool throwExceptions)
+		{
+			bool result = false;
+			try {
+				if (FileHelper.Instance.IsFile (path: RealPath)) {
+					result = true;
+				} else {
+					throw new VirtualIOException (message: "No such file", node: this);
+				}
+			} catch (Exception ex) {
+				throw new VirtualIOException (message: ex.Message, node: this, innerException: ex);
+			}
+			return result;
 		}
 
 		public override VirtualFileReader OpenReader ()

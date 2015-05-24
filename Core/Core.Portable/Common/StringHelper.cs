@@ -1,5 +1,6 @@
 ﻿using System;
 using Core.IO;
+using System.Collections.Generic;
 
 namespace Core.Common
 {

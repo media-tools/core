@@ -59,6 +59,7 @@
     <Compile Include="Common\DateTimeExtensions.cs" />
     <Compile Include="Mono.Options-PCL.cs" />
     <Compile Include="Portable\PlatformInfo.cs" />
+    <Compile Include="Common\ParamsFunc.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

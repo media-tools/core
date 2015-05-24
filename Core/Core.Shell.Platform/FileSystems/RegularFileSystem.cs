@@ -1,5 +1,6 @@
 ﻿using System;
 using Core.Shell.Common.FileSystems;
+using Core.Common;
 
 namespace Core.Shell.Platform.FileSystems
 {
@@ -21,7 +22,6 @@ namespace Core.Shell.Platform.FileSystems
 		public override VirtualNode ParseNativePath (string nativePath)
 		{
 			if (nativePath != null) {
-				nativePath = nativePath.Replace ('\\', '/').TrimEnd ('/');
 
 				foreach (string prefix in Prefixes) {
 					if (nativePath.StartsWith (prefix, StringComparison.OrdinalIgnoreCase)) {

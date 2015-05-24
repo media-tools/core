@@ -13,7 +13,9 @@ namespace Core.Shell.Platform.FileSystems
 
 		public override string PermissionsString { get { return FileHelper.Instance.PermissionsString (path: RealPath); } }
 
-		public override string Owner { get { return Core.IO.FileHelper.Instance.GetOwner (path: RealPath); } }
+		public override string OwnerName { get { return Core.IO.FileHelper.Instance.GetOwnerName (path: RealPath); } }
+
+		public override string GroupName { get { return Core.IO.FileHelper.Instance.GetGroupName (path: RealPath); } }
 	}
 
 	public class LinuxDirectory : RegularDirectory
@@ -25,7 +27,9 @@ namespace Core.Shell.Platform.FileSystems
 
 		public override string PermissionsString { get { return FileHelper.Instance.PermissionsString (path: RealPath); } }
 
-		public override string Owner { get { return Core.IO.FileHelper.Instance.GetOwner (path: RealPath); } }
+		public override string OwnerName { get { return Core.IO.FileHelper.Instance.GetOwnerName (path: RealPath); } }
+
+		public override string GroupName { get { return Core.IO.FileHelper.Instance.GetGroupName (path: RealPath); } }
 	}
 
 	public class LinuxLink : RegularLink
@@ -37,7 +41,9 @@ namespace Core.Shell.Platform.FileSystems
 
 		public override string PermissionsString { get { return FileHelper.Instance.PermissionsString (path: RealPath); } }
 
-		public override string Owner { get { return Core.IO.FileHelper.Instance.GetOwner (path: RealPath); } }
+		public override string OwnerName { get { return Core.IO.FileHelper.Instance.GetOwnerName (path: RealPath); } }
+
+		public override string GroupName { get { return Core.IO.FileHelper.Instance.GetGroupName (path: RealPath); } }
 	}
 }
 

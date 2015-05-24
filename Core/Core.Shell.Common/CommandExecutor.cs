@@ -67,7 +67,8 @@ namespace Core.Shell.Common
 					env.Output.WriteLine ("Error! " + ex.Message);
 				}
 			} else {
-				Log.Error ("No such command!");
+				Log.Error ("Command not found: " + ExecutableName);
+				env.Error.WriteLine ("Command not found: " + ExecutableName);
 
 				StackTraceElement element = new StackTraceElement {
 					Executable = ExecutableName,

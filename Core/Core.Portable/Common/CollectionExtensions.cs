@@ -17,16 +17,26 @@ namespace Core.Common
 			return string.Join (delimiter, enumerable.Select (e => e.ToString ()).ToArray ());
 		}
 
-		public static T[] Extend<T> (this T[] originalArray, params T[] addItem) where T : class
+		public static T[] Extend<T> (this T[] firstArray, params T[] secondArray) where T : class
 		{
-			if (addItem == null) {
-				throw new ArgumentNullException ("addItem");
+			if (secondArray == null) {
+				throw new ArgumentNullException ("secondArray");
 			}
-			var arr = addItem;
-			if (originalArray == null) {
-				return arr;
+			if (firstArray == null) {
+				return secondArray;
 			}
-			return originalArray.Concat (arr).ToArray (); // although Concat is not recommended for performance reasons, see the accepted answer
+			return firstArray.Concat (secondArray).ToArray (); // although Concat is not recommended for performance reasons
+		}
+
+		public static T[] Extend<T> (this T firstItem, params T[] secondArray) where T : class
+		{
+			if (secondArray == null) {
+				throw new ArgumentNullException ("secondArray");
+			}
+			if (firstItem == null) {
+				return secondArray;
+			}
+			return new T[]{ firstItem }.Concat (secondArray).ToArray (); // although Concat is not recommended for performance reasons
 		}
 	}
 }

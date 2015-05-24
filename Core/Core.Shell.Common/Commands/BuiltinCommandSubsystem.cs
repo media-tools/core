@@ -10,6 +10,7 @@ namespace Core.Shell.Common.Commands
 			["false" ] = new Builtins.False (),
 			["echo" ] = new Builtins.Echo (),
 			["sleep" ] = new Builtins.Sleep (),
+			["cd" ] = new Builtins.Cd (),
 			["ls" ] = new Builtins.Ls (),
 			["ll" ] = new Builtins.Ls (),
 			["l" ] = new Builtins.Ls (),

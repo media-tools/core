@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using Core.Common;
 using Core.Platform.Linux;
+using Core.Portable;
 
 namespace Core.IO
 {
@@ -29,75 +30,116 @@ namespace Core.IO
 
 		public virtual bool CanWrite (string path)
 		{
-			return ((File.GetAttributes (path) & FileAttributes.ReadOnly) == 0);
+			try {
+				return ((File.GetAttributes (path) & FileAttributes.ReadOnly) == 0);
+			} catch (Exception ex) {
+				Log.Warning (ex);
+				return false;
+			}
 		}
 
 		public virtual bool Delete (string path)
 		{
-			if (Directory.Exists (path)) {
-				if (Directory.GetFileSystemEntries (path).Length != 0)
-					return false;
-				MakeDirWritable (path);
-				Directory.Delete (path, true);
-				return true;
-			} else if (File.Exists (path)) {
-				MakeFileWritable (path);
-				File.Delete (path);
-				return true;
+			try {
+				if (Directory.Exists (path)) {
+					if (Directory.GetFileSystemEntries (path).Length != 0)
+						return false;
+					MakeDirWritable (path);
+					Directory.Delete (path, true);
+					return true;
+				} else if (File.Exists (path)) {
+					MakeFileWritable (path);
+					File.Delete (path);
+					return true;
+				}
+			} catch (Exception ex) {
+				Log.Warning (ex);
 			}
 			return false;
 		}
 
 		public virtual bool Exists (string path)
 		{
-			return (File.Exists (path) || Directory.Exists (path));
+			try {
+				return (File.Exists (path) || Directory.Exists (path));
+			} catch (Exception ex) {
+				Log.Warning (ex);
+				return false;
+			}
 		}
 
 		public virtual bool IsDirectory (string path)
 		{
-			return Directory.Exists (path);
+			try {
+				return Directory.Exists (path);
+			} catch (Exception ex) {
+				Log.Warning (ex);
+				return false;
+			}
 		}
 
 		public virtual bool IsFile (string path)
 		{
-			return File.Exists (path);
+			try {
+				return File.Exists (path);
+			} catch (Exception ex) {
+				Log.Warning (ex);
+				return false;
+			}
 		}
 
 		public virtual long LastModified (string path)
 		{
-			if (IsFile (path)) {
-				var info2 = new FileInfo (path);
-				return info2.Exists ? info2.LastWriteTimeUtc.ToMillisecondsSinceEpoch () : 0;
-			} else if (IsDirectory (path)) {
-				var info = new DirectoryInfo (path);
-				return info.Exists ? info.LastWriteTimeUtc.ToMillisecondsSinceEpoch () : 0;
+			try {
+				if (IsFile (path)) {
+					var info2 = new FileInfo (path);
+					return info2.Exists ? info2.LastWriteTimeUtc.ToMillisecondsSinceEpoch () : 0;
+				} else if (IsDirectory (path)) {
+					var info = new DirectoryInfo (path);
+					return info.Exists ? info.LastWriteTimeUtc.ToMillisecondsSinceEpoch () : 0;
+				}
+			} catch (Exception ex) {
+				Log.Warning (ex);
 			}
 			return 0;
 		}
 
 		public virtual long Length (string path)
 		{
-			// If you call .Length on a file that doesn't exist, an exception is thrown
-			var info2 = new FileInfo (path);
-			return info2.Exists ? info2.Length : 0;
+			try {
+				// If you call .Length on a file that doesn't exist, an exception is thrown
+				var info2 = new FileInfo (path);
+				return info2.Exists ? info2.Length : 0;
+			} catch (Exception ex) {
+				Log.Warning (ex);
+				return 0;
+			}
 		}
 
 		public virtual void MakeDirWritable (string path)
 		{
-			foreach (string file in Directory.GetFiles (path)) {
-				MakeFileWritable (file);
-			}
-			foreach (string subdir in Directory.GetDirectories (path)) {
-				MakeDirWritable (subdir);
+			try {
+				foreach (string file in Directory.GetFiles (path)) {
+					MakeFileWritable (file);
+				}
+				foreach (string subdir in Directory.GetDirectories (path)) {
+					MakeDirWritable (subdir);
+				}
+			} catch (Exception ex) {
+				Log.Warning (ex);
 			}
 		}
 
 		public virtual void MakeFileWritable (string file)
 		{
-			FileAttributes fileAttributes = File.GetAttributes (file);
-			if ((fileAttributes & FileAttributes.ReadOnly) != 0) {
-				fileAttributes &= ~FileAttributes.ReadOnly;
-				File.SetAttributes (file, fileAttributes);
+			try {
+				FileAttributes fileAttributes = File.GetAttributes (file);
+				if ((fileAttributes & FileAttributes.ReadOnly) != 0) {
+					fileAttributes &= ~FileAttributes.ReadOnly;
+					File.SetAttributes (file, fileAttributes);
+				}
+			} catch (Exception ex) {
+				Log.Warning (ex);
 			}
 		}
 
@@ -106,7 +148,8 @@ namespace Core.IO
 			try {
 				File.Move (path, name);
 				return true;
-			} catch {
+			} catch (Exception ex) {
+				Log.Warning (ex);
 				return false;
 			}
 		}
@@ -122,7 +165,8 @@ namespace Core.IO
 				var fileAttributes = File.GetAttributes (path) | FileAttributes.ReadOnly;
 				File.SetAttributes (path, fileAttributes);
 				return true;
-			} catch {
+			} catch (Exception ex) {
+				Log.Warning (ex);
 				return false;
 			}
 		}
@@ -141,7 +185,7 @@ namespace Core.IO
 					return true;
 				}
 			} catch (Exception ex) {
-				Log.Error (ex);
+				Log.Warning (ex);
 			}
 			return false;
 		}
@@ -166,59 +210,27 @@ namespace Core.IO
 			return null;
 		}
 
-		public virtual string GetOwner (string path)
+		public virtual string GetOwnerName (string path)
 		{
-			string user = File.GetAccessControl (path).GetOwner (typeof(System.Security.Principal.NTAccount)).ToString ();
-			return user;
+			try {
+				string userName = File.GetAccessControl (path).GetOwner (typeof(System.Security.Principal.NTAccount)).ToString ();
+				return userName.Replace ("\\", "/").Replace (PlatformInfo.User.HostName + "/", "");
+			} catch (Exception ex) {
+				Log.Warning (ex);
+				return "invalid";
+			}
 		}
-	}
 
-	[Flags ()]
-	public enum LinuxFileAccessPermissions
-	{
-		UserReadWriteExecute = 448,
-		UserRead = 256,
-		UserWrite = 128,
-		UserExecute = 64,
-		GroupReadWriteExecute = 56,
-		GroupRead = 32,
-		GroupWrite = 16,
-		GroupExecute = 8,
-		OtherReadWriteExecute = 7,
-		OtherRead = 4,
-		OtherWrite = 2,
-		OtherExecute = 1,
-		DefaultPermissions = 438,
-		AllPermissions = 511
-	}
-
-	public struct _UserInfo
-	{
-		public _GroupInfo Group { get; }
-
-		public long GroupId  { get; }
-
-		public string GroupName  { get; }
-
-		public string HomeDirectory { get; }
-
-		public string Password  { get; }
-
-		public string RealName { get; }
-
-		public long UserId { get; }
-
-		public string UserName { get; }
-	}
-
-	public struct _GroupInfo
-	{
-		public long GroupId  { get; }
-
-		public string GroupName  { get; }
-
-		public string Password  { get; }
-
+		public virtual string GetGroupName (string path)
+		{
+			try {
+				string groupName = File.GetAccessControl (path).GetGroup (typeof(System.Security.Principal.NTAccount)).ToString ();
+				return groupName.Replace ("\\", "/").Replace (PlatformInfo.User.HostName + "/", "");
+			} catch (Exception ex) {
+				Log.Warning (ex);
+				return "invalid";
+			}
+		}
 	}
 }
 

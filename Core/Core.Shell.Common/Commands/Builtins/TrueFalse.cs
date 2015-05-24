@@ -9,6 +9,10 @@ namespace Core.Shell.Common.Commands.Builtins
 			ExecutableName = "true";
 		}
 
+		protected override void ResetInternalState ()
+		{
+		}
+
 		protected override void ExecuteInternal ()
 		{
 			state.ExitCode = 0;
@@ -20,6 +24,10 @@ namespace Core.Shell.Common.Commands.Builtins
 		public False ()
 		{
 			ExecutableName = "false";
+		}
+
+		protected override void ResetInternalState ()
+		{
 		}
 
 		protected override void ExecuteInternal ()

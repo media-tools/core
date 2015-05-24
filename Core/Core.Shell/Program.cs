@@ -98,22 +98,24 @@ namespace Core.Shell
 				// run interactively
 				else {
 					shell.PrintWelcome ();
-					string line;
-					SpecialCommand specialCommand;
-					NonBlockingConsole.Write (shell.Prompt);
-					while (NonBlockingConsole.IsInputOpen) {
-						while (NonBlockingConsole.TryReadLine (result: out line, specialCommand: specialCommand)) {
-							// handle a special command?
-							if (specialCommand != SpecialCommand.None) {
 
+					NonBlockingConsole.ReadLine readLine = new NonBlockingConsole.ReadLine (shell.History);
+					NonBlockingConsole.Write (shell.Prompt ());
+					while (NonBlockingConsole.IsInputOpen) {
+						while (readLine.TryReadLine ()) {
+							// handle a special command?
+							if (readLine.SpecialCommand != SpecialCommands.None) {
+								// do something
 							}
 							// normal string input
 							else {
+								string line = readLine.Line;
+
 								if (!string.IsNullOrWhiteSpace (line)) {
 									shell.Interactive (line: line);
 								}
-								NonBlockingConsole.Write (shell.Prompt);
 							}
+							NonBlockingConsole.Write (shell.Prompt ());
 						}
 					}
 					NonBlockingConsole.WriteLine (string.Empty);

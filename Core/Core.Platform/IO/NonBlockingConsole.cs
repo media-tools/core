@@ -28,6 +28,9 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Text;
+using System.Collections.Generic;
+using Core.Common;
+using System.Linq;
 
 namespace Core.IO
 {
@@ -136,76 +139,112 @@ namespace Core.IO
 			return false;
 		}
 
-		public static bool TryReadLine (out string result, out SpecialCommand specialCommand)
+		public class ReadLine
 		{
-			specialCommand = SpecialCommand.None;
+			public string Line { get; private set; }
 
-			var buf = new StringBuilder ();
-			while (IsInputOpen) {
-				ConsoleKeyInfo key;
-				if (TryReadKey (result: out key)) {
+			public SpecialCommands SpecialCommand { get; private set; }
 
-					Console.WriteLine (key.Key + " " + key.Modifiers);
+			InputHistory history;
 
-					// Ctrl-D
-					if (key.Key == ConsoleKey.D && key.Modifiers == ConsoleModifiers.Control) {
-						result = null;
-						IsInputOpen = false;
-						return false;
-					}
-					// F4 ? WTF ?
-					else if (key.Key == ConsoleKey.F4) {
-						result = null;
-						IsInputOpen = false;
-						return false;
-					}
-					// Arrow Keys
-					else if (key.Key == ConsoleKey.UpArrow || key.Key == ConsoleKey.DownArrow || key.Key == ConsoleKey.LeftArrow || key.Key == ConsoleKey.RightArrow) {
-						result = null;
-						// remove all current chars
-						while (buf.Length > 0) {
-							buf.Remove (buf.Length - 1, 1);
-							System.Console.Write ("\b \b");
+			public ReadLine (InputHistory history)
+			{
+				this.history = history;
+			}
+
+			public bool TryReadLine ()
+			{
+				// reset state 
+				Line = null;
+				SpecialCommand = SpecialCommands.None;
+
+				var buf = new StringBuilder ();
+				while (NonBlockingConsole.IsInputOpen) {
+					ConsoleKeyInfo key;
+					if (NonBlockingConsole.TryReadKey (result: out key)) {
+
+						//Console.WriteLine (key.Key + " " + key.Modifiers);
+
+						//Log.Debug ("Index: ", history.Index, ", History: ", history.History.Select (l => "\"" + l + "\"").Join (", "));
+
+						// Ctrl-D
+						if (key.Key == ConsoleKey.D && key.Modifiers == ConsoleModifiers.Control) {
+							Close ();
+							return false;
 						}
-						specialCommand =
+						// F4 ? WTF ?
+						else if (key.Key == ConsoleKey.F4) {
+							Close ();
+							return false;
+						}
+						// Arrow Keys
+						else if (key.Key == ConsoleKey.UpArrow || key.Key == ConsoleKey.DownArrow || key.Key == ConsoleKey.LeftArrow || key.Key == ConsoleKey.RightArrow) {
+
+							// save at current history position
+							//history.Edit (buf.ToString ());
+
+							// remove all current chars
+							while (buf.Length > 0) {
+								buf.Remove (buf.Length - 1, 1);
+								System.Console.Write ("\b \b");
+							}
+
+							// move inside the history
+							if (key.Key == ConsoleKey.UpArrow)
+								history.Up ();
+							else if (key.Key == ConsoleKey.DownArrow)
+								history.Down ();
+
+							// load the current history position
+							buf.Append (history.Current);
+							System.Console.Write (buf);
+
+							/*specialCommand =
 							  key.Key == ConsoleKey.UpArrow ? SpecialCommand.ArrowUp
 							: key.Key == ConsoleKey.DownArrow ? SpecialCommand.ArrowDown
 							: key.Key == ConsoleKey.LeftArrow ? SpecialCommand.ArrowLeft
 							: key.Key == ConsoleKey.RightArrow ? SpecialCommand.ArrowRight
-							: SpecialCommand.None;
-						return true;
-					}
-					// Enter
-					else if (key.Key == ConsoleKey.Enter) {
-						result = buf.ToString ();
-						System.Console.Write (Environment.NewLine);
-						return true;
-					}
-					// Backspace
-					else if (key.Key == ConsoleKey.Backspace && buf.Length > 0) {
-						buf.Remove (buf.Length - 1, 1);
-						System.Console.Write ("\b \b");
-					}
-					// normal character
-					else if (key.KeyChar != 0) {
-						buf.Append (key.KeyChar);
-						System.Console.Write (key.KeyChar);
+							: SpecialCommand.None;*/
+							//return true;
+						}
+						// Enter
+						else if (key.Key == ConsoleKey.Enter) {
+							history.Add (buf.ToString ());
+							Line = buf.ToString ();
+							System.Console.WriteLine ();
+							return true;
+						}
+						// Backspace
+						else if (key.Key == ConsoleKey.Backspace && buf.Length > 0) {
+							buf.Remove (buf.Length - 1, 1);
+							System.Console.Write ("\b \b");
+						}
+						// normal character
+						else if (key.KeyChar != 0) {
+							buf.Append (key.KeyChar);
+							System.Console.Write (key.KeyChar);
+						}
 					}
 				}
+
+				Line = buf.ToString ();
+				return !string.IsNullOrEmpty (Line);
 			}
 
-			result = buf.ToString ();
-			return !string.IsNullOrEmpty (result);
+			void Close ()
+			{
+				NonBlockingConsole.IsInputOpen = false;
+			}
 		}
 	}
 
-	public enum SpecialCommand
+	public enum SpecialCommands
 	{
 		None = 0,
-		ArrowUp,
+		/*ArrowUp,
 		ArrowDown,
 		ArrowLeft,
-		ArrowRight,
+		ArrowRight,*/
 	}
 }
 

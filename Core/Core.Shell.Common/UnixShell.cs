@@ -11,6 +11,8 @@ namespace Core.Shell.Common
 	{
 		public ExecutionEnvironment Environment { get { return executer.Environment; } }
 
+		public InputHistory History { get; } = new InputHistory();
+
 		readonly Parser parser = new Parser ();
 		readonly Executer executer = new Executer ();
 
@@ -23,18 +25,17 @@ namespace Core.Shell.Common
 		// char.ConvertFromUtf32 (0x1F603) // SMILING FACE WITH OPEN MOUTH
 		// char.ConvertFromUtf32 (0x1F627) + " "; // ANGUISHED FACE
 		//
-		public string Prompt {
-			get {
-				string mail = PlatformInfo.User.UserShortName ?? PlatformInfo.User.UserShortName;
-				VirtualDirectory wd = executer.Environment.WorkingDirectory;
-				string smiley = executer.Environment.StackTrace.Last ().State.IsExitSuccess
+		public string Prompt ()
+		{
+			string mail = PlatformInfo.User.UserShortName ?? PlatformInfo.User.UserShortName;
+			VirtualDirectory wd = executer.Environment.WorkingDirectory;
+			string smiley = executer.Environment.StackTrace.Last ().State.IsExitSuccess
 					? string.Empty //char.ConvertFromUtf32 (0x1F603) // SMILING FACE WITH OPEN MOUTH
 					: char.ConvertFromUtf32 (0x1F627) + " "; // ANGUISHED FACE
-				//string ifLinux = SystemInfo.OperatingSystem == ModernOperatingSystem.Linux ? char.ConvertFromUtf32 (0x1F427) : string.Empty;
+			//string ifLinux = SystemInfo.OperatingSystem == ModernOperatingSystem.Linux ? char.ConvertFromUtf32 (0x1F427) : string.Empty;
 				
-				string prompt = $"{mail} {wd} {smiley}$ ";
-				return prompt;
-			}
+			string prompt = $"{mail} {wd} {smiley}$ ";
+			return prompt;
 		}
 
 		public void Interactive (string line)

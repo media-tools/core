@@ -65,6 +65,10 @@
       <Project>{6E2D2753-B286-441D-AC3B-8E0CA2549C15}</Project>
       <Name>Core.Portable</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mono.Options-PCL\Mono.Options-PCL.csproj">
+      <Project>{807E6868-2F7F-4CC3-8482-284C606834E4}</Project>
+      <Name>Mono.Options-PCL</Name>
+    </ProjectReference>
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>

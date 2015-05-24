@@ -66,7 +66,7 @@ namespace Core.IO
 
 		public void Add (string value)
 		{
-			if (!string.IsNullOrWhiteSpace (value)) {
+			if (!string.IsNullOrWhiteSpace (value) && History.LastOrDefault () != value) {
 				History.Add (value);
 			}
 			Index = History.Count;

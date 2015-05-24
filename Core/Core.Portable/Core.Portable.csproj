@@ -57,7 +57,6 @@
     <Compile Include="Math\PortablePoint.cs" />
     <Compile Include="Common\ExceptionExtensions.cs" />
     <Compile Include="Common\DateTimeExtensions.cs" />
-    <Compile Include="Mono.Options-PCL.cs" />
     <Compile Include="Portable\PlatformInfo.cs" />
     <Compile Include="Common\ParamsFunc.cs" />
     <Compile Include="IO\InputHistory.cs" />
@@ -78,5 +77,11 @@
     <Folder Include="IO\" />
     <Folder Include="Common\" />
     <Folder Include="Math\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mono.Options-PCL\Mono.Options-PCL.csproj">
+      <Project>{807E6868-2F7F-4CC3-8482-284C606834E4}</Project>
+      <Name>Mono.Options-PCL</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

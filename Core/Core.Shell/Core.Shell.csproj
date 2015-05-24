@@ -53,6 +53,10 @@
       <Project>{A286F6DE-1F31-4A5E-8DDE-BA9395952057}</Project>
       <Name>Core.Shell.Platform</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mono.Options-PCL\Mono.Options-PCL.csproj">
+      <Project>{807E6868-2F7F-4CC3-8482-284C606834E4}</Project>
+      <Name>Mono.Options-PCL</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="icon.png">

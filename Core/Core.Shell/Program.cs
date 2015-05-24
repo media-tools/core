@@ -99,13 +99,21 @@ namespace Core.Shell
 				else {
 					shell.PrintWelcome ();
 					string line;
+					SpecialCommand specialCommand;
 					NonBlockingConsole.Write (shell.Prompt);
 					while (NonBlockingConsole.IsInputOpen) {
-						while (NonBlockingConsole.TryReadLine (result: out line)) {
-							if (!string.IsNullOrWhiteSpace (line)) {
-								shell.Interactive (line: line);
+						while (NonBlockingConsole.TryReadLine (result: out line, specialCommand: specialCommand)) {
+							// handle a special command?
+							if (specialCommand != SpecialCommand.None) {
+
 							}
-							NonBlockingConsole.Write (shell.Prompt);
+							// normal string input
+							else {
+								if (!string.IsNullOrWhiteSpace (line)) {
+									shell.Interactive (line: line);
+								}
+								NonBlockingConsole.Write (shell.Prompt);
+							}
 						}
 					}
 					NonBlockingConsole.WriteLine (string.Empty);

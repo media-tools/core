@@ -136,13 +136,16 @@ namespace Core.IO
 			return false;
 		}
 
-		public static bool TryReadLine (out string result)
+		public static bool TryReadLine (out string result, out SpecialCommand specialCommand)
 		{
+			specialCommand = SpecialCommand.None;
+
 			var buf = new StringBuilder ();
 			while (IsInputOpen) {
 				ConsoleKeyInfo key;
 				if (TryReadKey (result: out key)) {
-					//Console.WriteLine (key.Key + " " + key.Modifiers);
+
+					Console.WriteLine (key.Key + " " + key.Modifiers);
 
 					// Ctrl-D
 					if (key.Key == ConsoleKey.D && key.Modifiers == ConsoleModifiers.Control) {
@@ -155,6 +158,22 @@ namespace Core.IO
 						result = null;
 						IsInputOpen = false;
 						return false;
+					}
+					// Arrow Keys
+					else if (key.Key == ConsoleKey.UpArrow || key.Key == ConsoleKey.DownArrow || key.Key == ConsoleKey.LeftArrow || key.Key == ConsoleKey.RightArrow) {
+						result = null;
+						// remove all current chars
+						while (buf.Length > 0) {
+							buf.Remove (buf.Length - 1, 1);
+							System.Console.Write ("\b \b");
+						}
+						specialCommand =
+							  key.Key == ConsoleKey.UpArrow ? SpecialCommand.ArrowUp
+							: key.Key == ConsoleKey.DownArrow ? SpecialCommand.ArrowDown
+							: key.Key == ConsoleKey.LeftArrow ? SpecialCommand.ArrowLeft
+							: key.Key == ConsoleKey.RightArrow ? SpecialCommand.ArrowRight
+							: SpecialCommand.None;
+						return true;
 					}
 					// Enter
 					else if (key.Key == ConsoleKey.Enter) {
@@ -178,6 +197,15 @@ namespace Core.IO
 			result = buf.ToString ();
 			return !string.IsNullOrEmpty (result);
 		}
+	}
+
+	public enum SpecialCommand
+	{
+		None = 0,
+		ArrowUp,
+		ArrowDown,
+		ArrowLeft,
+		ArrowRight,
 	}
 }
 

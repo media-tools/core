@@ -17,29 +17,29 @@ namespace Core.Shell.Platform.FileSystems
 			this.directory = directory;
 		}
 
-		VirtualNode[] listing = null;
+		IVirtualNode[] listing = null;
 
 		#region VirtualDirectoryListing implementation
 
-		public IEnumerable<VirtualFile> ListFiles ()
+		public IEnumerable<IVirtualFile> ListFiles ()
 		{
 			if (listing == null) {
 				listing = createListing ().ToArray ();
 			}
-			return listing.OfType<VirtualFile> ();
+			return listing.OfType<IVirtualFile> ();
 		}
 
-		public IEnumerable<VirtualDirectory> ListDirectories ()
+		public IEnumerable<IVirtualDirectory> ListDirectories ()
 		{
 			if (listing == null) {
 				listing = createListing ().ToArray ();
 			}
-			return listing.OfType<VirtualDirectory> ();
+			return listing.OfType<IVirtualDirectory> ();
 		}
 
 		#endregion
 
-		IEnumerable<VirtualNode> createListing ()
+		IEnumerable<IVirtualNode> createListing ()
 		{
 			Log.Debug ("Directory listing: ", directory);
 			Log.Indent++;
@@ -47,7 +47,7 @@ namespace Core.Shell.Platform.FileSystems
 			var directories = SafeDirectoryEnumerator.EnumerateDirectories (directory.RealPath, "*", SearchOption.TopDirectoryOnly);
 			foreach (string realPath in directories) {
 				Log.Debug ("realPath: ", realPath);
-				VirtualNode node = directory.GetChildDirectory (Path.GetFileName (realPath));
+				IVirtualNode node = directory.GetChildDirectory (Path.GetFileName (realPath));
 				if (node != null) {
 					yield return node;
 				}
@@ -55,7 +55,7 @@ namespace Core.Shell.Platform.FileSystems
 			var files = SafeDirectoryEnumerator.EnumerateFiles (directory.RealPath, "*", SearchOption.TopDirectoryOnly);
 			foreach (string realPath in files) {
 				Log.Debug ("realPath: ", realPath);
-				VirtualNode node = directory.GetChildFile (Path.GetFileName (realPath));
+				IVirtualNode node = directory.GetChildFile (Path.GetFileName (realPath));
 				if (node != null) {
 					yield return node;
 				}

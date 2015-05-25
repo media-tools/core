@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Core.Shell.Common.FileSystems
 {
-	public abstract class VirtualNode
+	public abstract class VirtualNode : IVirtualNode
 	{
 		public string VirtualPrefix { get; private set; }
 

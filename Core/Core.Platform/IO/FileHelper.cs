@@ -71,7 +71,13 @@ namespace Core.IO
 		public virtual bool IsDirectory (string path)
 		{
 			try {
-				return Directory.Exists (path);
+				// get the file attributes for file or directory
+				FileAttributes attr = File.GetAttributes (path);
+
+				// detect whether its a directory or file
+				return attr.HasFlag (FileAttributes.Directory);
+
+				//return Directory.Exists (path);
 			} catch (Exception ex) {
 				Log.Warning (ex);
 				return false;

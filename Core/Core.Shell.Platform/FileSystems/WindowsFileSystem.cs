@@ -13,17 +13,17 @@ namespace Core.Shell.Platform.FileSystems
 			DefaultRootDirectory = new WindowsDirectory ("c:/", "", this);
 		}
 
-		protected override VirtualFile File (string prefix, string path)
+		protected override IVirtualFile File (string prefix, string path)
 		{
 			return new WindowsFile (prefix: prefix, path: path, fileSystem: this);
 		}
 
-		protected override VirtualDirectory Directory (string prefix, string path)
+		protected override IVirtualDirectory Directory (string prefix, string path)
 		{
 			return new WindowsDirectory (prefix: prefix, path: path, fileSystem: this);
 		}
 
-		protected override VirtualLink Link (string prefix, string path)
+		protected override IVirtualLink Link (string prefix, string path)
 		{
 			return new WindowsLink (prefix: prefix, path: path, fileSystem: this);
 		}

@@ -31,7 +31,7 @@ namespace Core.Shell.Common.Commands.Builtins
 			useLongFormat |= invokedExecutableName.StartsWith ("ll");
 
 			Log.Debug ("parameters: ", parameters.Join (", "));
-			List<VirtualNode> nodes = resolveParameters ();
+			List<IVirtualNode> nodes = resolveParameters ();
 			Log.Debug ("nodes: ", nodes.Join (", "));
 
 			// print the resolved nodes
@@ -59,16 +59,16 @@ namespace Core.Shell.Common.Commands.Builtins
 			state.ExitCode = 0;
 		}
 
-		List<VirtualNode> resolveParameters ()
+		List<IVirtualNode> resolveParameters ()
 		{
-			List<VirtualNode> nodes = new List<VirtualNode> ();
+			List<IVirtualNode> nodes = new List<IVirtualNode> ();
 
 			// if there are command line parameters, resolve them
 			if (parameters.Count > 0) {
 				foreach (string p in parameters) {
 					try {
 						string resolvedPath = FileSystemSubsystems.ResolveRelativePath (env) (p);
-						VirtualNode node = FileSystemSubsystems.Node (resolvedPath);
+						IVirtualNode node = FileSystemSubsystems.Node (resolvedPath);
 						nodes.Add (node);
 					} catch (VirtualIOException ex) {
 						Log.Error (ex);
@@ -84,26 +84,26 @@ namespace Core.Shell.Common.Commands.Builtins
 			return nodes;
 		}
 
-		void printNode (VirtualNode node, Action<VirtualNode> printAction)
+		void printNode (VirtualNode node, Action<IVirtualNode> printAction)
 		{
-			VirtualFile file = node as VirtualFile;
+			IVirtualFile file = node as IVirtualFile;
 			if (file != null) {
 				printAction (file);
 			}
 
-			VirtualDirectory directory = node as VirtualDirectory;
+			IVirtualDirectory directory = node as IVirtualDirectory;
 			if (directory != null) {
 				var list = directory.OpenList ();
-				foreach (VirtualDirectory subDirectory in list.ListDirectories()) {
+				foreach (IVirtualDirectory subDirectory in list.ListDirectories()) {
 					printAction (subDirectory);
 				}
-				foreach (VirtualFile subFile in list.ListFiles()) {
+				foreach (IVirtualFile subFile in list.ListFiles()) {
 					printAction (subFile);
 				}
 			}
 		}
 
-		void printNodeLongFormat (VirtualNode node)
+		void printNodeLongFormat (IVirtualNode node)
 		{
 			// drwxrwxr-x  5 tobias tobias 4,0K Mai 21 20:39 
 
@@ -114,18 +114,18 @@ namespace Core.Shell.Common.Commands.Builtins
 			user = node.OwnerName;
 			group = node.OwnerName;
 
-			VirtualFile file = node as VirtualFile;
+			IVirtualFile file = node as IVirtualFile;
 			if (file != null) {
 			}
 
-			VirtualDirectory directory = node as VirtualDirectory;
+			IVirtualDirectory directory = node as IVirtualDirectory;
 			if (directory != null) {
 			}
 
 			Output.WriteLine ($"{permissions} {user} {group} {size} {date} {time} {name}");
 		}
 
-		void printNodeShortFormat (VirtualNode node)
+		void printNodeShortFormat (IVirtualNode node)
 		{
 			Output.WriteLine (node.VirtualFileName);
 		}

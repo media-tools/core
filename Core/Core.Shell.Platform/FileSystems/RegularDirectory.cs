@@ -4,17 +4,11 @@ using Core.Shell.Common.FileSystems;
 
 namespace Core.Shell.Platform.FileSystems
 {
-	public abstract class RegularDirectory : VirtualDirectory
+	public abstract class RegularDirectory : RegularNode, IVirtualDirectory
 	{
-		public string RealPath { get; private set; }
-
-		protected readonly RegularFileSystem fileSystem;
-
 		protected RegularDirectory (string prefix, string path, RegularFileSystem fileSystem)
-			: base (prefix: prefix, path: path)
+			: base (prefix: prefix, path: path, fileSystem: fileSystem)
 		{
-			this.fileSystem = fileSystem;
-			RealPath = prefix + path;
 		}
 
 		public override bool Validate (bool throwExceptions)
@@ -32,20 +26,20 @@ namespace Core.Shell.Platform.FileSystems
 			return result;
 		}
 
-		public override VirtualDirectoryListing OpenList ()
+		public VirtualDirectoryListing OpenList ()
 		{
 			return new RegularDirectoryListing (directory: this);
 		}
 
-		public VirtualNode GetChildDirectory (string name)
+		public IVirtualNode GetChildDirectory (string name)
 		{
-			string childPath = FileSystemHelper.CombinePath (VirtualPath, name);
+			string childPath = FileSystemHelper.CombinePath (preserveFrontSlash: false, parts: new[]{ VirtualPath, name });
 			return fileSystem.Directory (VirtualPrefix + childPath);
 		}
 
-		public VirtualNode GetChildFile (string name)
+		public IVirtualNode GetChildFile (string name)
 		{
-			string childPath = FileSystemHelper.CombinePath (VirtualPath, name);
+			string childPath = FileSystemHelper.CombinePath (preserveFrontSlash: false, parts: new[]{ VirtualPath, name });
 			return fileSystem.File (VirtualPrefix + childPath);
 		}
 	}

@@ -11,17 +11,17 @@ namespace Core.Shell.Platform.FileSystems
 			DefaultRootDirectory = new LinuxDirectory ("/", "", this);
 		}
 
-		protected override VirtualFile File (string prefix, string path)
+		protected override IVirtualFile File (string prefix, string path)
 		{
 			return new LinuxFile (prefix: prefix, path: path, fileSystem: this);
 		}
 
-		protected override VirtualDirectory Directory (string prefix, string path)
+		protected override IVirtualDirectory Directory (string prefix, string path)
 		{
 			return new LinuxDirectory (prefix: prefix, path: path, fileSystem: this);
 		}
 
-		protected override VirtualLink Link (string prefix, string path)
+		protected override IVirtualLink Link (string prefix, string path)
 		{
 			return new LinuxLink (prefix: prefix, path: path, fileSystem: this);
 		}

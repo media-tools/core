@@ -1,6 +1,7 @@
 ﻿using System;
 using Core.Shell.Common.FileSystems;
 using Core.Common;
+using Core.IO;
 
 namespace Core.Shell.Platform.FileSystems
 {
@@ -8,18 +9,19 @@ namespace Core.Shell.Platform.FileSystems
 	{
 		protected RegularFileSystem ()
 		{
+			AddPrefix ("~/");
 		}
 
-		protected override VirtualNode Node (string prefix, string path)
+		protected override IVirtualNode Node (string prefix, string path)
 		{
-			if (RegularFileUtilities.IsDirectory (realPath: prefix + path)) {
+			if (FileHelper.Instance.IsDirectory (path: RegularFileSystemHelper.RealPath (prefix: prefix, path: path))) {
 				return Directory (prefix, path);
 			} else {
 				return File (prefix, path);
 			}
 		}
 
-		public override VirtualNode ParseNativePath (string nativePath)
+		public override IVirtualNode ParseNativePath (string nativePath)
 		{
 			if (nativePath != null) {
 

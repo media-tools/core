@@ -4,17 +4,11 @@ using Core.Shell.Common.FileSystems;
 
 namespace Core.Shell.Platform.FileSystems
 {
-	public abstract class RegularLink : VirtualLink
+	public abstract class RegularLink : RegularNode, IVirtualLink
 	{
-		public string RealPath { get; private set; }
-
-		protected readonly RegularFileSystem fileSystem;
-
 		protected RegularLink (string prefix, string path, RegularFileSystem fileSystem)
-			: base (prefix: prefix, path: path)
+			: base (prefix: prefix, path: path, fileSystem: fileSystem)
 		{
-			this.fileSystem = fileSystem;
-			RealPath = prefix + path;
 		}
 
 		public override bool Validate (bool throwExceptions)

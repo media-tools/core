@@ -5,9 +5,9 @@ namespace Core.Shell.Common.FileSystems
 {
 	public interface VirtualDirectoryListing
 	{
-		IEnumerable<VirtualFile> ListFiles ();
+		IEnumerable<IVirtualFile> ListFiles ();
 
-		IEnumerable<VirtualDirectory> ListDirectories ();
+		IEnumerable<IVirtualDirectory> ListDirectories ();
 	}
 }
 

@@ -4,17 +4,11 @@ using Core.IO;
 
 namespace Core.Shell.Platform.FileSystems
 {
-	public abstract class RegularFile : VirtualFile
+	public abstract class RegularFile : RegularNode, IVirtualFile
 	{
-		public string RealPath { get; private set; }
-
-		protected readonly RegularFileSystem fileSystem;
-
 		protected RegularFile (string prefix, string path, RegularFileSystem fileSystem)
-			: base (prefix: prefix, path: path)
+			: base (prefix: prefix, path: path, fileSystem: fileSystem)
 		{
-			this.fileSystem = fileSystem;
-			RealPath = prefix + path;
 		}
 
 		public override bool Validate (bool throwExceptions)
@@ -32,12 +26,12 @@ namespace Core.Shell.Platform.FileSystems
 			return result;
 		}
 
-		public override VirtualFileReader OpenReader ()
+		public VirtualFileReader OpenReader ()
 		{
 			return new RegularFileAccess (file: this);
 		}
 
-		public override VirtualFileWriter OpenWriter ()
+		public VirtualFileWriter OpenWriter ()
 		{
 			return new RegularFileAccess (file: this);
 		}

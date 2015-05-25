@@ -91,22 +91,22 @@ namespace Core.Shell.Common.FileSystems
 
 		public VirtualFile File (Path path)
 		{
-			return getElement (path: path, internalFunc: File);
+			return getElement (path: path, internalFunc: FileInternal);
 		}
 
 		public VirtualDirectory Directory (Path path)
 		{
-			return getElement (path: path, internalFunc: Directory);
+			return getElement (path: path, internalFunc: DirectoryInternal);
 		}
 
 		public VirtualLink Link (Path path)
 		{
-			return getElement (path: path, internalFunc: Link);
+			return getElement (path: path, internalFunc: LinkInternal);
 		}
 
 		public VirtualNode Node (Path path)
 		{
-			return getElement (path: path, internalFunc: Node);
+			return getElement (path: path, internalFunc: NodeInternal);
 		}
 
 		T getElement<T> (Path path, Func<Path,T> internalFunc) where T : class

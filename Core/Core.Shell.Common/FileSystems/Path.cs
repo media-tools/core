@@ -26,7 +26,12 @@ namespace Core.Shell.Common.FileSystems
 
 		public Path CombinePath (params string[] parts)
 		{
-			return new Path (prefix: Prefix, virtualPath: VirtualPath.Extend (parts), fileSystem: FileSystem);
+			return new Path (prefix: Prefix, virtualPath: PathHelper.NormalizePath (VirtualPath.Extend (parts)), fileSystem: FileSystem);
+		}
+
+		public string FullPath ()
+		{
+			return Prefix.CombinePath (VirtualPath);
 		}
 
 		public override bool Equals (object obj)

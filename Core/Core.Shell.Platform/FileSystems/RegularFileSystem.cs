@@ -22,7 +22,7 @@ namespace Core.Shell.Platform.FileSystems
 			if (prefix == homePrefix) {
 				realPath = PathHelper.CombinePath (PlatformInfo.User.HomeDirectory, virtualPath);
 			} else {
-				realPath = PathHelper.CombinePath (prefix.Name, virtualPath);
+				realPath = prefix.CombinePath (virtualPath);
 			}
 			return realPath;
 		}
@@ -39,7 +39,6 @@ namespace Core.Shell.Platform.FileSystems
 		public override VirtualNode ParseNativePath (string nativePath)
 		{
 			if (nativePath != null) {
-
 				foreach (Prefix prefix in Prefixes) {
 					if (prefix.Matches (nativePath)) {
 						return Node (prefix.CreatePath (nativePath));

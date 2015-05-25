@@ -9,7 +9,7 @@ namespace Core.Shell.Platform.FileSystems
 		{
 			Prefix rootPrefix = new Prefix ("/", this);
 			AddPrefix (rootPrefix);
-			DefaultRootDirectory = new LinuxDirectory (rootPrefix.CreatePath (""), this);
+			DefaultRootDirectory = new LinuxDirectory (rootPrefix.CreatePath ("/"), this);
 		}
 
 		protected override VirtualFile FileInternal (Path path)

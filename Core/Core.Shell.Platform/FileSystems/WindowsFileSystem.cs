@@ -14,7 +14,7 @@ namespace Core.Shell.Platform.FileSystems
 			for (char prefix = 'd'; prefix <= 'z'; prefix++) {
 				AddPrefix (new Prefix (prefix + ":/", this));
 			}
-			DefaultRootDirectory = new WindowsDirectory (cPrefix.CreatePath (""));
+			DefaultRootDirectory = new WindowsDirectory (cPrefix.CreatePath ("c:/"));
 		}
 
 		protected override VirtualFile FileInternal (Path path)

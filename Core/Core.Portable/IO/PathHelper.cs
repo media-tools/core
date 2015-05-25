@@ -34,6 +34,7 @@ namespace Core.IO
 
 		public static string NormalizePath (string path)
 		{
+			Log.Debug ("PathHelper.NormalizePath: path=", path);
 			if (string.IsNullOrWhiteSpace (path))
 				return string.Empty;
 
@@ -54,6 +55,7 @@ namespace Core.IO
 					// ignore
 				} else if (part == "..") {
 					// go one up!
+					Log.Debug ("PathHelper.NormalizePath: go up from ", newParts.Join ("/"));
 					if (newParts.Count > 0) {
 						newParts.RemoveAt (newParts.Count - 1);
 					}
@@ -70,6 +72,20 @@ namespace Core.IO
 			return path;
 		}
 
+		public static string[] NormalizePath (string[] pathParts)
+		{
+			return NormalizePath (pathParts.Join ("/")).Split ('/');
+		}
+
+		public static string CombinePath (params string[] parts)
+		{
+			if (parts == null || parts.Length == 0) {
+				return string.Empty;
+			}
+
+			return NormalizePath (path: string.Join ("/", parts.Where (p => p.Length > 0)));
+		}
+
 		public static string CombinePath (string firstPart, params string[] otherParts)
 		{
 			if (firstPart == null || otherParts == null) {
@@ -78,7 +94,7 @@ namespace Core.IO
 
 			string[] parts = new[]{ firstPart }.Extend (otherParts);
 
-			return NormalizePath (path: string.Join ("/", parts.Where (p => p.Length > 0)));
+			return CombinePath (parts: parts);
 		}
 	}
 }

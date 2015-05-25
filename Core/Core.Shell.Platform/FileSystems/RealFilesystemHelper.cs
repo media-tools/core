@@ -4,13 +4,13 @@ using Core.Portable;
 
 namespace Core.Shell.Platform.FileSystems
 {
-	public static class RegularFileSystemHelper
+	/*public static class RegularFileSystemHelper
 	{
 		public static string RealPath (string prefix, string path)
 		{
 			string realPath;
 			if (prefix == "~/") {
-				realPath = FileSystemHelper.CombinePath (preserveFrontSlash: true, parts: new[] {
+				realPath = VirtualPathHelper.CombinePath (preserveFrontSlash: true, parts: new[] {
 					PlatformInfo.User.HomeDirectory,
 					path
 				});
@@ -19,6 +19,6 @@ namespace Core.Shell.Platform.FileSystems
 			}
 			return realPath;
 		}
-	}
+	}*/
 }
 

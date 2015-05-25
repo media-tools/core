@@ -55,11 +55,12 @@
     <Compile Include="Commands\Builtins\Cd.cs" />
     <Compile Include="Commands\AbstractCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
-    <Compile Include="FileSystems\IVirtualLink.cs" />
-    <Compile Include="FileSystems\IVirtualDirectory.cs" />
-    <Compile Include="FileSystems\IVirtualFile.cs" />
-    <Compile Include="FileSystems\IVirtualNode.cs" />
-    <Compile Include="FileSystems\FileSystemHelper.cs" />
+    <Compile Include="FileSystems\Prefix.cs" />
+    <Compile Include="FileSystems\Path.cs" />
+    <Compile Include="FileSystems\VirtualPathHelper.cs" />
+    <Compile Include="FileSystems\VirtualLink.cs" />
+    <Compile Include="FileSystems\VirtualFile.cs" />
+    <Compile Include="FileSystems\VirtualDirectory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

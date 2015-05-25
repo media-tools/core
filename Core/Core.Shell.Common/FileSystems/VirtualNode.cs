@@ -1,15 +1,12 @@
 using System;
 using System.IO;
+using Core.IO;
 
 namespace Core.Shell.Common.FileSystems
 {
-	public abstract class VirtualNode : IVirtualNode
+	public abstract class VirtualNode
 	{
-		public string VirtualPrefix { get; private set; }
-
-		public string VirtualPath { get; private set; }
-
-		public string VirtualFileName { get { return Path.GetFileName (VirtualPath); } }
+		public Path Path { get; private set; }
 
 		public abstract string PermissionsString { get; }
 
@@ -17,24 +14,23 @@ namespace Core.Shell.Common.FileSystems
 
 		public abstract string GroupName { get; }
 
-		protected VirtualNode (string prefix, string path)
+		protected VirtualNode (Path path)
 		{
-			VirtualPrefix = prefix;
-			VirtualPath = path;
+			Path = path;
 		}
 
 		public abstract bool Validate (bool throwExceptions);
 
 		public override string ToString ()
 		{
-			return string.Format ("{0}{1}", VirtualPrefix, VirtualPath);
+			return string.Format ("[{0}: Path={1}]", this.GetType ().Name, Path);
 		}
 
 		public override bool Equals (object obj)
 		{
 			VirtualNode other = obj as VirtualNode;
 			if (other != null) {
-				return VirtualPrefix == other.VirtualPrefix && VirtualPath == other.VirtualPath;
+				return Path == other.Path;
 			} else {
 				return false;
 			}

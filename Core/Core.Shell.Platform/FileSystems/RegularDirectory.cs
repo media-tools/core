@@ -4,10 +4,10 @@ using Core.Shell.Common.FileSystems;
 
 namespace Core.Shell.Platform.FileSystems
 {
-	public abstract class RegularDirectory : RegularNode, IVirtualDirectory
+	public abstract class RegularDirectory : VirtualDirectory
 	{
-		protected RegularDirectory (string prefix, string path, RegularFileSystem fileSystem)
-			: base (prefix: prefix, path: path, fileSystem: fileSystem)
+		protected RegularDirectory (Path path)
+			: base (path: path)
 		{
 		}
 
@@ -15,32 +15,32 @@ namespace Core.Shell.Platform.FileSystems
 		{
 			bool result = false;
 			try {
-				if (FileHelper.Instance.IsDirectory (path: RealPath)) {
+				if (FileHelper.Instance.IsDirectory (path: Path.RealPath)) {
 					result = true;
 				} else {
-					throw new VirtualIOException (message: "No such directory", node: this);
+					throw new VirtualIOException (message: "No such directory", node: Path);
 				}
 			} catch (Exception ex) {
-				throw new VirtualIOException (message: ex.Message, node: this, innerException: ex);
+				throw new VirtualIOException (message: ex.Message, node: Path, innerException: ex);
 			}
 			return result;
 		}
 
-		public VirtualDirectoryListing OpenList ()
+		public override VirtualDirectoryListing OpenList ()
 		{
 			return new RegularDirectoryListing (directory: this);
 		}
 
-		public IVirtualNode GetChildDirectory (string name)
+		public VirtualNode GetChildDirectory (string name)
 		{
-			string childPath = FileSystemHelper.CombinePath (preserveFrontSlash: false, parts: new[]{ VirtualPath, name });
-			return fileSystem.Directory (VirtualPrefix + childPath);
+			Path childPath = Path.CombinePath (name);
+			return Path.FileSystem.Directory (childPath);
 		}
 
-		public IVirtualNode GetChildFile (string name)
+		public VirtualNode GetChildFile (string name)
 		{
-			string childPath = FileSystemHelper.CombinePath (preserveFrontSlash: false, parts: new[]{ VirtualPath, name });
-			return fileSystem.File (VirtualPrefix + childPath);
+			Path childPath = Path.CombinePath (name);
+			return Path.FileSystem.File (childPath);
 		}
 	}
 }

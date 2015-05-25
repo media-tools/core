@@ -4,13 +4,13 @@ namespace Core.Shell.Common.FileSystems
 {
 	public class VirtualIOException : Exception
 	{
-		public VirtualIOException (string message, VirtualNode node, Exception innerException)
-			: this (message: message, path: node.VirtualPrefix + node.VirtualPath, innerException: innerException)
+		public VirtualIOException (string message, Path node, Exception innerException)
+			: this (message: message, path: node.ToString (), innerException: innerException)
 		{
 		}
 
-		public VirtualIOException (string message, VirtualNode node)
-			: this (message: message, path: node.VirtualPrefix + node.VirtualPath)
+		public VirtualIOException (string message, Path node)
+			: this (message: message, path: node.ToString ())
 		{
 		}
 

@@ -28,7 +28,7 @@ namespace Core.Shell.Common
 		public string Prompt ()
 		{
 			string mail = PlatformInfo.User.UserShortName ?? PlatformInfo.User.UserShortName;
-			IVirtualDirectory wd = executer.Environment.WorkingDirectory;
+			VirtualDirectory wd = executer.Environment.WorkingDirectory;
 			string smiley = executer.Environment.StackTrace.Last ().State.IsExitSuccess
 					? string.Empty //char.ConvertFromUtf32 (0x1F603) // SMILING FACE WITH OPEN MOUTH
 					: char.ConvertFromUtf32 (0x1F627) + " "; // ANGUISHED FACE

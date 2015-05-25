@@ -43,7 +43,6 @@
     <Compile Include="FileSystems\LinuxFile.cs" />
     <Compile Include="FileSystems\WindowsFile.cs" />
     <Compile Include="FileSystems\RegularLink.cs" />
-    <Compile Include="FileSystems\RegularNode.cs" />
     <Compile Include="FileSystems\RealFilesystemHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

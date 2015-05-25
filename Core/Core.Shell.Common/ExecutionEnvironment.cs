@@ -22,9 +22,9 @@ namespace Core.Shell.Common
 			}
 		};
 
-		public IVirtualDirectory WorkingDirectory { get; set; }
+		public VirtualDirectory WorkingDirectory { get; set; }
 
-		public IVirtualDirectory HomeDirectory { get; set; }
+		public VirtualDirectory HomeDirectory { get; set; }
 
 		public bool IsFatalError { protected get; set; } = false;
 
@@ -36,16 +36,16 @@ namespace Core.Shell.Common
 			HomeDirectory = findHomeDirectory ();
 		}
 
-		IVirtualDirectory findWorkingDirectory ()
+		VirtualDirectory findWorkingDirectory ()
 		{
-			IVirtualDirectory dir;
+			VirtualDirectory dir;
 
-			dir = FileSystemSubsystems.ParseNativePath (PlatformInfo.System.WorkingDirectory) as IVirtualDirectory;
+			dir = FileSystemSubsystems.ParseNativePath (PlatformInfo.System.WorkingDirectory) as VirtualDirectory;
 			if (dir != null) {
 				return dir;
 			}
 
-			dir = FileSystemSubsystems.ParseNativePath (PlatformInfo.User.HomeDirectory) as IVirtualDirectory;
+			dir = FileSystemSubsystems.ParseNativePath (PlatformInfo.User.HomeDirectory) as VirtualDirectory;
 			if (dir != null) {
 				return dir;
 			}
@@ -55,11 +55,11 @@ namespace Core.Shell.Common
 			return dir;
 		}
 
-		IVirtualDirectory findHomeDirectory ()
+		VirtualDirectory findHomeDirectory ()
 		{
-			IVirtualDirectory dir;
+			VirtualDirectory dir;
 
-			dir = FileSystemSubsystems.ParseNativePath (PlatformInfo.User.HomeDirectory) as IVirtualDirectory;
+			dir = FileSystemSubsystems.ParseNativePath (PlatformInfo.User.HomeDirectory) as VirtualDirectory;
 			if (dir != null) {
 				return dir;
 			}

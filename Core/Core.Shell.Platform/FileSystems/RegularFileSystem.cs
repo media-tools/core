@@ -2,32 +2,47 @@
 using Core.Shell.Common.FileSystems;
 using Core.Common;
 using Core.IO;
+using Core.Portable;
 
 namespace Core.Shell.Platform.FileSystems
 {
 	public abstract class RegularFileSystem : FileSystemSubsystem
 	{
+		readonly Prefix homePrefix;
+
 		protected RegularFileSystem ()
 		{
-			AddPrefix ("~/");
+			homePrefix = new Prefix ("~/", this);
+			AddPrefix (homePrefix);
 		}
 
-		protected override IVirtualNode Node (string prefix, string path)
+		public override string GetRealPath (Prefix prefix, string[] virtualPath)
 		{
-			if (FileHelper.Instance.IsDirectory (path: RegularFileSystemHelper.RealPath (prefix: prefix, path: path))) {
-				return Directory (prefix, path);
+			string realPath;
+			if (prefix == homePrefix) {
+				realPath = PathHelper.CombinePath (PlatformInfo.User.HomeDirectory, virtualPath);
 			} else {
-				return File (prefix, path);
+				realPath = PathHelper.CombinePath (prefix.Name, virtualPath);
+			}
+			return realPath;
+		}
+
+		protected override VirtualNode NodeInternal (Path path)
+		{
+			if (FileHelper.Instance.IsDirectory (path: path.RealPath)) {
+				return Directory (path);
+			} else {
+				return File (path);
 			}
 		}
 
-		public override IVirtualNode ParseNativePath (string nativePath)
+		public override VirtualNode ParseNativePath (string nativePath)
 		{
 			if (nativePath != null) {
 
-				foreach (string prefix in Prefixes) {
-					if (nativePath.StartsWith (prefix, StringComparison.OrdinalIgnoreCase)) {
-						return Node (prefix, nativePath.Substring (prefix.Length));
+				foreach (Prefix prefix in Prefixes) {
+					if (prefix.Matches (nativePath)) {
+						return Node (prefix.CreatePath (nativePath));
 					}
 				}
 			}

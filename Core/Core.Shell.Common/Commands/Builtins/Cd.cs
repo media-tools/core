@@ -18,7 +18,7 @@ namespace Core.Shell.Common.Commands.Builtins
 
 		protected override void ExecuteInternal ()
 		{
-			IVirtualDirectory node =
+			VirtualDirectory node =
 				parameters.Count >= 1
 				? FileSystemSubsystems.Directory (FileSystemSubsystems.ResolveRelativePath (env) (parameters [0]))
 				: env.HomeDirectory;

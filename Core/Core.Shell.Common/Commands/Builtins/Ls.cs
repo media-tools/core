@@ -31,7 +31,7 @@ namespace Core.Shell.Common.Commands.Builtins
 			useLongFormat |= invokedExecutableName.StartsWith ("ll");
 
 			Log.Debug ("parameters: ", parameters.Join (", "));
-			List<IVirtualNode> nodes = resolveParameters ();
+			List<VirtualNode> nodes = resolveParameters ();
 			Log.Debug ("nodes: ", nodes.Join (", "));
 
 			// print the resolved nodes
@@ -59,16 +59,16 @@ namespace Core.Shell.Common.Commands.Builtins
 			state.ExitCode = 0;
 		}
 
-		List<IVirtualNode> resolveParameters ()
+		List<VirtualNode> resolveParameters ()
 		{
-			List<IVirtualNode> nodes = new List<IVirtualNode> ();
+			List<VirtualNode> nodes = new List<VirtualNode> ();
 
 			// if there are command line parameters, resolve them
 			if (parameters.Count > 0) {
 				foreach (string p in parameters) {
 					try {
-						string resolvedPath = FileSystemSubsystems.ResolveRelativePath (env) (p);
-						IVirtualNode node = FileSystemSubsystems.Node (resolvedPath);
+						Path resolvedPath = FileSystemSubsystems.ResolveRelativePath (env) (p);
+						VirtualNode node = FileSystemSubsystems.Node (resolvedPath);
 						nodes.Add (node);
 					} catch (VirtualIOException ex) {
 						Log.Error (ex);
@@ -84,50 +84,50 @@ namespace Core.Shell.Common.Commands.Builtins
 			return nodes;
 		}
 
-		void printNode (VirtualNode node, Action<IVirtualNode> printAction)
+		void printNode (VirtualNode node, Action<VirtualNode> printAction)
 		{
-			IVirtualFile file = node as IVirtualFile;
+			VirtualFile file = node as VirtualFile;
 			if (file != null) {
 				printAction (file);
 			}
 
-			IVirtualDirectory directory = node as IVirtualDirectory;
+			VirtualDirectory directory = node as VirtualDirectory;
 			if (directory != null) {
 				var list = directory.OpenList ();
-				foreach (IVirtualDirectory subDirectory in list.ListDirectories()) {
+				foreach (VirtualDirectory subDirectory in list.ListDirectories()) {
 					printAction (subDirectory);
 				}
-				foreach (IVirtualFile subFile in list.ListFiles()) {
+				foreach (VirtualFile subFile in list.ListFiles()) {
 					printAction (subFile);
 				}
 			}
 		}
 
-		void printNodeLongFormat (IVirtualNode node)
+		void printNodeLongFormat (VirtualNode node)
 		{
 			// drwxrwxr-x  5 tobias tobias 4,0K Mai 21 20:39 
 
 			string type, permissions, user, group, size, date, time, name;
 
 			permissions = node.PermissionsString;
-			name = node.VirtualFileName;
+			name = node.Path.FileName;
 			user = node.OwnerName;
 			group = node.OwnerName;
 
-			IVirtualFile file = node as IVirtualFile;
+			VirtualFile file = node as VirtualFile;
 			if (file != null) {
 			}
 
-			IVirtualDirectory directory = node as IVirtualDirectory;
+			VirtualDirectory directory = node as VirtualDirectory;
 			if (directory != null) {
 			}
 
 			Output.WriteLine ($"{permissions} {user} {group} {size} {date} {time} {name}");
 		}
 
-		void printNodeShortFormat (IVirtualNode node)
+		void printNodeShortFormat (VirtualNode node)
 		{
-			Output.WriteLine (node.VirtualFileName);
+			Output.WriteLine (node.Path.FileName);
 		}
 	}
 }

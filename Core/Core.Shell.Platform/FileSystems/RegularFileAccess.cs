@@ -18,17 +18,17 @@ namespace Core.Shell.Platform.FileSystems
 
 		public System.Collections.Generic.IEnumerable<string> ReadLines ()
 		{
-			return File.ReadLines (file.RealPath);
+			return File.ReadLines (file.Path.RealPath);
 		}
 
 		public string ReadText ()
 		{
-			return File.ReadAllText (file.RealPath);
+			return File.ReadAllText (file.Path.RealPath);
 		}
 
 		public byte[] ReadBytes ()
 		{
-			return File.ReadAllBytes (file.RealPath);
+			return File.ReadAllBytes (file.Path.RealPath);
 		}
 
 		#endregion
@@ -37,32 +37,32 @@ namespace Core.Shell.Platform.FileSystems
 
 		public void WriteLines (System.Collections.Generic.IEnumerable<string> lines)
 		{
-			File.WriteAllLines (file.RealPath, lines, Encoding.UTF8);
+			File.WriteAllLines (file.Path.RealPath, lines, Encoding.UTF8);
 		}
 
 		public void WriteText (string text)
 		{
-			File.WriteAllText (file.RealPath, text, Encoding.UTF8);
+			File.WriteAllText (file.Path.RealPath, text, Encoding.UTF8);
 		}
 
 		public void WriteBytes (byte[] bytes)
 		{
-			File.WriteAllBytes (file.RealPath, bytes);
+			File.WriteAllBytes (file.Path.RealPath, bytes);
 		}
 
 		public void AppendLines (System.Collections.Generic.IEnumerable<string> lines)
 		{
-			File.AppendAllLines (file.RealPath, lines, Encoding.UTF8);
+			File.AppendAllLines (file.Path.RealPath, lines, Encoding.UTF8);
 		}
 
 		public void AppendText (string text)
 		{
-			File.AppendAllText (file.RealPath, text, Encoding.UTF8);
+			File.AppendAllText (file.Path.RealPath, text, Encoding.UTF8);
 		}
 
 		public void Delete ()
 		{
-			File.Delete (file.RealPath);
+			File.Delete (file.Path.RealPath);
 		}
 
 		#endregion

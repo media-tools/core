@@ -4,10 +4,10 @@ using Core.IO;
 
 namespace Core.Shell.Platform.FileSystems
 {
-	public abstract class RegularFile : RegularNode, IVirtualFile
+	public abstract class RegularFile : VirtualFile
 	{
-		protected RegularFile (string prefix, string path, RegularFileSystem fileSystem)
-			: base (prefix: prefix, path: path, fileSystem: fileSystem)
+		protected RegularFile (Path path)
+			: base (path: path)
 		{
 		}
 
@@ -15,23 +15,23 @@ namespace Core.Shell.Platform.FileSystems
 		{
 			bool result = false;
 			try {
-				if (FileHelper.Instance.IsFile (path: RealPath)) {
+				if (FileHelper.Instance.IsFile (path: Path.RealPath)) {
 					result = true;
 				} else {
-					throw new VirtualIOException (message: "No such file", node: this);
+					throw new VirtualIOException (message: "No such file", node: Path);
 				}
 			} catch (Exception ex) {
-				throw new VirtualIOException (message: ex.Message, node: this, innerException: ex);
+				throw new VirtualIOException (message: ex.Message, node: Path, innerException: ex);
 			}
 			return result;
 		}
 
-		public VirtualFileReader OpenReader ()
+		public override VirtualFileReader OpenReader ()
 		{
 			return new RegularFileAccess (file: this);
 		}
 
-		public VirtualFileWriter OpenWriter ()
+		public override VirtualFileWriter OpenWriter ()
 		{
 			return new RegularFileAccess (file: this);
 		}

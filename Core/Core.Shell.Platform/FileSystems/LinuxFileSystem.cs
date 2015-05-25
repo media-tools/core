@@ -7,23 +7,24 @@ namespace Core.Shell.Platform.FileSystems
 	{
 		public LinuxFileSystem ()
 		{
-			AddPrefix ("/");
-			DefaultRootDirectory = new LinuxDirectory ("/", "", this);
+			Prefix rootPrefix = new Prefix ("/", this);
+			AddPrefix (rootPrefix);
+			DefaultRootDirectory = new LinuxDirectory (rootPrefix.CreatePath (""), this);
 		}
 
-		protected override IVirtualFile File (string prefix, string path)
+		protected override VirtualFile FileInternal (Path path)
 		{
-			return new LinuxFile (prefix: prefix, path: path, fileSystem: this);
+			return new LinuxFile (path: path);
 		}
 
-		protected override IVirtualDirectory Directory (string prefix, string path)
+		protected override VirtualDirectory DirectoryInternal (Path path)
 		{
-			return new LinuxDirectory (prefix: prefix, path: path, fileSystem: this);
+			return new LinuxDirectory (path: path, fileSystem: this);
 		}
 
-		protected override IVirtualLink Link (string prefix, string path)
+		protected override VirtualLink LinkInternal (Path path)
 		{
-			return new LinuxLink (prefix: prefix, path: path, fileSystem: this);
+			return new LinuxLink (path: path, fileSystem: this);
 		}
 	}
 }

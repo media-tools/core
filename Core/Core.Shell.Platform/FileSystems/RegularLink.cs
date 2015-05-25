@@ -4,10 +4,10 @@ using Core.Shell.Common.FileSystems;
 
 namespace Core.Shell.Platform.FileSystems
 {
-	public abstract class RegularLink : RegularNode, IVirtualLink
+	public abstract class RegularLink : VirtualLink
 	{
-		protected RegularLink (string prefix, string path, RegularFileSystem fileSystem)
-			: base (prefix: prefix, path: path, fileSystem: fileSystem)
+		protected RegularLink (Path path)
+			: base (path: path)
 		{
 		}
 
@@ -15,13 +15,13 @@ namespace Core.Shell.Platform.FileSystems
 		{
 			bool result = false;
 			try {
-				if (FileHelper.Instance.IsSymLink (path: RealPath)) {
+				if (FileHelper.Instance.IsSymLink (path: Path.RealPath)) {
 					result = true;
 				} else {
-					throw new VirtualIOException (message: "No such file", node: this);
+					throw new VirtualIOException (message: "No such link", node: Path);
 				}
 			} catch (Exception ex) {
-				throw new VirtualIOException (message: ex.Message, node: this, innerException: ex);
+				throw new VirtualIOException (message: ex.Message, node: Path, innerException: ex);
 			}
 			return result;
 		}

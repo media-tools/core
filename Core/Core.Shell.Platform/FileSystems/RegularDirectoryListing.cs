@@ -17,45 +17,45 @@ namespace Core.Shell.Platform.FileSystems
 			this.directory = directory;
 		}
 
-		IVirtualNode[] listing = null;
+		VirtualNode[] listing = null;
 
 		#region VirtualDirectoryListing implementation
 
-		public IEnumerable<IVirtualFile> ListFiles ()
+		public IEnumerable<VirtualFile> ListFiles ()
 		{
 			if (listing == null) {
 				listing = createListing ().ToArray ();
 			}
-			return listing.OfType<IVirtualFile> ();
+			return listing.OfType<VirtualFile> ();
 		}
 
-		public IEnumerable<IVirtualDirectory> ListDirectories ()
+		public IEnumerable<VirtualDirectory> ListDirectories ()
 		{
 			if (listing == null) {
 				listing = createListing ().ToArray ();
 			}
-			return listing.OfType<IVirtualDirectory> ();
+			return listing.OfType<VirtualDirectory> ();
 		}
 
 		#endregion
 
-		IEnumerable<IVirtualNode> createListing ()
+		IEnumerable<VirtualNode> createListing ()
 		{
 			Log.Debug ("Directory listing: ", directory);
 			Log.Indent++;
 
-			var directories = SafeDirectoryEnumerator.EnumerateDirectories (directory.RealPath, "*", SearchOption.TopDirectoryOnly);
+			var directories = SafeDirectoryEnumerator.EnumerateDirectories (directory.Path.RealPath, "*", SearchOption.TopDirectoryOnly);
 			foreach (string realPath in directories) {
 				Log.Debug ("realPath: ", realPath);
-				IVirtualNode node = directory.GetChildDirectory (Path.GetFileName (realPath));
+				VirtualNode node = directory.GetChildDirectory (PathHelper.GetFileName (realPath));
 				if (node != null) {
 					yield return node;
 				}
 			}
-			var files = SafeDirectoryEnumerator.EnumerateFiles (directory.RealPath, "*", SearchOption.TopDirectoryOnly);
+			var files = SafeDirectoryEnumerator.EnumerateFiles (directory.Path.RealPath, "*", SearchOption.TopDirectoryOnly);
 			foreach (string realPath in files) {
 				Log.Debug ("realPath: ", realPath);
-				IVirtualNode node = directory.GetChildFile (Path.GetFileName (realPath));
+				VirtualNode node = directory.GetChildFile (PathHelper.GetFileName (realPath));
 				if (node != null) {
 					yield return node;
 				}

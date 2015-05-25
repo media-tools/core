@@ -5,27 +5,31 @@ namespace Core.Shell.Platform.FileSystems
 {
 	public class WindowsFileSystem : RegularFileSystem
 	{
+		readonly Prefix cPrefix;
+
 		public WindowsFileSystem ()
 		{
-			for (char prefix = 'c'; prefix <= 'z'; prefix++) {
-				AddPrefix (prefix + ":/");
+			cPrefix = new Prefix ("c:/", this);
+			AddPrefix (cPrefix);
+			for (char prefix = 'd'; prefix <= 'z'; prefix++) {
+				AddPrefix (new Prefix (prefix + ":/", this));
 			}
-			DefaultRootDirectory = new WindowsDirectory ("c:/", "", this);
+			DefaultRootDirectory = new WindowsDirectory (cPrefix.CreatePath (""));
 		}
 
-		protected override IVirtualFile File (string prefix, string path)
+		protected override VirtualFile FileInternal (Path path)
 		{
-			return new WindowsFile (prefix: prefix, path: path, fileSystem: this);
+			return new WindowsFile (path: path);
 		}
 
-		protected override IVirtualDirectory Directory (string prefix, string path)
+		protected override VirtualDirectory DirectoryInternal (Path path)
 		{
-			return new WindowsDirectory (prefix: prefix, path: path, fileSystem: this);
+			return new WindowsDirectory (path: path);
 		}
 
-		protected override IVirtualLink Link (string prefix, string path)
+		protected override VirtualLink LinkInternal (Path path)
 		{
-			return new WindowsLink (prefix: prefix, path: path, fileSystem: this);
+			return new WindowsLink (path: path);
 		}
 	}
 }

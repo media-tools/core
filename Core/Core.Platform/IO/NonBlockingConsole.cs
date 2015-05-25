@@ -215,9 +215,11 @@ namespace Core.IO
 							return true;
 						}
 						// Backspace
-						else if (key.Key == ConsoleKey.Backspace && buf.Length > 0) {
-							buf.Remove (buf.Length - 1, 1);
-							System.Console.Write ("\b \b");
+						else if (key.Key == ConsoleKey.Backspace) {
+							if (buf.Length > 0) {
+								buf.Remove (buf.Length - 1, 1);
+								System.Console.Write ("\b \b");
+							}
 						}
 						// normal character
 						else if (key.KeyChar != 0) {

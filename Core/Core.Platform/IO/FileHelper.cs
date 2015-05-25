@@ -9,9 +9,6 @@ namespace Core.IO
 {
 	public class FileHelper
 	{
-		internal static string LinuxFullClass = "Core.Platform.Linux.LinuxFileHelper";
-		internal static string LinuxAssemblyName = "Core.Platform.Linux";
-
 		public static FileHelper Instance { get; set; }
 
 		static FileHelper ()

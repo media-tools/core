@@ -63,7 +63,9 @@ namespace Core.IO
 		public void Finish ()
 		{
 			running = false;
-			thread.Abort ();
+			if (thread != null) {
+				thread.Abort ();
+			}
 			try {
 				while (m_Queue.Count > 0) {
 					writer.WriteLine (m_Queue.Take ());

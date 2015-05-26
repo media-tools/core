@@ -11,6 +11,7 @@ namespace Core.Shell.Common.Commands
 			["echo" ] = new Builtins.Echo (),
 			["sleep" ] = new Builtins.Sleep (),
 			["cd" ] = new Builtins.Cd (),
+			["pwd" ] = new Builtins.Pwd (),
 			["ls" ] = new Builtins.Ls (),
 			["ll" ] = new Builtins.Ls (),
 			["l" ] = new Builtins.Ls (),

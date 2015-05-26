@@ -61,6 +61,7 @@
     <Compile Include="FileSystems\VirtualLink.cs" />
     <Compile Include="FileSystems\VirtualFile.cs" />
     <Compile Include="FileSystems\VirtualDirectory.cs" />
+    <Compile Include="Commands\Builtins\Pwd.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

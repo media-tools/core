@@ -61,6 +61,7 @@
     <Compile Include="Common\ParamsFunc.cs" />
     <Compile Include="IO\InputHistory.cs" />
     <Compile Include="IO\PathHelper.cs" />
+    <Compile Include="Common\FixedSizedQueue.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

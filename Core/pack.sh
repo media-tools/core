@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IGNORE_NUSPEC='Mono.Posix-4.5.nuspec'
+IGNORE_NUSPEC='Mono.Posix-4.5.nuspec Mono.Options-PCL.nuspec'
 
 # git
 git pull

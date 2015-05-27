@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Core.Common</id>
-    <version>0.1.164</version>
+    <version>0.1.165</version>
     <authors>tobiasschulz</authors>
     <owners>tobiasschulz</owners>
     <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
@@ -14,7 +14,6 @@
     <tags>Utilities Common Core</tags>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="6.0.8" />
-      <dependency id="Mono.Posix-4.5" version="4.5.0" />
     </dependencies>
   </metadata>
   <files>
@@ -36,8 +35,10 @@
 
     <file src="Core.Portable/bin/$configuration$/Core.Portable.dll" target="lib/net45/" />
     <file src="Core.Platform/bin/$configuration$/Core.Platform.dll" target="lib/net45/" />
+    <file src="Mono.Posix-4.5/Mono.Posix.dll" target="lib/net45/" />
 
     <file src="Core.Portable/bin/$configuration$/Core.Portable.dll" target="lib/net40/" />
     <file src="Core.Platform/bin/$configuration$/Core.Platform.dll" target="lib/net40/" />
+    <file src="Mono.Posix-4.5/Mono.Posix.dll" target="lib/net40/" />
   </files>
 </package>

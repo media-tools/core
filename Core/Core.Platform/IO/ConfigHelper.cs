@@ -1,5 +1,5 @@
 ﻿//
-// Networking.cs
+// ConfigHelper.cs
 //
 // Author:
 //       Tobias Schulz <tobiasschulz.code@outlook.de>

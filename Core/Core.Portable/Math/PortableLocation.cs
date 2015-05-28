@@ -23,7 +23,7 @@ namespace Core.Math
 	public class PortableLocationCollection
 	{
 		[JsonProperty ("locations")]
-		List<PortableLocation> Locations { get; set; } = new List<PortableLocation> ();
+		public List<PortableLocation> Locations { get; set; } = new List<PortableLocation> ();
 
 		public PortableLocationCollection ()
 		{

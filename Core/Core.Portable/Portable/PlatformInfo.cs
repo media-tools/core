@@ -35,6 +35,8 @@ namespace Core.Portable
 		Linux,
 		WindowsDesktop,
 		WinRT,
+		MacOSX,
+		Android,
 		Undefined,
 	}
 

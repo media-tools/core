@@ -6,17 +6,32 @@ namespace Core.Math
 {
 	public class PortableLocation
 	{
-		[JsonProperty ("lat")]
+		[JsonProperty ("latitude")]
 		public double Latitude { get; set; } = 0;
 
-		[JsonProperty ("long")]
+		[JsonProperty ("longitude")]
 		public double Longitude { get; set; } = 0;
+
+		[JsonProperty ("altitude")]
+		public double Altitude { get; set; } = 0;
 
 		[JsonProperty ("timestamp")]
 		public DateTime DateTime { get; set; } = default(DateTime);
 
 		[JsonProperty ("provider")]
 		public string Provider { get; set; } = "";
+
+		[JsonProperty ("lat")]
+		private double LatitudeAlternateSetter {
+			// get is intentionally omitted here
+			set { Latitude = value; }
+		}
+
+		[JsonProperty ("long")]
+		private double LongitudeAlternateSetter {
+			// get is intentionally omitted here
+			set { Longitude = value; }
+		}
 
 		public PortableLocation ()
 		{

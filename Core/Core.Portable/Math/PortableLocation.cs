@@ -15,6 +15,9 @@ namespace Core.Math
 		[JsonProperty ("timestamp")]
 		public DateTime DateTime { get; set; } = default(DateTime);
 
+		[JsonProperty ("provider")]
+		public string Provider { get; set; } = "";
+
 		public PortableLocation ()
 		{
 		}

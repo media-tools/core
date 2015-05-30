@@ -5,7 +5,7 @@ using Core.IO;
 
 namespace Core.Shell.Common.FileSystems
 {
-	public class Prefix
+	public sealed class Prefix
 	{
 		public string Name { get; private set; }
 

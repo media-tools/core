@@ -4,7 +4,7 @@ using Core.IO;
 
 namespace Core.Shell.Common.FileSystems
 {
-	public class Path
+	public sealed class Path
 	{
 		public Prefix Prefix { get; private set; }
 

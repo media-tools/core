@@ -4,7 +4,7 @@ using Core.IO;
 
 namespace Core.Shell.Platform.FileSystems
 {
-	public class LinuxFile : RegularFile
+	public sealed class LinuxFile : RegularFile
 	{
 		public LinuxFile (Path path)
 			: base (path)
@@ -18,7 +18,7 @@ namespace Core.Shell.Platform.FileSystems
 		public override string GroupName { get { return Core.IO.FileHelper.Instance.GetGroupName (path: Path.RealPath); } }
 	}
 
-	public class LinuxDirectory : RegularDirectory
+	public sealed class LinuxDirectory : RegularDirectory
 	{
 		public LinuxDirectory (Path path, RegularFileSystem fileSystem)
 			: base (path)
@@ -32,7 +32,7 @@ namespace Core.Shell.Platform.FileSystems
 		public override string GroupName { get { return Core.IO.FileHelper.Instance.GetGroupName (path: Path.RealPath); } }
 	}
 
-	public class LinuxLink : RegularLink
+	public sealed class LinuxLink : RegularLink
 	{
 		public LinuxLink (Path path, RegularFileSystem fileSystem)
 			: base (path)

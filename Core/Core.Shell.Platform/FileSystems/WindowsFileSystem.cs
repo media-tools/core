@@ -3,7 +3,7 @@ using Core.Shell.Common.FileSystems;
 
 namespace Core.Shell.Platform.FileSystems
 {
-	public class WindowsFileSystem : RegularFileSystem
+	public sealed class WindowsFileSystem : RegularFileSystem
 	{
 		readonly Prefix cPrefix;
 

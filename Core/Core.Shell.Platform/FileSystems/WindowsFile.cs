@@ -3,7 +3,7 @@ using Core.Shell.Common.FileSystems;
 
 namespace Core.Shell.Platform.FileSystems
 {
-	public class WindowsFile : RegularFile
+	public sealed class WindowsFile : RegularFile
 	{
 		public WindowsFile (Path path)
 			: base (path)
@@ -17,7 +17,7 @@ namespace Core.Shell.Platform.FileSystems
 		public override string GroupName { get { return Core.IO.FileHelper.Instance.GetGroupName (path: Path.RealPath); } }
 	}
 
-	public class WindowsDirectory : RegularDirectory
+	public sealed class WindowsDirectory : RegularDirectory
 	{
 		public WindowsDirectory (Path path)
 			: base (path)
@@ -31,7 +31,7 @@ namespace Core.Shell.Platform.FileSystems
 		public override string GroupName { get { return Core.IO.FileHelper.Instance.GetGroupName (path: Path.RealPath); } }
 	}
 
-	public class WindowsLink : RegularLink
+	public sealed class WindowsLink : RegularLink
 	{
 		public WindowsLink (Path path)
 			: base (path)

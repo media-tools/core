@@ -3,7 +3,7 @@ using Core.Shell.Common.FileSystems;
 
 namespace Core.Shell.Platform.FileSystems
 {
-	public class LinuxFileSystem : RegularFileSystem
+	public sealed class LinuxFileSystem : RegularFileSystem
 	{
 		public LinuxFileSystem ()
 		{

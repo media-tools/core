@@ -62,6 +62,8 @@
     <Compile Include="FileSystems\VirtualFile.cs" />
     <Compile Include="FileSystems\VirtualDirectory.cs" />
     <Compile Include="Commands\Builtins\Pwd.cs" />
+    <Compile Include="Commands\CommandSubsystems.cs" />
+    <Compile Include="FileSystems\FileSystemSubsystems.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

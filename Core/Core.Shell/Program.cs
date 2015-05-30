@@ -6,6 +6,7 @@ using Core.IO;
 using Core.Platform;
 using Core.Portable;
 using Core.Shell.Common;
+using Core.Shell.Platform.Commands;
 using Core.Shell.Platform.FileSystems;
 using Mono.Options;
 
@@ -66,6 +67,7 @@ namespace Core.Shell
 			}
 
 			RegularFileSystems.Register ();
+			RegularExecutables.Register ();
 			UnixShell shell = new UnixShell ();
 			shell.Environment.Output.Stream = output;
 			shell.Environment.Error.Stream = output;

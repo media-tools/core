@@ -44,10 +44,17 @@
     <Compile Include="FileSystems\WindowsFile.cs" />
     <Compile Include="FileSystems\RegularLink.cs" />
     <Compile Include="FileSystems\RealFilesystemHelper.cs" />
+    <Compile Include="Commands\RegularExecutables.cs" />
+    <Compile Include="Commands\RegularExecutableSubsystem.cs" />
+    <Compile Include="Commands\LinuxExecutableSubsystem.cs" />
+    <Compile Include="Commands\WindowsExecutableSubsystem.cs" />
+    <Compile Include="Commands\NativeExecutable.cs" />
+    <Compile Include="Commands\NativeExecutableCommand.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="FileSystems\" />
+    <Folder Include="Commands\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core.Shell.Common\Core.Shell.Common.csproj">

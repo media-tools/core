@@ -12,7 +12,7 @@ namespace Core.IO
 		public static string GetFileName (string path)
 		{
 			if (string.IsNullOrEmpty (path))
-				return path;
+				return null;
 
 			//if (path.IndexOfAny (InvalidPathChars) != -1)
 			//	throw new ArgumentException ("Illegal characters in path.");

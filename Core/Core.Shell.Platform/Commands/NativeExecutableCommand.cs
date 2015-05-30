@@ -29,6 +29,7 @@ namespace Core.Shell.Platform.Commands
 					FileName = Executable.FullPath,
 					Arguments = ArgumentString (),
 					UseShellExecute = false,
+					CreateNoWindow = true,
 					RedirectStandardOutput = true,
 					RedirectStandardError = true,
 					StandardOutputEncoding = System.Text.Encoding.UTF8,
@@ -41,12 +42,14 @@ namespace Core.Shell.Platform.Commands
 
 				process.OutputDataReceived += (sender, args) => {
 					if (args.Data != null) {
-						Output.WriteLine ("received output: {0}", args.Data);
+						Log.Debug ("received output: ", args.Data);
+						Output.WriteLine (args.Data);
 					}
 				};
 				process.ErrorDataReceived += (sender, args) => {
 					if (args.Data != null) {
-						Error.WriteLine ("received error: {0}", args.Data);
+						Log.Debug ("received error: ", args.Data);
+						Error.WriteLine (args.Data);
 					}
 				};
 

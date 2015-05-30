@@ -7,7 +7,7 @@ namespace Core.Shell.Platform.Commands
 {
 	public sealed class LinuxExecutableSubsystem : RegularExecutableSubsystem
 	{
-		protected override bool IsValidExutable (string fullPath)
+		protected override bool IsValidExecutable (string fullPath)
 		{
 			return FileHelper.Instance.CanExecute (fullPath);
 		}

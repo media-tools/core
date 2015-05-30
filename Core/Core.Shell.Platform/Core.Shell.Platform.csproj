@@ -50,6 +50,8 @@
     <Compile Include="Commands\WindowsExecutableSubsystem.cs" />
     <Compile Include="Commands\NativeExecutable.cs" />
     <Compile Include="Commands\NativeExecutableCommand.cs" />
+    <Compile Include="Commands\PathIndex.cs" />
+    <Compile Include="Commands\IExecutablePathValidator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

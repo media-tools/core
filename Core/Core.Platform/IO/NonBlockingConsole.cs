@@ -104,13 +104,16 @@ namespace Core.IO
 					() => {
 						runningInputProcessing = true;
 						ConsoleKeyInfo item;
+						ITerminalInputStream self = this;
 						while (running) {
 							if (queueInput.TryTake (out item, InputInterval)) {
-								((ITerminalInputStream)this).ReadHandler (new PortableConsoleKeyInfo {
+								//Log.Debug ("before input process");
+								self.ReadHandler (new PortableConsoleKeyInfo {
 									Modifiers = (Core.IO.Terminal.ConsoleModifiers)item.Modifiers,
 									Key = (Core.IO.Terminal.ConsoleKey)item.Key,
 									KeyChar = item.KeyChar,
-								});
+								}).Wait ();
+								//Log.Debug ("after input process");
 							}
 						}
 						runningInputProcessing = false;

@@ -112,33 +112,39 @@ namespace Core.Shell
 
 		async Task Interactive (UnixShell shell, ITerminalStream console)
 		{
-			ResponsiveReadLine readLine = new ResponsiveReadLine (console: console);
-			bool done = false;
+			using (ResponsiveReadLine readLine = new ResponsiveReadLine (console: console)) {
+				using (readLine.UseHistory (shell.History)) {
+					
+					bool done = false;
 
-			using (readLine.UseHistory (shell.History)) {
-				shell.Environment.Input.PipeToLimbo ();
+					shell.Environment.Input.PipeToLimbo ();
 
-				await console.WriteAsync (shell.Prompt ());
-				while (!done && console.IsOpen) {
-					while (!done && await readLine.TryReadLineAsync ()) {
-						// handle a special command?
-						if (readLine.SpecialCommand != SpecialCommands.None) {
-							// do something
-							if (readLine.SpecialCommand == SpecialCommands.CloseStream) {
-								done = true;
-								break;
+					await console.WriteAsync (shell.Prompt ());
+
+					PortableBlockingQueue<ILine> queue = new PortableBlockingQueue<ILine> ();
+
+					readLine.Callback = async line => await queue.EnqueueAsync (item: line);
+
+					while (!done && console.IsOpen) {
+						while (queue.Count > 0) {
+							ILine line = await queue.DequeueAsync ();
+
+							// handle a special command?
+							if (line.SpecialCommand != SpecialCommands.None) {
+								// do something
+								done |= line.SpecialCommand == SpecialCommands.CloseStream;
 							}
-						}
-						// normal string input
-						else {
-							string line = readLine.Line;
-							// filter empty lines
-							if (!string.IsNullOrWhiteSpace (line)) {
+							// normal string input
+							else {
+								// filter empty lines
+								if (!string.IsNullOrWhiteSpace (line.Line)) {
 
-								await InteractiveLine (line: line, shell: shell, console: console);
+									await InteractiveLine (line: line.Line, shell: shell, console: console);
+								}
 							}
+							await console.WriteAsync (shell.Prompt ());
 						}
-						await console.WriteAsync (shell.Prompt ());
+						await Task.Delay (50);
 					}
 				}
 			}
@@ -147,32 +153,35 @@ namespace Core.Shell
 
 		async Task InteractiveLine (string line, UnixShell shell, ITerminalStream console)
 		{
-			ResponsiveReadLine readLine = new ResponsiveReadLine (console: console);
-			// use a separate history!
-			using (readLine.UseHistory (new InputHistory ())) {
+			using (ResponsiveReadLine readLine = new ResponsiveReadLine (console: console)) {
+				// use a separate history!
+				using (readLine.UseHistory (new InputHistory ())) {
 
-				// cache input
-				shell.Environment.Input.PipeToCache ();
-				var cancelToken = new CancellationTokenSource ();
+					// cache input
+					//shell.Environment.Input.PipeToCache ();
+					//var cancelToken = new CancellationTokenSource ();
 
-				// task for redirecting input to command!
-				Task inputCapturing = Task.Run (async () => {
-					cancelToken.Token.ThrowIfCancellationRequested ();
-					await shell.Environment.Input.Eat (readLine: readLine, cancelToken: cancelToken.Token).ConfigureAwait (false);
-				});
-				// task for running the command
-				Task commandRunning = Task.Run (async () => {
-					await shell.InteractiveAsync (line: line);
-					cancelToken.Cancel ();
-					await shell.Environment.Input.TryClose ();
-				});
+					// task for redirecting input to command!
+					//Task inputCapturing = Task.Run (async () => {
+					readLine.Callback = shell.Environment.Input.ToReadLineCallback ();
+					//cancelToken.Token.ThrowIfCancellationRequested ();
+					//await shell.Environment.Input.Eat (readLine: readLine, cancelToken: cancelToken.Token).ConfigureAwait (false);
+					//});
 
-				// wait for both
-				await Task.WhenAll (new []{ inputCapturing, commandRunning });
+					// task for running the command
+					Task commandRunning = Task.Run (async () => {
+						await shell.InteractiveAsync (line: line);
+						//cancelToken.Cancel ();
+						await shell.Environment.Input.TryClose ();
+					});
 
-				// throw input away, if there was any
-				shell.Environment.Input.PipeToLimbo ();
-				readLine.CancelToken = CancellationToken.None;
+					// wait for both
+					await Task.WhenAll (new []{ commandRunning });
+
+					// throw input away, if there was any
+					//shell.Environment.Input.PipeToLimbo ();
+					//readLine.CancelToken = CancellationToken.None;
+				}
 			}
 		}
 

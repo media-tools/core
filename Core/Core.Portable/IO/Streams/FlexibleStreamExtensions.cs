@@ -40,26 +40,31 @@ namespace Core.IO.Streams
 			}
 		}
 
-		public static async Task Eat (this IFlexibleOutputStream flex, IReadLine readLine, CancellationToken cancelToken)
+		public static ReadLineHandler ToReadLineCallback (this IFlexibleOutputStream flex)
+		{
+			return async (line) => {
+				if (line.SpecialCommand == SpecialCommands.CloseStream) {
+					Log.Debug ("try close!");
+					await flex.TryClose ();
+				} else {
+					Log.Debug ("eat: ", line);
+					await flex.WriteLineAsync (line.Line).ConfigureAwait (false);
+					Log.Debug ("eaten: ", line);
+				}
+			};
+		}
+
+		/*public static async Task Eat (, IReadLine readLine, CancellationToken cancelToken)
 		{
 			readLine.CancelToken = cancelToken;
 			while (readLine.IsOpen && !cancelToken.IsCancellationRequested) {
 				
 				if (await readLine.TryReadLineAsync ().ConfigureAwait (false)) {
-					if (readLine.SpecialCommand == SpecialCommands.CloseStream) {
-						Log.Debug ("try close!");
-						await flex.TryClose ();
-						return;
-					} else {
-						Log.Debug ("eat: ", readLine.Line);
-						await flex.WriteLineAsync (readLine.Line).ConfigureAwait (false);
-						Log.Debug ("eaten: ", readLine.Line);
-					}
 				}
 			}
 
 			readLine.CancelToken = CancellationToken.None;
-		}
+		}*/
 
 
 		public static TextWriter ToTextWriter (this IFlexibleOutputStream flex)

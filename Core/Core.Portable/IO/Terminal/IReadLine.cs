@@ -1,19 +1,25 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Common;
 
 namespace Core.IO.Terminal
 {
+	public delegate Task ReadLineHandler (ILine line);
+
 	public interface IReadLine
 	{
-		CancellationToken CancelToken { get; set; }
-
-		string Line { get; }
-
-		SpecialCommands SpecialCommand { get; }
+		void SetCancelToken (CancellationToken token);
 
 		bool IsOpen { get; }
 
-		Task<bool> TryReadLineAsync ();
+		ReadLineHandler Callback { get; set; }
+	}
+
+	public interface ILine
+	{
+		string Line { get; }
+
+		SpecialCommands SpecialCommand { get; }
 	}
 
 	public interface IHistoryReadLine : IReadLine

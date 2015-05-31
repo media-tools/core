@@ -4,81 +4,70 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Common;
 using Core.IO.Streams;
+using Core.Portable;
 
 namespace Core.IO.Terminal
 {
 	public class ResponsiveReadLine : IHistoryReadLine, IDisposable
 	{
-		public CancellationToken CancelToken { get; set; } = CancellationToken.None;
+		public CancellationToken CancelToken { get; private set; } = CancellationToken.None;
 
 		public bool IsOpen { get { return console.IsOpen; } }
 
-		public string Line { get; private set; }
-
-		public SpecialCommands SpecialCommand { get; private set; }
+		public ReadLineHandler Callback { get; set; }
 
 		public InputHistory History { get; set; }
 
-		readonly object _lock = new object ();
+		//readonly object _lock = new object ();
 		readonly ITerminalStream console;
 		readonly IDisposable readEventChanger;
-		TaskCompletionSource<bool> tcs;
-		StringBuilder buf;
+
+		bool isDisposed = false;
+		InputLine line;
 
 		public ResponsiveReadLine (ITerminalStream console)
 		{
 			this.console = console;
-			readEventChanger = console.HandleReadEvent (readKey);
+			line = new InputLine ();
+			readEventChanger = console.HandleReadEvent (readHandler: ReadKey);
+		}
+
+		public void SetCancelToken (CancellationToken token)
+		{
+			CancelToken = token;
+			//CancelToken.Register (() => finishRead (false));
 		}
 
 		#region IDisposable implementation
 
 		void IDisposable.Dispose ()
 		{
-			readEventChanger.Dispose ();
+			if (!isDisposed) {
+				if (readEventChanger != null) {
+					readEventChanger.Dispose ();
+				}
+				isDisposed = true;
+			}
 		}
 
 		#endregion
 
-		public Task<bool> TryReadLineAsync ()
+		async Task SendResult ()
 		{
-			lock (_lock) {
-				// reset state
-				tcs = new TaskCompletionSource<bool> ();
-				buf = new StringBuilder ();
-				Line = null;
-				SpecialCommand = SpecialCommands.None;
-
-				CancelToken.Register (() => finishRead (false));
-
-				return tcs.Task;
-			}
+			InputLine tmp = line;
+			line = new InputLine ();
+			await Callback (tmp).ConfigureAwait (false);
 		}
 
-		void finishRead (bool? result = null)
+		async Task ReadKey (PortableConsoleKeyInfo key)
 		{
-			lock (_lock) {
-				if (readEventChanger != null && buf != null && tcs != null) {
-					Line = buf.ToString ();
-					tcs.SetResult (result.HasValue ? result.Value : !string.IsNullOrEmpty (Line));
-
-					buf = null;
-					tcs = null;
-				}
+			if (CancelToken.IsCancellationRequested) {
+				await SendResult ();
+				return;
 			}
-		}
-
-		async Task readKey (PortableConsoleKeyInfo key)
-		{
-			lock (_lock) {
-				if (CancelToken.IsCancellationRequested) {
-					finishRead ();
-					return;
-				}
-				if (buf == null || tcs == null || readEventChanger == null) {
-					Log.Warning ("Bug: ResponsiveReadLine: variable is null: ", $"buf={buf},tcs={tcs},readEventChanger={readEventChanger}");
-					return;
-				}
+			if (isDisposed) {
+				Log.Warning ("Bug in ResponsiveReadLine.ReadKey: isDisposed = true! key=", key);
+				return;
 			}
 
 			//if (ConsoleInput.TryReadKey (result: out key, cancelToken: CancelToken)) {
@@ -87,25 +76,22 @@ namespace Core.IO.Terminal
 
 			// Ctrl-D
 			if (key.Key == ConsoleKey.D && key.Modifiers == ConsoleModifiers.Control) {
-				SpecialCommand = SpecialCommands.CloseStream;
-				finishRead (true);
+				line.SpecialCommand = SpecialCommands.CloseStream;
+				await SendResult ();
 				return;
 			}
 			// F4 ? WTF ?
 			else if (key.Key == ConsoleKey.F4) {
-				SpecialCommand = SpecialCommands.CloseStream;
-				finishRead (true);
+				line.SpecialCommand = SpecialCommands.CloseStream;
+				await SendResult ();
 				return;
 			}
 			// Arrow Keys
 			else if (key.Key == ConsoleKey.UpArrow || key.Key == ConsoleKey.DownArrow || key.Key == ConsoleKey.LeftArrow || key.Key == ConsoleKey.RightArrow) {
 
-				// save at current history position
-				//history.Edit (buf.ToString ());
-
 				// remove all current chars
-				while (buf.Length > 0) {
-					buf.Remove (buf.Length - 1, 1);
+				while (line.buf.Length > 0) {
+					line.buf.Remove (line.buf.Length - 1, 1);
 					await console.WriteAsync ("\b \b");
 				}
 
@@ -117,30 +103,44 @@ namespace Core.IO.Terminal
 						History.Down ();
 
 					// load the current history position
-					buf.Append (History.Current);
-					await console.WriteAsync (buf);
+					line.buf.Append (History.Current);
+					await console.WriteAsync (line.buf);
 				}
 			}
 			// Enter
 			else if (key.Key == ConsoleKey.Enter) {
 				if (History != null) {
-					History.Add (buf.ToString ());
+					History.Add (line.buf.ToString ());
 				}
 				await console.WriteLineAsync ();
-				finishRead (true);
+				await SendResult ();
 				return;
 			}
 			// Backspace
 			else if (key.Key == ConsoleKey.Backspace) {
-				if (buf.Length > 0) {
-					buf.Remove (buf.Length - 1, 1);
+				if (line.buf.Length > 0) {
+					line.buf.Remove (line.buf.Length - 1, 1);
 					await console.WriteAsync ("\b \b");
 				}
 			}
 			// normal character
 			else if (key.KeyChar != 0) {
-				buf.Append (key.KeyChar);
+				line.buf.Append (key.KeyChar);
 				await console.WriteAsync (key.KeyChar);
+			}
+		}
+
+		public class InputLine : ILine
+		{
+			internal StringBuilder buf = new StringBuilder ();
+
+			public string Line { get { return buf.ToString (); } }
+
+			public SpecialCommands SpecialCommand { get; internal set; } = SpecialCommands.None;
+
+			public override string ToString ()
+			{
+				return string.Format ("[InputLine: Line={0}, SpecialCommand={1}]", Line, SpecialCommand);
 			}
 		}
 	}

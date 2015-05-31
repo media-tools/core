@@ -74,6 +74,7 @@
     <Compile Include="IO\Terminal\ReadLineExtensions.cs" />
     <Compile Include="IO\Terminal\ITerminalStream.cs" />
     <Compile Include="IO\Terminal\ITerminalInputStream.cs" />
+    <Compile Include="Common\PortableBlockingQueue.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

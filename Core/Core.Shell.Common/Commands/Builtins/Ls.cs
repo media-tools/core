@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Linq;
-using Core.Shell.Common.FileSystems;
-using Core.Common;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Core.Common;
+using Core.Shell.Common.FileSystems;
 
 namespace Core.Shell.Common.Commands.Builtins
 {
@@ -26,40 +27,40 @@ namespace Core.Shell.Common.Commands.Builtins
 			useHumanReadableSizes = false;
 		}
 
-		protected override void ExecuteInternal ()
+		protected override async Task ExecuteInternalAsync ()
 		{
 			useLongFormat |= invokedExecutableName.StartsWith ("ll");
 
 			Log.Debug ("parameters: ", parameters.Join (", "));
-			List<VirtualNode> nodes = resolveParameters ();
+			List<VirtualNode> nodes = await resolveParameters ();
 			Log.Debug ("nodes: ", nodes.Join (", "));
 
 			// print the resolved nodes
 			foreach (VirtualNode node in nodes) {
 				if (nodes.Count > 1) {
-					Output.WriteLine (node + ":");
+					await Output.WriteLineAsync (node + ":");
 				}
 
 				try {
 					if (useLongFormat) {
-						printNode (node: node, printAction: printNodeLongFormat);
+						await printNode (node: node, printAction: printNodeLongFormat);
 					} else {
-						printNode (node: node, printAction: printNodeShortFormat);
+						await printNode (node: node, printAction: printNodeShortFormat);
 					}
 				} catch (VirtualIOException ex) {
 					Log.Error (ex);
-					Output.WriteLine (ex.Message);
+					await Output.WriteLineAsync (ex.Message);
 				}
 
 				if (nodes.Count > 1) {
-					Output.WriteLine ();
+					await Output.WriteLineAsync ();
 				}
 			}
 
 			state.ExitCode = 0;
 		}
 
-		List<VirtualNode> resolveParameters ()
+		async Task<List<VirtualNode>> resolveParameters ()
 		{
 			List<VirtualNode> nodes = new List<VirtualNode> ();
 
@@ -72,7 +73,7 @@ namespace Core.Shell.Common.Commands.Builtins
 						nodes.Add (node);
 					} catch (VirtualIOException ex) {
 						Log.Error (ex);
-						Output.WriteLine (ex.Message);
+						await Output.WriteLineAsync (ex.Message);
 					}
 				}
 			}
@@ -84,26 +85,26 @@ namespace Core.Shell.Common.Commands.Builtins
 			return nodes;
 		}
 
-		void printNode (VirtualNode node, Action<VirtualNode> printAction)
+		async Task printNode (VirtualNode node, AsyncAction<VirtualNode> printAction)
 		{
 			VirtualFile file = node as VirtualFile;
 			if (file != null) {
-				printAction (file);
+				await printAction (file);
 			}
 
 			VirtualDirectory directory = node as VirtualDirectory;
 			if (directory != null) {
 				var list = directory.OpenList ();
 				foreach (VirtualDirectory subDirectory in list.ListDirectories()) {
-					printAction (subDirectory);
+					await printAction (subDirectory);
 				}
 				foreach (VirtualFile subFile in list.ListFiles()) {
-					printAction (subFile);
+					await printAction (subFile);
 				}
 			}
 		}
 
-		void printNodeLongFormat (VirtualNode node)
+		async Task printNodeLongFormat (VirtualNode node)
 		{
 			// drwxrwxr-x  5 tobias tobias 4,0K Mai 21 20:39 
 
@@ -122,12 +123,12 @@ namespace Core.Shell.Common.Commands.Builtins
 			if (directory != null) {
 			}
 
-			Output.WriteLine ($"{permissions} {user} {group} {size} {date} {time} {name}");
+			await Output.WriteLineAsync ($"{permissions} {user} {group} {size} {date} {time} {name}");
 		}
 
-		void printNodeShortFormat (VirtualNode node)
+		async Task printNodeShortFormat (VirtualNode node)
 		{
-			Output.WriteLine (node.Path.FileName);
+			await Output.WriteLineAsync (node.Path.FileName);
 		}
 	}
 }

@@ -48,8 +48,8 @@ namespace Core.UnitTests.Shell
 			string result = "";
 
 			UnixShell shell = new UnixShell ();
-			shell.Environment.Output.Stream = line => result += line;
-			shell.Environment.Error.Stream = line => result += line;
+			shell.Environment.Output.PipeTo (async line => result += line);
+			shell.Environment.Error.PipeTo (async line => result += line);
 
 			try {
 				shell.RunScript (code: code);

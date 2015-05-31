@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Core.Common;
 using Core.IO;
 using Core.Platform;
@@ -69,8 +70,8 @@ namespace Core.Shell
 			RegularFileSystems.Register ();
 			RegularExecutables.Register ();
 			UnixShell shell = new UnixShell ();
-			shell.Environment.Output.Stream = output;
-			shell.Environment.Error.Stream = output;
+			shell.Environment.Output.PipeTo (output);
+			shell.Environment.Error.PipeTo (output);
 
 			// run code line
 			if (mode == Mode.CommandString) {
@@ -164,9 +165,11 @@ namespace Core.Shell
 			);
 		}
 
-		void output (string text)
+		Task output (string text)
 		{
+			//Log.Debug ("output: ", text);
 			NonBlockingConsole.Write (text);
+			return TaskHelper.Completed;
 		}
 	}
 }

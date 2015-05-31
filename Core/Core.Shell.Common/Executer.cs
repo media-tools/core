@@ -1,6 +1,7 @@
 ﻿using System;
-using Core.Common;
 using System.Linq;
+using System.Threading.Tasks;
+using Core.Common;
 
 namespace Core.Shell.Common
 {
@@ -14,10 +15,10 @@ namespace Core.Shell.Common
 
 		public void Execute (ScriptBlock block)
 		{
-			ExecuteBlock (block);
+			ExecuteBlock (block).Wait ();
 		}
 
-		void ExecuteBlock (Block block)
+		async Task ExecuteBlock (Block block)
 		{
 			if (Environment.IsAborted)
 				return;
@@ -27,17 +28,17 @@ namespace Core.Shell.Common
 			var commandBlock = block as ICommandBlock;
 
 			if (simpleBlock != null) {
-				ExecuteSimpleBlock (simpleBlock);
+				await ExecuteSimpleBlock (simpleBlock);
 			} else if (conditionalBlock != null) {
-				ExecuteConditionalBlock (conditionalBlock);
+				await ExecuteConditionalBlock (conditionalBlock);
 			} else if (commandBlock != null) {
-				ExecuteCommandBlock (commandBlock);
+				await ExecuteCommandBlock (commandBlock);
 			} else {
 				Log.Error ("Unknown block: ", block);
 			}
 		}
 
-		void ExecuteSimpleBlock (ISimpleBlock block)
+		async Task ExecuteSimpleBlock (ISimpleBlock block)
 		{
 			if (Environment.IsAborted)
 				return;
@@ -45,11 +46,11 @@ namespace Core.Shell.Common
 			foreach (Block subBlock in block.Content) {
 				if (Environment.IsAborted)
 					break;
-				ExecuteBlock (block: subBlock);
+				await ExecuteBlock (block: subBlock);
 			}
 		}
 
-		bool ExecuteConditionalBlock (IConditionalBlock block)
+		async Task<bool> ExecuteConditionalBlock (IConditionalBlock block)
 		{
 			Log.Debug ("Condition block: ");
 			Log.Indent++;
@@ -73,7 +74,7 @@ namespace Core.Shell.Common
 			}
 
 			foreach (ICommandBlock command in block.Condition) {
-				ExecuteCommandBlock (block: command);
+				await ExecuteCommandBlock (block: command);
 			}
 
 			bool wasConditionSuccessful = Environment.StackTrace.Last ().State.IsExitSuccess;
@@ -83,7 +84,7 @@ namespace Core.Shell.Common
 
 				Log.Indent++;
 				foreach (Block thenBlock in block.ThenBlock) {
-					ExecuteBlock (block: thenBlock);
+					await ExecuteBlock (block: thenBlock);
 				}
 				Log.Indent--;
 
@@ -94,14 +95,14 @@ namespace Core.Shell.Common
 				foreach (Block elifOrElseBlock in block.ElseBlock) {
 					// if it's an ELIF block
 					if (elifOrElseBlock.Type == BlockType.ELIF) {
-						bool wasElifSuccessful = ExecuteConditionalBlock (elifOrElseBlock as ElifBlock);
+						bool wasElifSuccessful = await ExecuteConditionalBlock (elifOrElseBlock as ElifBlock);
 						if (wasElifSuccessful) {
 							break;
 						}
 					}
 					// if it's an ELSE block
 					else if (elifOrElseBlock.Type == BlockType.ELSE) {
-						ExecuteBlock (block: elifOrElseBlock);
+						await ExecuteBlock (block: elifOrElseBlock);
 					}
 					// WTF?
 					else {
@@ -114,13 +115,13 @@ namespace Core.Shell.Common
 			return wasConditionSuccessful;
 		}
 
-		void ExecuteCommandBlock (ICommandBlock block)
+		async Task ExecuteCommandBlock (ICommandBlock block)
 		{
 			try {
 				if (!string.IsNullOrWhiteSpace (block.ContentString)) {
 					Log.Debug ("Execute: \"", block.ContentString, "\"");
 					CommandExecutor commandExecutor = new CommandExecutor (block);
-					commandExecutor.Execute (env: Environment);
+					await commandExecutor.ExecuteAsync (env: Environment);
 				}
 			} catch (Exception ex) {
 				Log.Error (ex);

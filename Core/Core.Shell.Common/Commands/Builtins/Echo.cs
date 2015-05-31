@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Core.Shell.Common.Commands.Builtins
 {
@@ -20,11 +21,11 @@ namespace Core.Shell.Common.Commands.Builtins
 			printNewline = true;
 		}
 
-		protected override void ExecuteInternal ()
+		protected override async Task ExecuteInternalAsync ()
 		{
-			Output.Write (string.Join (" ", parameters.Select (p => p ?? "null")));
+			await Output.WriteAsync (string.Join (" ", parameters.Select (p => p ?? "null")));
 			if (printNewline) {
-				Output.WriteLine ();
+				await Output.WriteLineAsync ();
 			}
 			state.ExitCode = 0;
 		}

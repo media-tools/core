@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Core.Portable
 {
@@ -15,7 +16,12 @@ namespace Core.Portable
 
 		public static void Sleep (int milliseconds)
 		{
-			System.Threading.Tasks.Task.Delay (milliseconds).Wait ();
+			Task.Delay (milliseconds).Wait ();
+		}
+
+		public static async Task SleepAsync (int milliseconds)
+		{
+			await Task.Delay (milliseconds);
 		}
 	}
 }

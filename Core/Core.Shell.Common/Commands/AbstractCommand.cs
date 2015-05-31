@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Core.Common;
+using Core.Shell.Common.Streams;
 using Mono.Options;
 
 namespace Core.Shell.Common.Commands
@@ -9,9 +11,9 @@ namespace Core.Shell.Common.Commands
 	public abstract class AbstractCommand : ICommand
 	{
 		// the default output stream
-		public RedirectableTextWriter Output { get; } = new RedirectableTextWriter();
+		public FlexibleStream Output { get; } = new FlexibleStream();
 		// the default error stream
-		public RedirectableTextWriter Error { get; } = new RedirectableTextWriter();
+		public FlexibleStream Error { get; } = new FlexibleStream();
 
 		// the default executable name
 		public string ExecutableName { get; protected set; } = "unknown";
@@ -42,11 +44,11 @@ namespace Core.Shell.Common.Commands
 
 		#region ICommand implementation
 
-		public void Execute (string invokedExecutableName, string[] parameters, ExecutionEnvironment env)
+		public async Task ExecuteAsync (string invokedExecutableName, string[] parameters, ExecutionEnvironment env)
 		{
 			Log.Debug ("Execute: ", ExecutableName, " ", parameters.ToJson (inline: true));
-			Output.Stream = env.Output.Stream;
-			Error.Stream = env.Error.Stream;
+			Output.PipeTo (env.Output);
+			Error.PipeTo (env.Error);
 
 			this.invokedExecutableName = invokedExecutableName;
 			this.parameters = parameters.ToList ();
@@ -66,22 +68,20 @@ namespace Core.Shell.Common.Commands
 			}
 			// execute the command
 			else {
-				ExecuteInternal ();
+				await ExecuteInternalAsync ();
 			}
 
 			StackTraceElement element = new StackTraceElement {
 				Executable = ExecutableName,
 				Parameters = parameters,
-				State = new ExecutionState {
-					ExitCode = 0
-				}
+				State = state
 			};
 			env.StackTrace.Add (element);
 		}
 
 		private void printOptions ()
 		{
-			optionSet.WriteOptionDescriptions (env.Output);
+			optionSet.WriteOptionDescriptions (env.Output.ToTextWriter ());
 		}
 
 		private void parseOptions ()
@@ -97,7 +97,7 @@ namespace Core.Shell.Common.Commands
 
 		#endregion
 
-		protected abstract void ExecuteInternal ();
+		protected abstract Task ExecuteInternalAsync ();
 
 		protected abstract void ResetInternalState ();
 	}

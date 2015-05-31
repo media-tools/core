@@ -5,6 +5,7 @@ using Core.Common;
 using Core.IO;
 using Core.Shell.Common.Commands;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Core.Shell.Platform.Commands
 {
@@ -22,10 +23,13 @@ namespace Core.Shell.Platform.Commands
 		{
 		}
 
-		protected override void ExecuteInternal ()
+		protected override async Task ExecuteInternalAsync ()
 		{
+			Process process = null;
 			try {
-				ProcessStartInfo startInfo = new ProcessStartInfo {
+				process = new Process { };
+				
+				process.StartInfo = new ProcessStartInfo {
 					FileName = Executable.FullPath,
 					Arguments = ArgumentString (),
 					UseShellExecute = false,
@@ -35,34 +39,43 @@ namespace Core.Shell.Platform.Commands
 					StandardOutputEncoding = System.Text.Encoding.UTF8,
 					StandardErrorEncoding = System.Text.Encoding.UTF8,
 				};
+				process.EnableRaisingEvents = true;
 
-				Process process = new Process {
-					StartInfo = startInfo,
+				List<Task> waitfor = new List<Task> ();
+
+				var tcs = new TaskCompletionSource<object> ();
+				waitfor.Add (tcs.Task);
+				process.Exited += (sender, args) => {
+					Log.Debug (GetType ().Name, ": Process Exited!");
+					tcs.SetResult (null);
 				};
 
-				process.OutputDataReceived += (sender, args) => {
-					if (args.Data != null) {
-						Log.Debug ("received output: ", args.Data);
-						Output.WriteLine (args.Data);
-					}
-				};
-				process.ErrorDataReceived += (sender, args) => {
-					if (args.Data != null) {
-						Log.Debug ("received error: ", args.Data);
-						Error.WriteLine (args.Data);
-					}
-				};
-
+				Log.Debug (GetType ().Name, ": process.Start ()");
 				process.Start ();
-				process.BeginOutputReadLine ();
-				process.BeginErrorReadLine ();
-				process.WaitForExit ();
+				//process.BeginOutputReadLine ();
+				//process.BeginErrorReadLine ();
+				//process.WaitForExit ();
 
-				state.ExitCode = process.ExitCode;
+				waitfor.Add (Task.Run (async () => await Output.Eat (process.StandardOutput)));
+				waitfor.Add (Task.Run (async () => await Error.Eat (process.StandardError)));
+
+				await Task.Run (() => {
+					Log.Debug ("awaiting all...");
+					Task.WaitAll (waitfor.ToArray ());
+					Log.Debug ("all done!");
+					state.ExitCode = process.ExitCode;
+					process.Dispose ();
+				});
 
 			} catch (Exception ex) {
-				Error.WriteLine (ex);
+				Log.Debug (GetType ().Name, ": Error!");
+				Log.Error (ex);
+				Error.ToTextWriter ().WriteLine (ex);
 				state.ExitCode = 1;
+				if (process != null) {
+					process.Dispose ();
+				}
+				//	tcs.SetException (new InvalidOperationException ("The process did not exit correctly. " + "The corresponding error message was: " + errorMessage));
 			}
 		}
 

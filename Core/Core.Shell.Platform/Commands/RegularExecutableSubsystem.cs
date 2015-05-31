@@ -32,13 +32,24 @@ namespace Core.Shell.Platform.Commands
 
 		public override bool ContainsCommand (string commandName)
 		{
-			return PathIndex.ContainsCommand (commandName);
+			try {
+				return PathIndex.ContainsCommand (commandName) || FileHelper.Instance.IsFile (commandName);
+			} catch (Exception ex) {
+				Log.Warning (ex);
+				return false;
+			}
 		}
 
 		public override ICommand GetCommand (string commandName)
 		{
-			NativeExecutable exe = PathIndex.GetCommand (commandName);
-			return exe != null ? new NativeExecutableCommand (executable: exe) : null;
+			try {
+				NativeExecutable exe = PathIndex.GetCommand (commandName)
+				                       ?? (FileHelper.Instance.IsFile (commandName) ? new NativeExecutable (commandName) : null);
+				return exe != null ? new NativeExecutableCommand (executable: exe) : null;
+			} catch (Exception ex) {
+				Log.Warning (ex);
+				return null;
+			}
 		}
 	}
 

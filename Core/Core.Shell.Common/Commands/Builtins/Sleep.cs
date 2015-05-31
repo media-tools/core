@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Core.Portable;
 
 namespace Core.Shell.Common.Commands.Builtins
@@ -15,7 +16,7 @@ namespace Core.Shell.Common.Commands.Builtins
 		{
 		}
 
-		protected override void ExecuteInternal ()
+		protected override async Task ExecuteInternalAsync ()
 		{
 			try {
 				if (parameters.Count != 1) {
@@ -39,12 +40,12 @@ namespace Core.Shell.Common.Commands.Builtins
 				intervalStr = new string (intervalStr.ToCharArray ().Where (c => char.IsDigit (c)).ToArray ());
 				double interval = int.Parse (s: intervalStr);
 
-				Thread.Sleep ((int)(interval * multiplier));
+				await Thread.SleepAsync ((int)(interval * multiplier));
 
 				state.ExitCode = 0;
 
 			} catch (Exception ex) {
-				Error.WriteLine (ex);
+				await Error.WriteLineAsync (ex);
 				state.ExitCode = 1;
 			}
 		}

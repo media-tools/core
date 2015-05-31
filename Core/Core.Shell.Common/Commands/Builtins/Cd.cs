@@ -1,6 +1,7 @@
 ﻿using System;
-using Core.Shell.Common.FileSystems;
+using System.Threading.Tasks;
 using Core.Common;
+using Core.Shell.Common.FileSystems;
 
 namespace Core.Shell.Common.Commands.Builtins
 {
@@ -16,7 +17,7 @@ namespace Core.Shell.Common.Commands.Builtins
 		{
 		}
 
-		protected override void ExecuteInternal ()
+		protected override Task ExecuteInternalAsync ()
 		{
 			VirtualDirectory node =
 				parameters.Count >= 1
@@ -27,6 +28,8 @@ namespace Core.Shell.Common.Commands.Builtins
 			node.Validate (throwExceptions: true);
 
 			env.WorkingDirectory = node;
+
+			return TaskHelper.Completed;
 		}
 	}
 }

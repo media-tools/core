@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Core.Portable;
 
 namespace Core.Shell.Common.Commands.Builtins
@@ -15,9 +16,9 @@ namespace Core.Shell.Common.Commands.Builtins
 		{
 		}
 
-		protected override void ExecuteInternal ()
+		protected override async Task ExecuteInternalAsync ()
 		{
-			Output.WriteLine (env.WorkingDirectory.Path.FullPath ());
+			await Output.WriteLineAsync (env.WorkingDirectory.Path.FullPath ());
 		}
 	}
 }

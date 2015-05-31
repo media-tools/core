@@ -3,14 +3,15 @@ using Core.Common;
 using System.Collections.Generic;
 using Core.Shell.Common.FileSystems;
 using Core.Portable;
+using Core.Shell.Common.Streams;
 
 namespace Core.Shell.Common
 {
 	public class ExecutionEnvironment
 	{
-		public RedirectableTextWriter Output { get; } = new RedirectableTextWriter ();
+		public FlexibleStream Output { get; } = new FlexibleStream ();
 
-		public RedirectableTextWriter Error { get; } = new RedirectableTextWriter ();
+		public FlexibleStream Error { get; } = new FlexibleStream ();
 
 		public List<StackTraceElement> StackTrace { get; set; } = new List<StackTraceElement> {
 			new StackTraceElement {

@@ -1,17 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Core.Common;
+using Core.Shell.Common.Streams;
 using Mono.Options;
 
 namespace Core.Shell.Common.Commands
 {
 	public interface ICommand
 	{
-		RedirectableTextWriter Output { get; }
+		FlexibleStream Output { get; }
 
-		RedirectableTextWriter Error { get; }
+		FlexibleStream Error { get; }
 
-		void Execute (string invokedExecutableName, string[] parameters, ExecutionEnvironment env);
+		Task ExecuteAsync (string invokedExecutableName, string[] parameters, ExecutionEnvironment env);
 	}
 }

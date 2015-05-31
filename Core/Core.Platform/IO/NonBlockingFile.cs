@@ -26,8 +26,9 @@
 //
 using System;
 using System.Collections.Concurrent;
-using System.Threading;
 using System.IO;
+using System.Text;
+using System.Threading;
 
 namespace Core.IO
 {
@@ -44,7 +45,7 @@ namespace Core.IO
 			try {
 				Directory.CreateDirectory (Path.GetDirectoryName (fileName));
 
-				writer = new StreamWriter (fileName, true);
+				writer = new StreamWriter (fileName, true, Encoding.UTF8);
 
 				thread = new Thread (
 					() => {

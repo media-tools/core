@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Core.Common;
 
 namespace Core.Shell.Common.Commands.Builtins
 {
@@ -13,9 +15,10 @@ namespace Core.Shell.Common.Commands.Builtins
 		{
 		}
 
-		protected override void ExecuteInternal ()
+		protected override Task ExecuteInternalAsync ()
 		{
 			state.ExitCode = 0;
+			return TaskHelper.Completed;
 		}
 	}
 
@@ -30,9 +33,10 @@ namespace Core.Shell.Common.Commands.Builtins
 		{
 		}
 
-		protected override void ExecuteInternal ()
+		protected override Task ExecuteInternalAsync ()
 		{
 			state.ExitCode = 1;
+			return TaskHelper.Completed;
 		}
 	}
 }

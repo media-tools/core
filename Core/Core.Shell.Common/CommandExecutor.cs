@@ -1,8 +1,9 @@
 using System;
-using Core.Common;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using Core.Common;
 using Core.Shell.Common.Commands;
 
 namespace Core.Shell.Common
@@ -56,19 +57,19 @@ namespace Core.Shell.Common
 			return p;
 		}
 
-		public void Execute (ExecutionEnvironment env)
+		public async Task ExecuteAsync (ExecutionEnvironment env)
 		{
 			if (CommandSubsystems.ContainsCommand (commandName: ExecutableName)) {
 				ICommand command = CommandSubsystems.GetCommand (commandName: ExecutableName);
 				try {
-					command.Execute (invokedExecutableName: ExecutableName, parameters: Params, env: env);
+					await command.ExecuteAsync (invokedExecutableName: ExecutableName, parameters: Params, env: env);
 				} catch (Exception ex) {
 					Log.Error (ex);
-					env.Output.WriteLine ("Error! " + ex.Message);
+					await env.Output.WriteLineAsync ("Error! " + ex.Message);
 				}
 			} else {
 				Log.Error ("Command not found: " + ExecutableName);
-				env.Error.WriteLine ("Command not found: " + ExecutableName);
+				await env.Error.WriteLineAsync ("Command not found: " + ExecutableName);
 
 				StackTraceElement element = new StackTraceElement {
 					Executable = ExecutableName,

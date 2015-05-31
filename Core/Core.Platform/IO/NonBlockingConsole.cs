@@ -179,7 +179,7 @@ namespace Core.IO
 			return false;
 		}
 
-		public class ReadLine : IReadLine
+		public class ReadLine : IHistoryReadLine
 		{
 			public CancellationToken CancelToken { get; set; } = CancellationToken.None;
 
@@ -189,11 +189,11 @@ namespace Core.IO
 
 			public SpecialCommands SpecialCommand { get; private set; }
 
-			InputHistory history;
+			public InputHistory History { get; set; }
 
 			public ReadLine (InputHistory history)
 			{
-				this.history = history;
+				History = history;
 			}
 
 			public bool TryReadLine ()
@@ -237,27 +237,23 @@ namespace Core.IO
 								System.Console.Write ("\b \b");
 							}
 
-							// move inside the history
-							if (key.Key == ConsoleKey.UpArrow)
-								history.Up ();
-							else if (key.Key == ConsoleKey.DownArrow)
-								history.Down ();
+							if (History != null) {
+								// move inside the history
+								if (key.Key == ConsoleKey.UpArrow)
+									History.Up ();
+								else if (key.Key == ConsoleKey.DownArrow)
+									History.Down ();
 
-							// load the current history position
-							buf.Append (history.Current);
-							System.Console.Write (buf);
-
-							/*specialCommand =
-							  key.Key == ConsoleKey.UpArrow ? SpecialCommand.ArrowUp
-							: key.Key == ConsoleKey.DownArrow ? SpecialCommand.ArrowDown
-							: key.Key == ConsoleKey.LeftArrow ? SpecialCommand.ArrowLeft
-							: key.Key == ConsoleKey.RightArrow ? SpecialCommand.ArrowRight
-							: SpecialCommand.None;*/
-							//return true;
+								// load the current history position
+								buf.Append (History.Current);
+								System.Console.Write (buf);
+							}
 						}
 						// Enter
 						else if (key.Key == ConsoleKey.Enter) {
-							history.Add (buf.ToString ());
+							if (History != null) {
+								History.Add (buf.ToString ());
+							}
 							Line = buf.ToString ();
 							System.Console.WriteLine ();
 							return true;
@@ -285,11 +281,6 @@ namespace Core.IO
 			{
 				return Task.FromResult (TryReadLine ());
 			}
-
-			/*public void Close ()
-			{
-				NonBlockingConsole.IsInputOpen = false;
-			}*/
 		}
 	}
 }

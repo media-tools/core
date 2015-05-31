@@ -127,25 +127,34 @@ namespace Core.Shell
 					// normal string input
 					else {
 						string line = readLine.Line;
-
+						// filter empty lines
 						if (!string.IsNullOrWhiteSpace (line)) {
+							
+							// use a separate history!
+							using (readLine.UseHistory (new InputHistory ())) {
+								
+								// cache input
+								shell.Environment.Input.PipeToCache ();
+								var cancelToken = new CancellationTokenSource ();
 
-							shell.Environment.Input.PipeToCache ();
-							var cancelToken = new CancellationTokenSource ();
+								// task for redirecting input to command!
+								Task inputCapturing = Task.Run (async () => {
+									await shell.Environment.Input.Eat (readLine: readLine, cancelToken: cancelToken.Token);
+								});
+								// task for running the command
+								Task commandRunning = Task.Run (async () => {
+									await shell.InteractiveAsync (line: line);
+									cancelToken.Cancel ();
+									await shell.Environment.Input.TryClose ();
+								});
 
-							Task inputCapturing = Task.Run (async () => {
-								await shell.Environment.Input.Eat (readLine: readLine, cancelToken: cancelToken.Token);
-							});
-							Task commandRunning = Task.Run (async () => {
-								await shell.InteractiveAsync (line: line);
-								cancelToken.Cancel ();
-								await shell.Environment.Input.TryClose ();
-							});
+								// wait for both
+								Task.WaitAll (new []{ inputCapturing, commandRunning });
 
-							Task.WaitAll (new []{ inputCapturing, commandRunning });
-
-							shell.Environment.Input.PipeToLimbo ();
-							readLine.CancelToken = CancellationToken.None;
+								// throw input away, if there was any
+								shell.Environment.Input.PipeToLimbo ();
+								readLine.CancelToken = CancellationToken.None;
+							}
 						}
 					}
 					NonBlockingConsole.Write (shell.Prompt ());

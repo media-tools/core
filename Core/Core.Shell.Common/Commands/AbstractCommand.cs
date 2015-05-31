@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Common;
-using Core.Shell.Common.Streams;
+using Core.IO.Streams;
 using Mono.Options;
 
 namespace Core.Shell.Common.Commands
@@ -51,6 +51,7 @@ namespace Core.Shell.Common.Commands
 			Log.Debug ("Execute: ", ExecutableName, " ", parameters.ToJson (inline: true));
 			Output.PipeTo (env.Output);
 			Error.PipeTo (env.Error);
+			env.Input.PipeTo (Input);
 
 			this.invokedExecutableName = invokedExecutableName;
 			this.parameters = parameters.ToList ();

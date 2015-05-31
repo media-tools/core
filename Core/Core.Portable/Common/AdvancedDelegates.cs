@@ -56,6 +56,36 @@ namespace Core.Common
 		public static void Empty<T1, T2, T3, T4, T5> (T1 value1, T2 value2, T3 value3, T4 value4, T5 value5)
 		{
 		}
+
+		public static Task EmptyAsync ()
+		{
+			return TaskHelper.Completed;
+		}
+
+		public static Task EmptyAsync<T> (T value)
+		{
+			return TaskHelper.Completed;
+		}
+
+		public static Task EmptyAsync<T1, T2> (T1 value1, T2 value2)
+		{
+			return TaskHelper.Completed;
+		}
+
+		public static Task EmptyAsync<T1, T2, T3> (T1 value1, T2 value2, T3 value3)
+		{
+			return TaskHelper.Completed;
+		}
+
+		public static Task EmptyAsync<T1, T2, T3, T4> (T1 value1, T2 value2, T3 value3, T4 value4)
+		{
+			return TaskHelper.Completed;
+		}
+
+		public static Task EmptyAsync<T1, T2, T3, T4, T5> (T1 value1, T2 value2, T3 value3, T4 value4, T5 value5)
+		{
+			return TaskHelper.Completed;
+		}
 	}
 
 	public static class Functions

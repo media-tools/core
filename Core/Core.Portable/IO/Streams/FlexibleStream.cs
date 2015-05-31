@@ -1,20 +1,36 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Core.Common;
-using Core.Portable;
-using Core.Shell.Common.FileSystems;
-using System.Text;
+using Core.IO;
 
-namespace Core.Shell.Common.Streams
+namespace Core.IO.Streams
 {
-	public class FlexibleStream
+	public sealed class FlexibleStream : IFlexibleStream
 	{
-		protected AsyncAction<string> OnWrite = NoHandlerWarning;
 		readonly List<string> cache = new List<string> ();
 		readonly object _lock = new object ();
 		bool InCacheMode = false;
+
+		AsyncAction<string> OnWrite = OnWrite_NoHandlerWarning;
+		AsyncAction OnClose = OnClose_NoHandlerWarning;
+
+		#region IFlexiblePipeTarget implementation
+
+		public async Task WriteAsync (string str)
+		{
+			await WriteAsync (new object[]{ str });
+		}
+
+		public async Task TryClose ()
+		{
+			await OnClose ();
+		}
+
+		#endregion
 
 		public async Task WriteAsync (params object[] values)
 		{
@@ -33,28 +49,25 @@ namespace Core.Shell.Common.Streams
 			await OnWrite (Environment.NewLine);
 		}
 
-		static Task NoHandlerWarning (string str)
+		/*public void PipeTo (FlexibleStream otherStream)
 		{
-			Log.Debug ("FlexibleStream.NoHandlerWarning: no output handler assigned! str: ", str);
+			PipeTo (
+				onWrite: async str => await otherStream.WriteAsync (str),
+				onClose: async () => await otherStream.TryClose ()
+			);
+		}*/
 
-			return TaskHelper.Completed;
+		public void PipeTo (StreamWriter streamWriter, bool dispose)
+		{
+			PipeTo (new FlexibleStreamWriter (streamWriter: streamWriter) { IsDisposable = dispose });
 		}
 
-		public void PipeTo (FlexibleStream otherStream)
-		{
-			PipeTo (async str => await otherStream.WriteAsync (str));
-		}
-
-		public void PipeTo (StreamWriter writer)
-		{
-			PipeTo (async str => await writer.WriteAsync (str));
-		}
-
-		public void PipeTo (AsyncAction<string> action)
+		public void PipeTo (IFlexibleStream target)
 		{
 			lock (_lock) {
 				// set the write handler
-				OnWrite = async str => await action (str);
+				OnWrite = target.WriteAsync;// async str => await onWrite (str);
+				OnClose = target.TryClose;//onClose;
 				InCacheMode = false;
 				// print the cache in the new handler!
 				foreach (string str in cache) {
@@ -67,7 +80,11 @@ namespace Core.Shell.Common.Streams
 		public void PipeToCache ()
 		{
 			lock (_lock) {
-				OnWrite = async str => cache.Add (str);
+				OnWrite = str => {
+					cache.Add (str);
+					return TaskHelper.Completed;
+				};
+				OnClose = Actions.EmptyAsync;
 				InCacheMode = true;
 			}
 		}
@@ -75,7 +92,7 @@ namespace Core.Shell.Common.Streams
 		public void PipeToLimbo ()
 		{
 			InCacheMode = false;
-			OnWrite = NoHandlerWarning;
+			OnWrite = OnWrite_NoHandlerWarning;
 		}
 
 		public bool TryReadLine (out string result)
@@ -112,6 +129,36 @@ namespace Core.Shell.Common.Streams
 				Log.Debug ("received: ", line);
 				await WriteLineAsync (line);
 			}
+		}
+
+		public async Task Eat (IReadLine readLine, CancellationToken cancelToken)
+		{
+			readLine.CancelToken = cancelToken;
+			while (readLine.IsOpen && !cancelToken.IsCancellationRequested) {
+				if (await readLine.TryReadLineAsync ()) {
+					if (readLine.SpecialCommand == SpecialCommands.CloseStream) {
+						Log.Debug ("try close!");
+						await TryClose ();
+						return;
+					} else {
+						Log.Debug ("eat: ", readLine.Line);
+						await WriteLineAsync (readLine.Line);
+					}
+				}
+			}
+			readLine.CancelToken = CancellationToken.None;
+		}
+
+		static Task OnWrite_NoHandlerWarning (string str)
+		{
+			Log.Debug ("FlexibleStream.OnWrite_NoHandlerWarning: no output handler assigned! str: ", str);
+			return TaskHelper.Completed;
+		}
+
+		static Task OnClose_NoHandlerWarning ()
+		{
+			Log.Debug ("FlexibleStream.OnClose_NoHandlerWarning: no output handler assigned!");
+			return TaskHelper.Completed;
 		}
 
 		public TextWriter ToTextWriter ()

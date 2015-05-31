@@ -59,7 +59,7 @@ namespace Core.Shell.Platform.Commands
 
 				waitfor.Add (Task.Run (async () => await Output.Eat (process.StandardOutput)));
 				waitfor.Add (Task.Run (async () => await Error.Eat (process.StandardError)));
-				Input.PipeTo (process.StandardInput);
+				Input.PipeTo (streamWriter: process.StandardInput, dispose: true);
 
 				await Task.Run (() => {
 					Log.Debug ("awaiting all...");

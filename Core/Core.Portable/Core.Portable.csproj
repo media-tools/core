@@ -64,6 +64,11 @@
     <Compile Include="Math\PortableLocation.cs" />
     <Compile Include="Common\TaskHelper.cs" />
     <Compile Include="Common\AdvancedDelegates.cs" />
+    <Compile Include="IO\IReadLine.cs" />
+    <Compile Include="IO\Streams\FlexibleStream.cs" />
+    <Compile Include="IO\Streams\FlexibleStreamExtensions.cs" />
+    <Compile Include="IO\Streams\FlexibleStreamWriter.cs" />
+    <Compile Include="IO\Streams\IFlexibleStream.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

@@ -1,9 +1,9 @@
 using System;
-using Core.Common;
 using System.Collections.Generic;
-using Core.Shell.Common.FileSystems;
+using Core.Common;
+using Core.IO.Streams;
 using Core.Portable;
-using Core.Shell.Common.Streams;
+using Core.Shell.Common.FileSystems;
 
 namespace Core.Shell.Common
 {

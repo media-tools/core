@@ -71,8 +71,8 @@ namespace Core.Shell
 			RegularFileSystems.Register ();
 			RegularExecutables.Register ();
 			UnixShell shell = new UnixShell ();
-			shell.Environment.Output.PipeTo (output);
-			shell.Environment.Error.PipeTo (output);
+			shell.Environment.Output.PipeTo (NonBlockingConsole.ToFlexibleStream ());
+			shell.Environment.Error.PipeTo (NonBlockingConsole.ToFlexibleStream ());
 
 			// run code line
 			if (mode == Mode.CommandString) {
@@ -103,50 +103,54 @@ namespace Core.Shell
 				else {
 					await shell.PrintWelcomeAsync ();
 
-					NonBlockingConsole.ReadLine readLine = new NonBlockingConsole.ReadLine (shell.History);
-					shell.Environment.Input.PipeToLimbo ();
-
-					NonBlockingConsole.Write (shell.Prompt ());
-					while (NonBlockingConsole.IsInputOpen) {
-						while (readLine.TryReadLine ()) {
-							// handle a special command?
-							if (readLine.SpecialCommand != SpecialCommands.None) {
-								// do something
-							}
-							// normal string input
-							else {
-								string line = readLine.Line;
-
-								if (!string.IsNullOrWhiteSpace (line)) {
-									
-									shell.Environment.Input.PipeToCache ();
-									var cancelToken = new CancellationTokenSource ();
-									readLine.CancelToken = cancelToken.Token;
-
-									Task inputCapturing = Task.Run (async () => {
-										while (NonBlockingConsole.IsInputOpen && !cancelToken.IsCancellationRequested) {
-											if (await readLine.TryReadLineAsync ()) {
-												await shell.Environment.Input.WriteLineAsync (line);
-											}
-										}
-									});
-									Task commandRunning = Task.Run (async () => {
-										await shell.InteractiveAsync (line: line);
-										cancelToken.Cancel ();
-									});
-
-									Task.WaitAll (new []{ inputCapturing, commandRunning });
-
-									shell.Environment.Input.PipeToLimbo ();
-									readLine.CancelToken = CancellationToken.None;
-								}
-							}
-							NonBlockingConsole.Write (shell.Prompt ());
-						}
-					}
-					await NonBlockingConsole.WriteLineAsync (string.Empty);
+					await Interactive (shell: shell);
 				}
 			}
+		}
+
+		async Task Interactive (UnixShell shell)
+		{
+			NonBlockingConsole.ReadLine readLine = new NonBlockingConsole.ReadLine (shell.History);
+			shell.Environment.Input.PipeToLimbo ();
+
+			NonBlockingConsole.Write (shell.Prompt ());
+			while (NonBlockingConsole.IsInputOpen) {
+				while (readLine.TryReadLine ()) {
+					// handle a special command?
+					if (readLine.SpecialCommand != SpecialCommands.None) {
+						// do something
+						if (readLine.SpecialCommand == SpecialCommands.CloseStream) {
+							return;
+						}
+					}
+					// normal string input
+					else {
+						string line = readLine.Line;
+
+						if (!string.IsNullOrWhiteSpace (line)) {
+
+							shell.Environment.Input.PipeToCache ();
+							var cancelToken = new CancellationTokenSource ();
+
+							Task inputCapturing = Task.Run (async () => {
+								await shell.Environment.Input.Eat (readLine: readLine, cancelToken: cancelToken.Token);
+							});
+							Task commandRunning = Task.Run (async () => {
+								await shell.InteractiveAsync (line: line);
+								cancelToken.Cancel ();
+								await shell.Environment.Input.TryClose ();
+							});
+
+							Task.WaitAll (new []{ inputCapturing, commandRunning });
+
+							shell.Environment.Input.PipeToLimbo ();
+							readLine.CancelToken = CancellationToken.None;
+						}
+					}
+					NonBlockingConsole.Write (shell.Prompt ());
+				}
+			}
+			await NonBlockingConsole.WriteLineAsync (string.Empty);
 		}
 
 		private void printOptions (OptionSet optionSet)
@@ -188,11 +192,11 @@ namespace Core.Shell
 			);
 		}
 
-		Task output (string text)
+		/*Task output (string text)
 		{
 			//Log.Debug ("output: ", text);
 			NonBlockingConsole.Write (text);
 			return TaskHelper.Completed;
-		}
+		}*/
 	}
 }

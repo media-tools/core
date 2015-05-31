@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Core.Common;
+using Core.IO.Streams;
 using Core.Platform;
 using Core.Shell.Common;
 using NUnit.Framework;
@@ -46,11 +47,11 @@ namespace Core.UnitTests.Shell
 
 		private string captureOutput (string code)
 		{
-			string result = "";
+			var capture = new FlexibleCaptureStream ();
 
 			UnixShell shell = new UnixShell ();
-			shell.Environment.Output.PipeTo (async line => result += line);
-			shell.Environment.Error.PipeTo (async line => result += line);
+			shell.Environment.Output.PipeTo (capture);
+			shell.Environment.Error.PipeTo (capture);
 
 			try {
 				Task.Run (async () => await shell.RunScriptAsync (code: code)).Wait ();
@@ -58,9 +59,29 @@ namespace Core.UnitTests.Shell
 				Log.Error (ex);
 			}
 
+			var result = capture.Result;
 			result = result.Replace (Environment.NewLine, "\n");
-
 			return result;
+		}
+
+		private class FlexibleCaptureStream : IFlexibleStream
+		{
+			public string Result { get; private set; } = string.Empty;
+
+			#region IFlexibleStream implementation
+
+			public Task WriteAsync (string str)
+			{
+				Result += str;
+				return TaskHelper.Completed;
+			}
+
+			public Task TryClose ()
+			{
+				return TaskHelper.Completed;
+			}
+
+			#endregion
 		}
 	}
 }

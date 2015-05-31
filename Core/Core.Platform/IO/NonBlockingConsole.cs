@@ -32,6 +32,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Common;
+using Core.IO.Streams;
 
 namespace Core.IO
 {
@@ -141,6 +142,29 @@ namespace Core.IO
 			return TaskHelper.Completed;
 		}
 
+		public static IFlexibleStream ToFlexibleStream ()
+		{
+			return new FlexibleNonBlockingConsole ();
+		}
+
+		public class FlexibleNonBlockingConsole : IFlexibleStream
+		{
+			#region IFlexibleStream implementation
+
+			// Analysis disable once MemberHidesStaticFromOuterClass
+			async Task IFlexibleStream.WriteAsync (string str)
+			{
+				await NonBlockingConsole.WriteAsync (str);
+			}
+
+			Task IFlexibleStream.TryClose ()
+			{
+				return Actions.EmptyAsync ();
+			}
+
+			#endregion
+		}
+
 		public static bool TryReadKey (out ConsoleKeyInfo result, CancellationToken cancelToken)
 		{
 			while (IsInputOpen) {
@@ -155,9 +179,11 @@ namespace Core.IO
 			return false;
 		}
 
-		public class ReadLine
+		public class ReadLine : IReadLine
 		{
-			public CancellationToken CancelToken { get; set; }
+			public CancellationToken CancelToken { get; set; } = CancellationToken.None;
+
+			public bool IsOpen { get { return NonBlockingConsole.IsInputOpen; } }
 
 			public string Line { get; private set; }
 
@@ -191,13 +217,13 @@ namespace Core.IO
 
 						// Ctrl-D
 						if (key.Key == ConsoleKey.D && key.Modifiers == ConsoleModifiers.Control) {
-							Close ();
-							return false;
+							SpecialCommand = SpecialCommands.CloseStream;
+							return true;
 						}
 						// F4 ? WTF ?
 						else if (key.Key == ConsoleKey.F4) {
-							Close ();
-							return false;
+							SpecialCommand = SpecialCommands.CloseStream;
+							return true;
 						}
 						// Arrow Keys
 						else if (key.Key == ConsoleKey.UpArrow || key.Key == ConsoleKey.DownArrow || key.Key == ConsoleKey.LeftArrow || key.Key == ConsoleKey.RightArrow) {
@@ -260,20 +286,11 @@ namespace Core.IO
 				return Task.FromResult (TryReadLine ());
 			}
 
-			void Close ()
+			/*public void Close ()
 			{
 				NonBlockingConsole.IsInputOpen = false;
-			}
+			}*/
 		}
-	}
-
-	public enum SpecialCommands
-	{
-		None = 0,
-		/*ArrowUp,
-		ArrowDown,
-		ArrowLeft,
-		ArrowRight,*/
 	}
 }
 

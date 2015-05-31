@@ -36,6 +36,7 @@ namespace Core.Shell.Platform.Commands
 					CreateNoWindow = true,
 					RedirectStandardOutput = true,
 					RedirectStandardError = true,
+					RedirectStandardInput = true,
 					StandardOutputEncoding = System.Text.Encoding.UTF8,
 					StandardErrorEncoding = System.Text.Encoding.UTF8,
 				};
@@ -58,10 +59,12 @@ namespace Core.Shell.Platform.Commands
 
 				waitfor.Add (Task.Run (async () => await Output.Eat (process.StandardOutput)));
 				waitfor.Add (Task.Run (async () => await Error.Eat (process.StandardError)));
+				Input.PipeTo (process.StandardInput);
 
 				await Task.Run (() => {
 					Log.Debug ("awaiting all...");
 					Task.WaitAll (waitfor.ToArray ());
+					Input.PipeToCache ();
 					Log.Debug ("all done!");
 					state.ExitCode = process.ExitCode;
 					process.Dispose ();

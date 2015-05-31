@@ -1,8 +1,9 @@
-﻿using NUnit.Framework;
-using System;
-using Core.Shell.Common;
+﻿using System;
+using System.Threading.Tasks;
 using Core.Common;
 using Core.Platform;
+using Core.Shell.Common;
+using NUnit.Framework;
 
 namespace Core.UnitTests.Shell
 {
@@ -52,7 +53,7 @@ namespace Core.UnitTests.Shell
 			shell.Environment.Error.PipeTo (async line => result += line);
 
 			try {
-				shell.RunScript (code: code);
+				Task.Run (async () => await shell.RunScriptAsync (code: code)).Wait ();
 			} catch (Exception ex) {
 				Log.Error (ex);
 			}

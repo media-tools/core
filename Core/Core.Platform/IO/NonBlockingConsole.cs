@@ -26,11 +26,12 @@
 //
 using System;
 using System.Collections.Concurrent;
-using System.Threading;
-using System.Text;
 using System.Collections.Generic;
-using Core.Common;
 using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Core.Common;
 
 namespace Core.IO
 {
@@ -128,9 +129,24 @@ namespace Core.IO
 			queueOutput.Add (value + "\n");
 		}
 
-		public static bool TryReadKey (out ConsoleKeyInfo result)
+		public static Task WriteAsync (string value)
+		{
+			Write (value);
+			return TaskHelper.Completed;
+		}
+
+		public static Task WriteLineAsync (string value)
+		{
+			WriteLine (value);
+			return TaskHelper.Completed;
+		}
+
+		public static bool TryReadKey (out ConsoleKeyInfo result, CancellationToken cancelToken)
 		{
 			while (IsInputOpen) {
+				if (cancelToken.IsCancellationRequested) {
+					break;
+				}
 				if (queueInput.TryTake (out result, 50)) {
 					return true;
 				}
@@ -141,6 +157,8 @@ namespace Core.IO
 
 		public class ReadLine
 		{
+			public CancellationToken CancelToken { get; set; }
+
 			public string Line { get; private set; }
 
 			public SpecialCommands SpecialCommand { get; private set; }
@@ -160,8 +178,12 @@ namespace Core.IO
 
 				var buf = new StringBuilder ();
 				while (NonBlockingConsole.IsInputOpen) {
+					if (CancelToken.IsCancellationRequested) {
+						break;
+					}
+
 					ConsoleKeyInfo key;
-					if (NonBlockingConsole.TryReadKey (result: out key)) {
+					if (NonBlockingConsole.TryReadKey (result: out key, cancelToken: CancelToken)) {
 
 						//Console.WriteLine (key.Key + " " + key.Modifiers);
 
@@ -231,6 +253,11 @@ namespace Core.IO
 
 				Line = buf.ToString ();
 				return !string.IsNullOrEmpty (Line);
+			}
+
+			public Task<bool> TryReadLineAsync ()
+			{
+				return Task.FromResult (TryReadLine ());
 			}
 
 			void Close ()

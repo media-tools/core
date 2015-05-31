@@ -10,6 +10,7 @@ using Core.Shell.Common;
 using Core.Shell.Platform.Commands;
 using Core.Shell.Platform.FileSystems;
 using Mono.Options;
+using System.Threading;
 
 namespace Core.Shell
 {
@@ -19,12 +20,12 @@ namespace Core.Shell
 		{
 			DesktopPlatform.Start ();
 
-			new MainClass ().Run (args);
+			Task.Run (async () => await new MainClass ().Run (args)).Wait ();
 
 			DesktopPlatform.Finish ();
 		}
 
-		public void Run (string[] args)
+		public async Task Run (string[] args)
 		{
 			fixFileAssociations ();
 			
@@ -76,7 +77,7 @@ namespace Core.Shell
 			// run code line
 			if (mode == Mode.CommandString) {
 				try {
-					shell.RunScript (code: commandString);
+					await shell.RunScriptAsync (code: commandString);
 				} catch (Exception ex) {
 					Log.Error (ex);
 				}
@@ -84,7 +85,7 @@ namespace Core.Shell
 			// run script
 			if (mode == Mode.ScriptFile) {
 				try {
-					shell.RunScript (code: File.ReadAllText (scriptFile));
+					await shell.RunScriptAsync (code: File.ReadAllText (scriptFile));
 				} catch (Exception ex) {
 					Log.Error (ex);
 				}
@@ -100,9 +101,11 @@ namespace Core.Shell
 
 				// run interactively
 				else {
-					shell.PrintWelcome ();
+					await shell.PrintWelcomeAsync ();
 
 					NonBlockingConsole.ReadLine readLine = new NonBlockingConsole.ReadLine (shell.History);
+					shell.Environment.Input.PipeToLimbo ();
+
 					NonBlockingConsole.Write (shell.Prompt ());
 					while (NonBlockingConsole.IsInputOpen) {
 						while (readLine.TryReadLine ()) {
@@ -115,13 +118,33 @@ namespace Core.Shell
 								string line = readLine.Line;
 
 								if (!string.IsNullOrWhiteSpace (line)) {
-									shell.Interactive (line: line);
+									
+									shell.Environment.Input.PipeToCache ();
+									var cancelToken = new CancellationTokenSource ();
+									readLine.CancelToken = cancelToken.Token;
+
+									Task inputCapturing = Task.Run (async () => {
+										while (NonBlockingConsole.IsInputOpen && !cancelToken.IsCancellationRequested) {
+											if (await readLine.TryReadLineAsync ()) {
+												await shell.Environment.Input.WriteLineAsync (line);
+											}
+										}
+									});
+									Task commandRunning = Task.Run (async () => {
+										await shell.InteractiveAsync (line: line);
+										cancelToken.Cancel ();
+									});
+
+									Task.WaitAll (new []{ inputCapturing, commandRunning });
+
+									shell.Environment.Input.PipeToLimbo ();
+									readLine.CancelToken = CancellationToken.None;
 								}
 							}
 							NonBlockingConsole.Write (shell.Prompt ());
 						}
 					}
-					NonBlockingConsole.WriteLine (string.Empty);
+					await NonBlockingConsole.WriteLineAsync (string.Empty);
 				}
 			}
 		}
@@ -140,7 +163,7 @@ namespace Core.Shell
 
 		void test (UnixShell shell)
 		{
-			shell.Interactive (@"
+			Task.Run (async () => await shell.InteractiveAsync (@"
 				echo test;echo test2
 				echo test7 a  ""b c d"" """" ''      'c' abc;
 				if true;
@@ -151,7 +174,7 @@ namespace Core.Shell
 				else ;;;
 					echo test6; echo test7
 				fi
-			");
+			")).Wait ();
 		}
 
 		void fixFileAssociations ()

@@ -13,9 +13,9 @@ namespace Core.Shell.Common
 		{
 		}
 
-		public void Execute (ScriptBlock block)
+		public async Task Execute (ScriptBlock block)
 		{
-			ExecuteBlock (block).Wait ();
+			await ExecuteBlock (block);
 		}
 
 		async Task ExecuteBlock (Block block)

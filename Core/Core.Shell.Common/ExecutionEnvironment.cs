@@ -13,6 +13,8 @@ namespace Core.Shell.Common
 
 		public FlexibleStream Error { get; } = new FlexibleStream ();
 
+		public FlexibleStream Input { get; } = new FlexibleStream ();
+
 		public List<StackTraceElement> StackTrace { get; set; } = new List<StackTraceElement> {
 			new StackTraceElement {
 				Executable = "root",

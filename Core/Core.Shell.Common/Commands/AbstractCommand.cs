@@ -14,6 +14,8 @@ namespace Core.Shell.Common.Commands
 		public FlexibleStream Output { get; } = new FlexibleStream();
 		// the default error stream
 		public FlexibleStream Error { get; } = new FlexibleStream();
+		// the default input stream
+		public FlexibleStream Input { get; } = new FlexibleStream();
 
 		// the default executable name
 		public string ExecutableName { get; protected set; } = "unknown";

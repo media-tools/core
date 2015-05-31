@@ -8,11 +8,9 @@ namespace Core.IO.Terminal
 
 	public interface IReadLine
 	{
-		void SetCancelToken (CancellationToken token);
+		ReadLineHandler Callback { get; set; }
 
 		bool IsOpen { get; }
-
-		ReadLineHandler Callback { get; set; }
 	}
 
 	public interface ILine

@@ -10,8 +10,6 @@ namespace Core.IO.Terminal
 {
 	public class ResponsiveReadLine : IHistoryReadLine, IDisposable
 	{
-		public CancellationToken CancelToken { get; private set; } = CancellationToken.None;
-
 		public bool IsOpen { get { return console.IsOpen; } }
 
 		public ReadLineHandler Callback { get; set; }
@@ -30,12 +28,6 @@ namespace Core.IO.Terminal
 			this.console = console;
 			line = new InputLine ();
 			readEventChanger = console.HandleReadEvent (readHandler: ReadKey);
-		}
-
-		public void SetCancelToken (CancellationToken token)
-		{
-			CancelToken = token;
-			//CancelToken.Register (() => finishRead (false));
 		}
 
 		#region IDisposable implementation
@@ -61,10 +53,6 @@ namespace Core.IO.Terminal
 
 		async Task ReadKey (PortableConsoleKeyInfo key)
 		{
-			if (CancelToken.IsCancellationRequested) {
-				await SendResult ();
-				return;
-			}
 			if (isDisposed) {
 				Log.Warning ("Bug in ResponsiveReadLine.ReadKey: isDisposed = true! key=", key);
 				return;

@@ -157,30 +157,17 @@ namespace Core.Shell
 				// use a separate history!
 				using (readLine.UseHistory (new InputHistory ())) {
 
-					// cache input
-					//shell.Environment.Input.PipeToCache ();
-					//var cancelToken = new CancellationTokenSource ();
-
-					// task for redirecting input to command!
-					//Task inputCapturing = Task.Run (async () => {
+					// read line callback
 					readLine.Callback = shell.Environment.Input.ToReadLineCallback ();
-					//cancelToken.Token.ThrowIfCancellationRequested ();
-					//await shell.Environment.Input.Eat (readLine: readLine, cancelToken: cancelToken.Token).ConfigureAwait (false);
-					//});
 
 					// task for running the command
 					Task commandRunning = Task.Run (async () => {
 						await shell.InteractiveAsync (line: line);
-						//cancelToken.Cancel ();
 						await shell.Environment.Input.TryClose ();
 					});
 
 					// wait for both
 					await Task.WhenAll (new []{ commandRunning });
-
-					// throw input away, if there was any
-					//shell.Environment.Input.PipeToLimbo ();
-					//readLine.CancelToken = CancellationToken.None;
 				}
 			}
 		}

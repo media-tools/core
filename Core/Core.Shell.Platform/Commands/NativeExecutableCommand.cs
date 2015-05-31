@@ -63,7 +63,7 @@ namespace Core.Shell.Platform.Commands
 				await Task.Run (() => {
 					Log.Debug ("awaiting all...");
 					Task.WaitAll (waitfor.ToArray ());
-					Input.PipeToCache ();
+					Input.PipeToLimbo ();
 					Log.Debug ("all done!");
 					state.ExitCode = process.ExitCode;
 					process.Dispose ();

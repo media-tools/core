@@ -9,16 +9,9 @@ namespace Core.IO.Streams
 		Task TryClose ();
 	}
 
-	/*public interface IFlexibleBufferedOutputStream : IFlexibleOutputStream
-	{
-		Task WriteAsync (params object[] values);
-
-		Task WriteLineAsync (params object[] values);
-	}*/
-
-	public interface IFlexibleInputStream
+	/*public interface IFlexibleInputStream
 	{
 		bool TryReadLine (out string line);
-	}
+	}*/
 }
 

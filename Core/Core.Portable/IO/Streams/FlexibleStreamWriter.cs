@@ -13,6 +13,7 @@ namespace Core.IO.Streams
 		public FlexibleStreamWriter (StreamWriter streamWriter)
 		{
 			this.streamWriter = streamWriter;
+			streamWriter.AutoFlush = true;
 		}
 
 		#region IFlexibleStream implementation

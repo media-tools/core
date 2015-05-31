@@ -67,7 +67,7 @@ namespace Core.Shell.Platform.Commands
 					Log.Debug ("all done!");
 					state.ExitCode = process.ExitCode;
 					process.Dispose ();
-				});
+				}).ConfigureAwait (false);
 
 			} catch (Exception ex) {
 				Log.Debug (GetType ().Name, ": Error!");

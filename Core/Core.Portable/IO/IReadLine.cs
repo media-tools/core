@@ -45,6 +45,8 @@ namespace Core.IO
 
 		bool IsOpen { get; }
 
+		Task<bool> IsOpenAsync { get; }
+
 		bool TryReadLine ();
 
 		Task<bool> TryReadLineAsync ();

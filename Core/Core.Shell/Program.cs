@@ -139,7 +139,7 @@ namespace Core.Shell
 
 								// task for redirecting input to command!
 								Task inputCapturing = Task.Run (async () => {
-									await shell.Environment.Input.Eat (readLine: readLine, cancelToken: cancelToken.Token);
+									await shell.Environment.Input.Eat (readLine: readLine, cancelToken: cancelToken.Token).ConfigureAwait (false);
 								});
 								// task for running the command
 								Task commandRunning = Task.Run (async () => {

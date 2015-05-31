@@ -185,6 +185,8 @@ namespace Core.IO
 
 			public bool IsOpen { get { return NonBlockingConsole.IsInputOpen; } }
 
+			public Task<bool> IsOpenAsync { get { return Task.FromResult (IsOpen); } }
+
 			public string Line { get; private set; }
 
 			public SpecialCommands SpecialCommand { get; private set; }

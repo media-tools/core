@@ -42,15 +42,16 @@ namespace Core.IO.Streams
 		public static async Task Eat (this IFlexibleOutputStream flex, IReadLine readLine, CancellationToken cancelToken)
 		{
 			readLine.CancelToken = cancelToken;
-			while (readLine.IsOpen && !cancelToken.IsCancellationRequested) {
-				if (await readLine.TryReadLineAsync ()) {
+			while (await readLine.IsOpenAsync && !cancelToken.IsCancellationRequested) {
+				if (await readLine.TryReadLineAsync ().ConfigureAwait (false)) {
 					if (readLine.SpecialCommand == SpecialCommands.CloseStream) {
 						Log.Debug ("try close!");
 						await flex.TryClose ();
 						return;
 					} else {
 						Log.Debug ("eat: ", readLine.Line);
-						await flex.WriteLineAsync (readLine.Line);
+						await flex.WriteLineAsync (readLine.Line).ConfigureAwait (false);
+						Log.Debug ("eaten: ", readLine.Line);
 					}
 				}
 			}

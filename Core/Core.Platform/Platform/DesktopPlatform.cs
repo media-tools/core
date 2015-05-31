@@ -30,7 +30,7 @@ namespace Core.Platform
 						//foreach (string message in messageLines) Console.WriteLine (message);
 						if (LogTargets.StandardOutput) {
 							foreach (string message in messageLines) {
-								NonBlockingConsole.WriteLine (string.Format ("{0} {1}", formatType (type), message));
+								NonBlockingConsole.Instance.WriteLine (string.Format ("{0} {1}", formatType (type), message));
 							}
 						}
 					};
@@ -63,7 +63,7 @@ namespace Core.Platform
 		{
 			if (isStarted) {
 				isStarted = false;
-				NonBlockingConsole.Finish ();
+				NonBlockingConsole.Instance.Finish ();
 				if (logfile != null) {
 					logfile.Finish ();
 				}

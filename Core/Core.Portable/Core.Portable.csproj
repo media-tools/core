@@ -58,17 +58,22 @@
     <Compile Include="Common\ExceptionExtensions.cs" />
     <Compile Include="Common\DateTimeExtensions.cs" />
     <Compile Include="Portable\PlatformInfo.cs" />
-    <Compile Include="IO\InputHistory.cs" />
     <Compile Include="IO\PathHelper.cs" />
     <Compile Include="Common\FixedSizedQueue.cs" />
     <Compile Include="Math\PortableLocation.cs" />
     <Compile Include="Common\TaskHelper.cs" />
     <Compile Include="Common\AdvancedDelegates.cs" />
-    <Compile Include="IO\IReadLine.cs" />
     <Compile Include="IO\Streams\FlexibleStream.cs" />
     <Compile Include="IO\Streams\FlexibleStreamExtensions.cs" />
     <Compile Include="IO\Streams\FlexibleStreamWriter.cs" />
     <Compile Include="IO\Streams\IFlexibleOutputStream.cs" />
+    <Compile Include="IO\Terminal\InputHistory.cs" />
+    <Compile Include="IO\Terminal\IReadLine.cs" />
+    <Compile Include="IO\Terminal\ResponsiveReadLine.cs" />
+    <Compile Include="IO\Terminal\PortableConsoleKey.cs" />
+    <Compile Include="IO\Terminal\ReadLineExtensions.cs" />
+    <Compile Include="IO\Terminal\ITerminalStream.cs" />
+    <Compile Include="IO\Terminal\ITerminalInputStream.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
@@ -86,6 +91,7 @@
     <Folder Include="IO\" />
     <Folder Include="Common\" />
     <Folder Include="Math\" />
+    <Folder Include="IO\Terminal\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mono.Options-PCL\Mono.Options-PCL.csproj">

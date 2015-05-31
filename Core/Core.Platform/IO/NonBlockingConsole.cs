@@ -32,25 +32,33 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Common;
+using Core.IO.Terminal;
 using Core.IO.Streams;
 
 namespace Core.IO
 {
-	public static class NonBlockingConsole
+	public class NonBlockingConsole : ITerminalStream
 	{
-		private static readonly BlockingCollection<string> queueOutput = new BlockingCollection<string> ();
-		private static readonly BlockingCollection<ConsoleKeyInfo> queueInput = new BlockingCollection<ConsoleKeyInfo> ();
+		public static NonBlockingConsole Instance = new NonBlockingConsole ();
 
-		private static bool running;
-		private static readonly Thread threadOutput;
-		private static readonly Thread threadInput;
-		private static readonly object lockObject = new object ();
-		private static bool runningOutput;
-		private static bool runningInput;
+		readonly BlockingCollection<string> queueOutput = new BlockingCollection<string> ();
+		readonly BlockingCollection<ConsoleKeyInfo> queueInput = new BlockingCollection<ConsoleKeyInfo> ();
 
-		public static bool IsInputOpen { get; private set; } = false;
+		const int InputInterval = 50;
 
-		static NonBlockingConsole ()
+		bool running;
+		readonly Thread threadOutput;
+		readonly Thread threadInput;
+		readonly Thread threadInputProcessing;
+		readonly object lockObject = new object ();
+		bool runningOutput;
+		bool runningInput;
+		bool runningInputProcessing;
+
+		public bool IsInputOpen { get; private set; } = false;
+
+
+		NonBlockingConsole ()
 		{
 			// unit tests
 			if (Core.Portable.PlatformInfo.System.IsRunningFromNUnit) {
@@ -65,7 +73,7 @@ namespace Core.IO
 						runningOutput = true;
 						string item;
 						while (running) {
-							if (queueOutput.TryTake (out item, 50)) {
+							if (queueOutput.TryTake (out item, InputInterval)) {
 								lock (lockObject) {
 									Console.Write (item);
 								}
@@ -85,18 +93,36 @@ namespace Core.IO
 									queueInput.Add (Console.ReadKey (true));
 								}
 							}
-							Thread.Sleep (50);
+							Thread.Sleep (InputInterval);
 						}
 						runningInput = false;
 					});
 				threadInput.IsBackground = true;
 				threadInput.Start ();
 
+				threadInputProcessing = new Thread (
+					() => {
+						runningInputProcessing = true;
+						ConsoleKeyInfo item;
+						while (running) {
+							if (queueInput.TryTake (out item, InputInterval)) {
+								((ITerminalInputStream)this).ReadHandler (new PortableConsoleKeyInfo {
+									Modifiers = (Core.IO.Terminal.ConsoleModifiers)item.Modifiers,
+									Key = (Core.IO.Terminal.ConsoleKey)item.Key,
+									KeyChar = item.KeyChar,
+								});
+							}
+						}
+						runningInputProcessing = false;
+					});
+				threadInputProcessing.IsBackground = true;
+				threadInputProcessing.Start ();
+
 				IsInputOpen = Core.Portable.PlatformInfo.System.IsInteractive;
 			}
 		}
 
-		public static void Finish ()
+		public void Finish ()
 		{
 			// unit tests
 			if (Core.Portable.PlatformInfo.System.IsRunningFromNUnit) {
@@ -107,7 +133,7 @@ namespace Core.IO
 			else {
 				
 				running = false;
-				for (int i = 10; i >= 0 && (runningInput || runningOutput); i--) {
+				for (int i = 10; i >= 0 && (runningInput || runningOutput || runningInputProcessing); i--) {
 					Thread.Sleep (30);
 				}
 				IsInputOpen = false;
@@ -120,51 +146,52 @@ namespace Core.IO
 			}
 		}
 
-		public static void Write (string value)
+		public void Write (string value)
 		{
 			queueOutput.Add (value);
 		}
 
-		public static void WriteLine (string value)
+		public void WriteLine (string value)
 		{
 			queueOutput.Add (value + "\n");
 		}
 
-		public static Task WriteAsync (string value)
+		public Task WriteAsync (string value)
 		{
 			Write (value);
 			return TaskHelper.Completed;
 		}
 
-		public static Task WriteLineAsync (string value)
+		public Task WriteLineAsync (string value)
 		{
 			WriteLine (value);
 			return TaskHelper.Completed;
 		}
 
-		public static IFlexibleOutputStream ToFlexibleStream ()
+		#region IConsoleInput implementation
+
+		ConsoleReadHandler ITerminalInputStream.ReadHandler { get; set; } = Actions.EmptyAsync;
+
+		bool ITerminalInputStream.IsOpen { get { return IsInputOpen; } }
+
+		#endregion
+
+		#region IFlexibleStream implementation
+
+		// Analysis disable once MemberHidesStaticFromOuterClass
+		async Task IFlexibleOutputStream.WriteAsync (string str)
 		{
-			return new FlexibleNonBlockingConsole ();
+			await NonBlockingConsole.Instance.WriteAsync (str);
 		}
 
-		public class FlexibleNonBlockingConsole : IFlexibleOutputStream
+		Task IFlexibleOutputStream.TryClose ()
 		{
-			#region IFlexibleStream implementation
-
-			// Analysis disable once MemberHidesStaticFromOuterClass
-			async Task IFlexibleOutputStream.WriteAsync (string str)
-			{
-				await NonBlockingConsole.WriteAsync (str);
-			}
-
-			Task IFlexibleOutputStream.TryClose ()
-			{
-				return Actions.EmptyAsync ();
-			}
-
-			#endregion
+			return Actions.EmptyAsync ();
 		}
 
+		#endregion
+	}
+	/*
 		public static bool TryReadKey (out ConsoleKeyInfo result, CancellationToken cancelToken)
 		{
 			while (IsInputOpen) {
@@ -284,6 +311,6 @@ namespace Core.IO
 				return Task.FromResult (TryReadLine ());
 			}
 		}
-	}
+	}*/
 }
 

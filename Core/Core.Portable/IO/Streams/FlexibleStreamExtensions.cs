@@ -2,6 +2,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Common;
+using Core.IO.Terminal;
 
 namespace Core.IO.Streams
 {
@@ -42,7 +43,8 @@ namespace Core.IO.Streams
 		public static async Task Eat (this IFlexibleOutputStream flex, IReadLine readLine, CancellationToken cancelToken)
 		{
 			readLine.CancelToken = cancelToken;
-			while (await readLine.IsOpenAsync && !cancelToken.IsCancellationRequested) {
+			while (readLine.IsOpen && !cancelToken.IsCancellationRequested) {
+				
 				if (await readLine.TryReadLineAsync ().ConfigureAwait (false)) {
 					if (readLine.SpecialCommand == SpecialCommands.CloseStream) {
 						Log.Debug ("try close!");
@@ -55,6 +57,7 @@ namespace Core.IO.Streams
 					}
 				}
 			}
+
 			readLine.CancelToken = CancellationToken.None;
 		}
 

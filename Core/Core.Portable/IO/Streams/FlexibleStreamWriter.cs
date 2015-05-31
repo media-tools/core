@@ -4,7 +4,7 @@ using Core.Common;
 
 namespace Core.IO.Streams
 {
-	public class FlexibleStreamWriter : IFlexibleStream
+	public class FlexibleStreamWriter : IFlexibleOutputStream
 	{
 		readonly StreamWriter streamWriter;
 

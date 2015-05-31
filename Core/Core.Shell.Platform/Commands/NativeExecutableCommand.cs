@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using Core.Common;
-using Core.IO;
-using Core.Shell.Common.Commands;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Core.Common;
+using Core.IO.Streams;
+using Core.Shell.Common.Commands;
 
 namespace Core.Shell.Platform.Commands
 {

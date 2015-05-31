@@ -64,7 +64,7 @@ namespace Core.UnitTests.Shell
 			return result;
 		}
 
-		private class FlexibleCaptureStream : IFlexibleStream
+		private class FlexibleCaptureStream : IFlexibleOutputStream
 		{
 			public string Result { get; private set; } = string.Empty;
 

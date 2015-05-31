@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Core.Common;
 using Core.IO;
 using Core.Portable;
-using Core.Shell.Common.FileSystems;
+using Core.IO.Streams;
 
 namespace Core.Shell.Common
 {

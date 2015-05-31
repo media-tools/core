@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Common;
+using Core.IO.Streams;
 using Core.Shell.Common.Commands;
 
 namespace Core.Shell.Common

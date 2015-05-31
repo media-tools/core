@@ -142,22 +142,22 @@ namespace Core.IO
 			return TaskHelper.Completed;
 		}
 
-		public static IFlexibleStream ToFlexibleStream ()
+		public static IFlexibleOutputStream ToFlexibleStream ()
 		{
 			return new FlexibleNonBlockingConsole ();
 		}
 
-		public class FlexibleNonBlockingConsole : IFlexibleStream
+		public class FlexibleNonBlockingConsole : IFlexibleOutputStream
 		{
 			#region IFlexibleStream implementation
 
 			// Analysis disable once MemberHidesStaticFromOuterClass
-			async Task IFlexibleStream.WriteAsync (string str)
+			async Task IFlexibleOutputStream.WriteAsync (string str)
 			{
 				await NonBlockingConsole.WriteAsync (str);
 			}
 
-			Task IFlexibleStream.TryClose ()
+			Task IFlexibleOutputStream.TryClose ()
 			{
 				return Actions.EmptyAsync ();
 			}

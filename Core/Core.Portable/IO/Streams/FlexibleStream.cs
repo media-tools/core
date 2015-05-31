@@ -9,7 +9,7 @@ using Core.IO;
 
 namespace Core.IO.Streams
 {
-	public sealed class FlexibleStream : IFlexibleStream
+	public sealed class FlexibleStream : IFlexibleOutputStream, IFlexibleInputStream
 	{
 		readonly List<string> cache = new List<string> ();
 		readonly object _lock = new object ();
@@ -18,11 +18,11 @@ namespace Core.IO.Streams
 		AsyncAction<string> OnWrite = OnWrite_NoHandlerWarning;
 		AsyncAction OnClose = OnClose_NoHandlerWarning;
 
-		#region IFlexiblePipeTarget implementation
+		#region IFlexibleOutputStream implementation
 
 		public async Task WriteAsync (string str)
 		{
-			await WriteAsync (new object[]{ str });
+			await OnWrite (str).ConfigureAwait (false);
 		}
 
 		public async Task TryClose ()
@@ -31,23 +31,6 @@ namespace Core.IO.Streams
 		}
 
 		#endregion
-
-		public async Task WriteAsync (params object[] values)
-		{
-			foreach (object value in values) {
-				//Log.Debug ("FlexibleStream.WriteAsync: ", value);
-				await OnWrite (value.ToString ()).ConfigureAwait (false);
-			}
-		}
-
-		public async Task WriteLineAsync (params object[] values)
-		{
-			foreach (object value in values) {
-				//Log.Debug ("FlexibleStream.WriteAsync: ", value);
-				await OnWrite (value.ToString ()).ConfigureAwait (false);
-			}
-			await OnWrite (Environment.NewLine);
-		}
 
 		/*public void PipeTo (FlexibleStream otherStream)
 		{
@@ -62,7 +45,7 @@ namespace Core.IO.Streams
 			PipeTo (new FlexibleStreamWriter (streamWriter: streamWriter) { IsDisposable = dispose });
 		}
 
-		public void PipeTo (IFlexibleStream target)
+		public void PipeTo (IFlexibleOutputStream target)
 		{
 			lock (_lock) {
 				// set the write handler
@@ -95,6 +78,8 @@ namespace Core.IO.Streams
 			OnWrite = OnWrite_NoHandlerWarning;
 		}
 
+		#region IFlexibleInputStream implementation
+
 		public bool TryReadLine (out string result)
 		{
 			if (InCacheMode && cache.Count > 0) {
@@ -121,33 +106,7 @@ namespace Core.IO.Streams
 			}
 		}
 
-		public async Task Eat (StreamReader reader)
-		{
-			string line;
-			while ((line = await reader.ReadLineAsync ()) != null) {
-
-				Log.Debug ("received: ", line);
-				await WriteLineAsync (line);
-			}
-		}
-
-		public async Task Eat (IReadLine readLine, CancellationToken cancelToken)
-		{
-			readLine.CancelToken = cancelToken;
-			while (readLine.IsOpen && !cancelToken.IsCancellationRequested) {
-				if (await readLine.TryReadLineAsync ()) {
-					if (readLine.SpecialCommand == SpecialCommands.CloseStream) {
-						Log.Debug ("try close!");
-						await TryClose ();
-						return;
-					} else {
-						Log.Debug ("eat: ", readLine.Line);
-						await WriteLineAsync (readLine.Line);
-					}
-				}
-			}
-			readLine.CancelToken = CancellationToken.None;
-		}
+		#endregion
 
 		static Task OnWrite_NoHandlerWarning (string str)
 		{
@@ -159,37 +118,6 @@ namespace Core.IO.Streams
 		{
 			Log.Debug ("FlexibleStream.OnClose_NoHandlerWarning: no output handler assigned!");
 			return TaskHelper.Completed;
-		}
-
-		public TextWriter ToTextWriter ()
-		{
-			return new InternalTextWriter (this);
-		}
-
-		public class InternalTextWriter : TextWriter
-		{
-			FlexibleStream flexi;
-
-			public InternalTextWriter (FlexibleStream flexi)
-			{
-				this.flexi = flexi;
-			}
-
-			public override void Write (char value)
-			{
-				//Log.Debug ("InternalTextWriter.Write: ", value);
-				flexi.WriteAsync (value + "").Wait ();
-			}
-
-			public override void Write (string value)
-			{
-				//Log.Debug ("InternalTextWriter.Write: ", value);
-				flexi.WriteAsync (value).Wait ();
-			}
-
-			public override Encoding Encoding {
-				get { return Encoding.UTF8; }
-			}
 		}
 	}
 }

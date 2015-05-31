@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Common;
+using Core.IO.Streams;
 using Core.Shell.Common.FileSystems;
 
 namespace Core.Shell.Common.Commands.Builtins

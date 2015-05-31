@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Core.Common;
 using Core.IO;
+using Core.IO.Streams;
 using Core.Platform;
 using Core.Portable;
 using Core.Shell.Common;
 using Core.Shell.Platform.Commands;
 using Core.Shell.Platform.FileSystems;
 using Mono.Options;
-using System.Threading;
 
 namespace Core.Shell
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.IO.Streams;
 using Core.Portable;
 
 namespace Core.Shell.Common.Commands.Builtins

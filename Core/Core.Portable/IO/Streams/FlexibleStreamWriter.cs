@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Core.Common;
@@ -20,7 +21,11 @@ namespace Core.IO.Streams
 
 		public async Task WriteAsync (string str)
 		{
-			await streamWriter.WriteAsync (str);
+			try {
+				await streamWriter.WriteAsync (str);
+			} catch (ObjectDisposedException ex) {
+				Log.Warning (ex);
+			}
 		}
 
 		public Task TryClose ()

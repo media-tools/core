@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>Core.Shell</id>
+    <version>0.1.1</version>
+    <authors>tobiasschulz</authors>
+    <owners>tobiasschulz</owners>
+    <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
+    <projectUrl>https://github.com/media-tools/core/</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/media-tools/core/master/Core/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A pure managed shell script interpreter for .NET applications</description>
+    <releaseNotes>an open source project which provides a pure managed shell script interpreter.</releaseNotes>
+    <tags>Utilities Common Core Shell Unix Script</tags>
+    <dependencies>
+      <dependency id="Core.Common" version="0.1.0" />
+      <dependency id="Mono.Options-PCL" version="2.0.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="Core.Shell/bin/$configuration$/Core.Shell.Common.dll" target="lib/portable-net45+win/" />
+
+    <file src="Core.Shell/bin/$configuration$/Core.Shell.Common.dll" target="lib/portable-win81/" />
+
+    <file src="Core.Shell/bin/$configuration$/Core.Shell.Common.dll" target="lib/portable-net45+sl50+win+wp80/" />
+
+    <file src="Core.Shell/bin/$configuration$/Core.Shell.Common.dll" target="lib/portable-windows8+net45/" />
+
+    <file src="Core.Shell/bin/$configuration$/Core.Shell.Common.dll" target="lib/portable-net45+win+wp80/" />
+
+    <file src="Core.Shell/bin/$configuration$/Core.Shell.Common.dll" target="lib/net45/" />
+    <file src="Core.Shell/bin/$configuration$/Core.Shell.Platform.dll" target="lib/net45/" />
+  </files>
+</package>

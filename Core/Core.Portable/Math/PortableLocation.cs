@@ -36,6 +36,28 @@ namespace Core.Math
 		public PortableLocation ()
 		{
 		}
+
+		public override string ToString ()
+		{
+			return string.Format ("[PortableLocation: Latitude={0}, Longitude={1}, Altitude={2}, DateTime={3}, Provider={4}]", Latitude, Longitude, Altitude, DateTime, Provider);
+		}
+
+		public override bool Equals (object obj)
+		{
+			PortableLocation other = obj as PortableLocation;
+			if (other != null) {
+				return System.Math.Abs (Latitude - other.Latitude) < EPSILON && System.Math.Abs (Longitude - other.Longitude) < EPSILON && System.Math.Abs (Altitude - other.Altitude) < EPSILON && DateTime == other.DateTime && Provider == other.Provider;
+			} else {
+				return false;
+			}
+		}
+
+		public override int GetHashCode ()
+		{
+			return (int)(Latitude + Longitude * 100.0 + Altitude / 100.0 + DateTime.Ticks);
+		}
+
+		static readonly double EPSILON = 0.000001;
 	}
 
 	public class PortableLocationCollection

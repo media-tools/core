@@ -28,7 +28,7 @@ namespace Core.Shell.Common.FileSystems
 
 		private string[] GetVirtualPath (string path)
 		{
-			Log.Debug ("Prefix.GetVirtualPath: Name=", Name, ", path=", path);
+			//Log.Debug ("Prefix.GetVirtualPath: Name=", Name, ", path=", path);
 			if (path == Name || path == Name.TrimEnd ('/')) {
 				return new string[0];
 			} else if (path.StartsWith (Name, StringComparison.OrdinalIgnoreCase)) {
@@ -41,7 +41,7 @@ namespace Core.Shell.Common.FileSystems
 		public Path CreatePath (string path)
 		{
 			if (Matches (path)) {
-				Log.Debug ("Prefix.CreatePath: Name=", Name, ", path=", path, ", result=", new Path (prefix: this, virtualPath: GetVirtualPath (path: path), fileSystem: FileSystem));
+				//Log.Debug ("Prefix.CreatePath: Name=", Name, ", path=", path, ", result=", new Path (prefix: this, virtualPath: GetVirtualPath (path: path), fileSystem: FileSystem));
 				return new Path (prefix: this, virtualPath: GetVirtualPath (path: path), fileSystem: FileSystem);
 			} else {
 				throw new VirtualIOException ("Prefix: Cannot create a path from a string that doesn't match the prefix!", path);

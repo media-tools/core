@@ -67,7 +67,7 @@ namespace Core.Math
 	public class PortableLocationCollection
 	{
 		[JsonProperty ("locations")]
-		PortableLocation[] Locations_Internal { get { return Locations.OrderBy (l => l.DateTime).ToArray (); } set { Locations = new HashSet<PortableLocation> (value); } }
+		PortableLocation[] Locations_Internal { get { return Locations?.OrderBy (l => l.DateTime)?.ToArray (); } set { Locations = new HashSet<PortableLocation> (value); } }
 
 		[JsonIgnore]
 		public HashSet<PortableLocation> Locations { get; set; } = new HashSet<PortableLocation> ();

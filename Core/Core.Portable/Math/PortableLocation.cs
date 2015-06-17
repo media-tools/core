@@ -25,6 +25,9 @@ namespace Core.Math
 		[JsonProperty ("reference_file")]
 		public string ReferenceFile { get; set; } = "";
 
+		[JsonProperty ("reference_note")]
+		public string ReferenceNote { get; set; } = "";
+
 		[JsonProperty ("lat")]
 		private double LatitudeAlternateSetter {
 			// get is intentionally omitted here

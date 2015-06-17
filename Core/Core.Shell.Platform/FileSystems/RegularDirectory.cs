@@ -31,13 +31,13 @@ namespace Core.Shell.Platform.FileSystems
 			return new RegularDirectoryListing (directory: this);
 		}
 
-		public VirtualNode GetChildDirectory (string name)
+		public VirtualDirectory GetChildDirectory (string name)
 		{
 			Path childPath = Path.CombinePath (name);
 			return Path.FileSystem.Directory (childPath);
 		}
 
-		public VirtualNode GetChildFile (string name)
+		public VirtualFile GetChildFile (string name)
 		{
 			Path childPath = Path.CombinePath (name);
 			return Path.FileSystem.File (childPath);

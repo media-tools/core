@@ -46,7 +46,7 @@ namespace Core.Math
 
 		public override string ToString ()
 		{
-			return string.Format ("[PortableLocation: Latitude={0}, Longitude={1}, Altitude={2}, DateTime={3}, Provider={4}]", Latitude, Longitude, Altitude, DateTime, Provider);
+			return string.Format ("[PortableLocation: Latitude={0}, Longitude={1}, Altitude={2}, DateTime={3}, Provider={4}, ReferenceFile={5}, ReferenceNote={6}]", Latitude, Longitude, Altitude, DateTime, Provider, ReferenceFile, ReferenceNote);
 		}
 
 		public override bool Equals (object obj)

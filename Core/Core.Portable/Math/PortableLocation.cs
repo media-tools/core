@@ -1,6 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Core.Math
 {
@@ -66,7 +67,9 @@ namespace Core.Math
 	public class PortableLocationCollection
 	{
 		[JsonProperty ("locations")]
-		public List<PortableLocation> Locations { get; set; } = new List<PortableLocation> ();
+		PortableLocation[] Locations_Internal { get { return Locations.OrderBy (l => l.DateTime).ToArray (); } set { Locations = new HashSet<PortableLocation> (value); } }
+
+		public HashSet<PortableLocation> Locations { get; set; } = new HashSet<PortableLocation> ();
 
 		public PortableLocationCollection ()
 		{

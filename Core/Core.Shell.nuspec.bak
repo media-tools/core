@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Core.Shell</id>
-    <version>0.1.4</version>
+    <version>0.1.5</version>
     <authors>tobiasschulz</authors>
     <owners>tobiasschulz</owners>
     <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>

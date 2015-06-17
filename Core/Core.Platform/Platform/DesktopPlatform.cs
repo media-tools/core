@@ -28,7 +28,7 @@ namespace Core.Platform
 				if (!Core.Portable.PlatformInfo.System.IsRunningFromNUnit) {
 					Log.LogHandler += (type, messageLines) => {
 						//foreach (string message in messageLines) Console.WriteLine (message);
-						if (LogTargets.StandardOutput) {
+						if (LogTargets.StandardOutput && (int)type >= (int)LogTargets.StandardOutput_MinimalType) {
 							foreach (string message in messageLines) {
 								NonBlockingConsole.Instance.WriteLine (string.Format ("{0} {1}", formatType (type), message));
 							}
@@ -73,6 +73,8 @@ namespace Core.Platform
 		public static class LogTargets
 		{
 			public static bool StandardOutput { get; set; } = true;
+
+			public static Log.Type StandardOutput_MinimalType { get; set; } = Log.Type.TRACE;
 
 			public static bool DefaultLogFile { get; set; } = true;
 		}

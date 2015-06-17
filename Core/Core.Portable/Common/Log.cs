@@ -93,7 +93,7 @@ namespace Core.Common
 
 		public enum Type
 		{
-			TRACE,
+			TRACE = 0,
 			DEBUG,
 			INFO,
 			WARNING,

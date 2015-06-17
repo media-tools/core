@@ -50,7 +50,12 @@ namespace Core.Math
 		{
 			PortableLocation other = obj as PortableLocation;
 			if (other != null) {
-				return System.Math.Abs (Latitude - other.Latitude) < EPSILON && System.Math.Abs (Longitude - other.Longitude) < EPSILON && System.Math.Abs (Altitude - other.Altitude) < EPSILON && DateTime == other.DateTime && Provider == other.Provider;
+				return System.Math.Abs (Latitude - other.Latitude) < EPSILON
+				&& System.Math.Abs (Longitude - other.Longitude) < EPSILON
+				&& System.Math.Abs (Altitude - other.Altitude) < EPSILON
+				&& DateTime == other.DateTime
+				&& Provider == other.Provider
+				&& Provider == other.ReferenceFile;
 			} else {
 				return false;
 			}

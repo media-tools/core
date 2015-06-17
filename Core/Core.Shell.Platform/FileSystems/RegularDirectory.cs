@@ -42,6 +42,15 @@ namespace Core.Shell.Platform.FileSystems
 			Path childPath = Path.CombinePath (name);
 			return Path.FileSystem.File (childPath);
 		}
+
+		public void CreateDirectories ()
+		{
+			try {
+				System.IO.Directory.CreateDirectory (Path.RealPath);
+			} catch (Exception ex) {
+				throw new VirtualIOException (message: ex.Message, node: Path, innerException: ex);
+			}
+		}
 	}
 }
 

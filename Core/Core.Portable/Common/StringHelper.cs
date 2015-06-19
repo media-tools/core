@@ -1,6 +1,7 @@
 ﻿using System;
 using Core.IO;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Core.Common
 {
@@ -39,6 +40,11 @@ namespace Core.Common
 				result = result.TrimEnd ('\r', '\n');
 			}
 			return result;
+		}
+
+		public static string Between (this string source, string left, string right)
+		{
+			return Regex.Match (source, string.Format ("{0}(.*){1}", left, right)).Groups [1].Value;
 		}
 	}
 }

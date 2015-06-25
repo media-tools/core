@@ -36,6 +36,7 @@
     <Compile Include="GoogleScopes.cs" />
     <Compile Include="GoogleAccount.cs" />
     <Compile Include="DictionaryDataStore.cs" />
+    <Compile Include="GoogleAuthentification.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

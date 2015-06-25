@@ -3,18 +3,18 @@ using Core.Common;
 using Google.GData.Client;
 using System.Collections.Generic;
 
-namespace Core.Google.Auth
+namespace Core.Google.Auth.Portable
 {
 	public interface IGoogleAuthReceiver
 	{
 		// when the tokens change
-		Action UpdateAuth (GoogleAuth auth);
+		void UpdateAuth (GoogleAuthentification auth);
 	}
 
-	public sealed class GoogleAuth
+	public sealed class GoogleAuthentification
 	{
 		// the google app
-		public GoogleApp App { get; set; }
+		public IGoogleAuthBroker Broker { get; set; }
 		// the google account
 		public GoogleAccount Account { get; set; }
 
@@ -30,12 +30,10 @@ namespace Core.Google.Auth
 		// clients
 		List<IGoogleAuthReceiver> Receivers = new List<IGoogleAuthReceiver> ();
 
-		public GoogleAuth (GoogleApp app, GoogleAccount account)
+		public GoogleAuthentification (IGoogleAuthBroker broker, GoogleAccount account)
 		{
-			App = app;
+			Broker = broker;
 			Account = account;
-
-			Core.Net.Networking.DisableCertificateValidation ();
 		}
 
 		public void AddReceiver (params IGoogleAuthReceiver[] receivers)
@@ -49,13 +47,13 @@ namespace Core.Google.Auth
 		{
 			lock (internalLockAuth) {
 				// get the OAuth2 parameters
-				OAuth2Parameters parameters = Account.GetOAuth2Parameters (app: App);
+				OAuth2Parameters parameters = Account.GetOAuth2Parameters (broker: Broker);
 
 				// for request-based libraries
-				Settings = new RequestSettings (GoogleApp.ApplicationName, parameters);
+				Settings = new RequestSettings (Broker.AppName, parameters);
 
 				// for service-based libraries
-				RequestFactory = new GOAuth2RequestFactory ("apps", GoogleApp.ApplicationName, parameters);
+				RequestFactory = new GOAuth2RequestFactory ("apps", Broker.AppName, parameters);
 				RequestFactory.MethodOverride = true;
 
 				// call the method implemented in the derived class

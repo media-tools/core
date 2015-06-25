@@ -7,45 +7,49 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Auth.OAuth2.Flows;
 using Google.Apis.Auth.OAuth2.Responses;
 using Core.Common;
+using Newtonsoft.Json;
+using Core.IO;
+using Google.Apis.Plus.v1;
+using Google.Apis.Services;
+using Google.Apis.Plus.v1.Data;
 
 namespace Core.Google.Auth
 {
 	public class GoogleAccount : ValueObject<GoogleAccount>
 	{
-		private ConfigFile accountConfig;
+		public static string CONFIG_PATH = null;
 
-		private string section;
+		GoogleAccountListJson jsonAccounts;
+		GoogleAccountJson jsonAccount;
 
-		public string Id { get { return accountConfig [section, "Id", ""]; } }
+		public string Id { get { return jsonAccount.Id; } }
 
-		public string DisplayName { get { return accountConfig [section, "DisplayName", ""]; } }
+		public string DisplayName { get { return jsonAccount.DisplayName; } }
 
-		private static Regex filterShortDisplayName = new Regex ("[^a-z]");
+		static Regex filterShortDisplayName = new Regex ("[^a-z]");
 
 		public string ShortDisplayName { get { return filterShortDisplayName.Replace (FirstName.ToLower (), ""); } }
 
 		public string FirstName { get { return DisplayName.Contains (" ") ? DisplayName.Substring (0, DisplayName.IndexOf (" ")) : DisplayName; } }
 
-		public string Emails { get { return accountConfig [section, "Emails", ""]; } }
+		public string Emails { get { return string.Join (";", jsonAccount.Emails); } }
 
-		public string Url { get { return accountConfig [section, "Url", ""]; } }
+		public string AccessToken { get { return jsonAccount.AccessToken; } private set { jsonAccount.AccessToken = value; } }
 
-		public string AccessToken { get { return accountConfig [section, "AccessToken", ""]; } private set { accountConfig [section, "AccessToken", ""] = value; } }
-
-		public string RefreshToken { get { return accountConfig [section, "RefreshToken", ""]; } }
+		public string RefreshToken { get { return jsonAccount.RefreshToken; } }
 
 		public GoogleAccount (string id)
 			: this ()
 		{
-			section = id2section (id);
-			string displayName = accountConfig [section, "DisplayName", ""];
-			string emails = accountConfig [section, "Emails", ""];
+			if (!jsonAccounts.Accounts.ContainsKey (id)) {
+				jsonAccounts.Accounts [id] = new GoogleAccountJson ();
+			}
+			jsonAccount = jsonAccounts.Accounts [id];
 		}
 
 		private GoogleAccount ()
 		{
-			ConfigName = NamespaceGoogle.CONFIG_NAME;
-			accountConfig = fs.Config.OpenConfigFile ("accounts.ini");
+			jsonAccounts = ConfigHelper.OpenConfig<GoogleAccountListJson> (fullPath: CONFIG_PATH);
 		}
 
 		public static GoogleAccount SaveAccount (UserCredential credential, DictionaryDataStore dataStore)
@@ -61,23 +65,22 @@ namespace Core.Google.Auth
 			Person me = plusService.People.Get ("me").Execute ();
 
 			string id = me.Id;
-			string section = id2section (id);
-			Log.Message ("Authorized user: ", me.DisplayName);
+			Log.Info ("Authorized user: ", me.DisplayName);
 
-			ConfigFile accountConfig = dummy.accountConfig;
+			GoogleAccountListJson jsonAccounts = dummy.jsonAccounts;
+			if (!jsonAccounts.Accounts.ContainsKey (id)) {
+				jsonAccounts.Accounts [id] = new GoogleAccountJson ();
+			}
 
-			accountConfig ["General", "account_list", ""] = accountConfig ["General", "account_list", ""].SplitValues ().Concat (id).JoinValues ();
-			accountConfig [section, "AccessToken", ""] = credential.Token.AccessToken;
-			accountConfig [section, "RefreshToken", ""] = credential.Token.RefreshToken;
-			accountConfig [section, "Id", ""] = me.Id;
-			accountConfig [section, "Emails", ""] = string.Join (";", from email in me.Emails ?? new Person.EmailsData[0]
-			                                                          select email.Value);
-			accountConfig [section, "DisplayName", ""] = me.DisplayName;
-			accountConfig [section, "Url", ""] = me.Url;
-			accountConfig [section, "RelationshipStatus", ""] = me.RelationshipStatus;
-			accountConfig [section, "Image.Url", ""] = me.Image.Url;
+			GoogleAccountJson accJson = jsonAccounts.Accounts [id];
+			accJson.AccessToken = credential.Token.AccessToken;
+			accJson.RefreshToken = credential.Token.RefreshToken;
+			accJson.Id = me.Id;
+			accJson.Emails = (from email in me.Emails ?? new Person.EmailsData[0]
+			                  select email.Value).ToArray ();
+			accJson.DisplayName = me.DisplayName;
 
-			dataStore.Save (configFile: accountConfig, section: section);
+			ConfigHelper.SaveConfig (fullPath: CONFIG_PATH, stuff: jsonAccounts);
 
 			return new GoogleAccount (id: id);
 		}
@@ -85,9 +88,8 @@ namespace Core.Google.Auth
 		public static IEnumerable<GoogleAccount> List ()
 		{
 			GoogleAccount dummy = new GoogleAccount ();
-			ConfigFile accountConfig = dummy.fs.Config.OpenConfigFile ("accounts.ini");
 
-			string[] ids = accountConfig ["General", "account_list", ""].SplitValues ();
+			string[] ids = dummy.jsonAccounts.Accounts.Keys.ToArray ();
 			foreach (string id in ids) {
 				GoogleAccount acc = new GoogleAccount (id: id);
 				yield return acc;
@@ -96,7 +98,7 @@ namespace Core.Google.Auth
 
 		public void LoadDataStore (ref DictionaryDataStore dataStore)
 		{
-			dataStore.Load (configFile: accountConfig, section: section);
+			dataStore.Load (dictionary: jsonAccount.DataStore);
 		}
 
 		private static string id2section (string id)
@@ -106,7 +108,7 @@ namespace Core.Google.Auth
 
 		public bool Refresh ()
 		{
-			NetworkHelper.DisableCertificateChecks ();
+			Core.Net.Networking.DisableCertificateValidation ();
 
 			TokenResponse token = new TokenResponse {
 				AccessToken = AccessToken,
@@ -115,8 +117,8 @@ namespace Core.Google.Auth
 
 			IAuthorizationCodeFlow flow =
 				//new GoogleAuthorizationCodeFlow (new GoogleAuthorizationCodeFlow.Initializer {
-				new AuthorizationCodeFlow (new AuthorizationCodeFlow.Initializer (Google.Apis.Auth.OAuth2.GoogleAuthConsts.AuthorizationUrl, Google.Apis.Auth.OAuth2.GoogleAuthConsts.TokenUrl) {
-					ClientSecrets = new GoogleApp ().Secrets,
+				new AuthorizationCodeFlow (new AuthorizationCodeFlow.Initializer (GoogleAuthConsts.AuthorizationUrl, GoogleAuthConsts.TokenUrl) {
+					ClientSecrets = GoogleApp.Secrets.ToClientSecrets (),
 					Scopes = new [] { PlusService.Scope.PlusLogin }
 				});
 
@@ -145,7 +147,7 @@ namespace Core.Google.Auth
 
 		public bool Reauthenticate ()
 		{
-			Log.Info (LogColor.DarkYellow, "Google Account needs to be re-authenticated: ", this, LogColor.Reset);
+			Log.Info ("Google Account needs to be re-authenticated: ", this);
 			return new GoogleApp ().Authenticate ();
 		}
 
@@ -165,14 +167,31 @@ namespace Core.Google.Auth
 			return new object[] { Id };
 		}
 
-		public override bool Equals (object obj)
+		public sealed class GoogleAccountJson
 		{
-			return ValueObject<ConfigurableObject>.Equals (myself: this, obj: obj);
+			[JsonProperty ("access_token")]
+			public string AccessToken { get; set; } = "";
+
+			[JsonProperty ("refresh_token")]
+			public string RefreshToken { get; set; } = "";
+
+			[JsonProperty ("id")]
+			public string Id { get; set; } = "";
+
+			[JsonProperty ("emails")]
+			public string[] Emails { get; set; } = new string[0];
+
+			[JsonProperty ("display_name")]
+			public string DisplayName { get; set; } = "";
+
+			[JsonProperty ("data_store")]
+			public Dictionary<string, string> DataStore { get; set; } = new Dictionary<string, string>();
 		}
 
-		public override int GetHashCode ()
+		public sealed class GoogleAccountListJson
 		{
-			return base.GetHashCode ();
+			[JsonProperty ("accounts")]
+			public Dictionary<string, GoogleAccountJson> Accounts { get; set; } = new Dictionary<string, GoogleAccountJson>();
 		}
 	}
 }

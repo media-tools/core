@@ -75,16 +75,9 @@
     <Compile Include="IO\Terminal\ITerminalStream.cs" />
     <Compile Include="IO\Terminal\ITerminalInputStream.cs" />
     <Compile Include="Common\PortableBlockingQueue.cs" />
+    <Compile Include="Common\ValueObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\portable-net45+wp80+win8+wpa81+aspnetcore50\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
   <ItemGroup>
     <Folder Include="Tar\" />
     <Folder Include="Net\" />
@@ -99,5 +92,13 @@
       <Project>{807E6868-2F7F-4CC3-8482-284C606834E4}</Project>
       <Name>Mono.Options-PCL</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\portable-net45+wp80+win8+wpa81+dnxcore50\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

@@ -94,6 +94,5 @@
   <Import Project="..\..\..\google-photos\GooglePhotos\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\google-photos\GooglePhotos\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="App.config" />
   </ItemGroup>
 </Project>

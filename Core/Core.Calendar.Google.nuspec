@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Core.Calendar.Google</id>
-    <version>0.1.172</version>
+    <version>0.1.173</version>
     <authors>tobiasschulz</authors>
     <owners>tobiasschulz</owners>
     <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
@@ -22,10 +22,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="Core.Calendar.Google/bin/$configuration$/Core.Calendar.Google.dll.config" target="content/Core.Calendar.Google.dll.config" />
-    <file src="Core.Calendar.Google/App.config.install.xdt" target="content/" />
-    <file src="Core.Calendar.Google/App.config.uninstall.xdt" target="content/" />
-
     <file src="Core.Calendar.Google/bin/$configuration$/Core.Calendar.Google.dll" target="lib/portable-net45+win/" />
 
     <file src="Core.Calendar.Google/bin/$configuration$/Core.Calendar.Google.dll" target="lib/portable-win81/" />

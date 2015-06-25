@@ -42,15 +42,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PhotoDimensions.cs" />
-    <Compile Include="Album.cs" />
-    <Compile Include="Medium.cs" />
-    <Compile Include="Photo.cs" />
-    <Compile Include="Video.cs" />
     <Compile Include="Mono.Options-PCL.cs" />
+    <Compile Include="Common\Album.cs" />
+    <Compile Include="Common\Medium.cs" />
+    <Compile Include="Common\Photo.cs" />
+    <Compile Include="Common\PhotoDimensions.cs" />
+    <Compile Include="Common\Video.cs" />
+    <Compile Include="Common\Share.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Common\" />
   </ItemGroup>
 </Project>

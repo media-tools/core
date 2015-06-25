@@ -30,8 +30,9 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="MyClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="GooglePhotos\GoogleAlbum.cs" />
+    <Compile Include="GooglePhotos\GoogleShare.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
@@ -50,5 +51,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GooglePhotos\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core.Media\Core.Media.csproj">
+      <Project>{3AD9088F-8C19-4B98-ADB6-17909F8310F8}</Project>
+      <Name>Core.Media</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

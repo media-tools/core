@@ -12,6 +12,7 @@ using Core.IO;
 using Google.Apis.Plus.v1;
 using Google.Apis.Services;
 using Google.Apis.Plus.v1.Data;
+using Google.GData.Client;
 
 namespace Core.Google.Auth
 {
@@ -151,9 +152,18 @@ namespace Core.Google.Auth
 			return new GoogleApp ().Authenticate ();
 		}
 
-		public string[] FilterKeys ()
+		public OAuth2Parameters GetOAuth2Parameters (GoogleApp app)
 		{
-			return new [] { DisplayName, Emails };
+			OAuth2Parameters parameters = new OAuth2Parameters {
+				ClientId = app.ClientId,
+				ClientSecret = app.ClientSecret,
+				RedirectUri = GoogleApp.RedirectUri,
+				Scope = string.Join (" ", GoogleApp.Scopes),
+			};
+			parameters.AccessToken = AccessToken;
+			parameters.RefreshToken = RefreshToken;
+
+			return parameters;
 		}
 
 		public override string ToString ()

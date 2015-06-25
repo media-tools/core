@@ -3,28 +3,31 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Core.Media
+namespace Core.Media.Common
 {
-	public class Album
+	public abstract class Album
 	{
 		[JsonProperty ("photos")]
-		Photo[] Photos_Internal { get { return Photos?.SortByDate ()?.ToArray (); } set { Photos = new HashSet<Photo> (value); } }
+		Photo[] Photos_JSON { get { return Photos?.SortByDate ()?.ToArray (); } set { Photos = new HashSet<Photo> (value); } }
 
 		[JsonIgnore]
 		public HashSet<Photo> Photos { get; set; } = new HashSet<Photo> ();
 
 
 		[JsonProperty ("videos")]
-		Video[] Videos_Internal { get { return Videos?.SortByDate ()?.ToArray (); } set { Videos = new HashSet<Video> (value); } }
+		Video[] Videos_JSON { get { return Videos?.SortByDate ()?.ToArray (); } set { Videos = new HashSet<Video> (value); } }
 
 		[JsonIgnore]
 		public HashSet<Video> Videos { get; set; } = new HashSet<Video> ();
 
-		public Album ()
+		public string Name { get; private set; }
+
+		protected Album (string name)
 		{
+			Name = name;
 		}
 
-		public void AddPhoto (Photo photo)
+		public virtual void AddPhoto (Photo photo)
 		{
 			Photos.Add (photo);
 		}

@@ -6,10 +6,11 @@ using System.Threading;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Auth.OAuth2.Flows;
 using Google.Apis.Auth.OAuth2.Responses;
+using Core.Common;
 
 namespace Core.Google.Auth
 {
-	public class GoogleAccount
+	public class GoogleAccount : ValueObject<GoogleAccount>
 	{
 		private ConfigFile accountConfig;
 
@@ -144,7 +145,7 @@ namespace Core.Google.Auth
 
 		public bool Reauthenticate ()
 		{
-			Log.Message (LogColor.DarkYellow, "Google Account needs to be re-authenticated: ", this, LogColor.Reset);
+			Log.Info (LogColor.DarkYellow, "Google Account needs to be re-authenticated: ", this, LogColor.Reset);
 			return new GoogleApp ().Authenticate ();
 		}
 
@@ -172,16 +173,6 @@ namespace Core.Google.Auth
 		public override int GetHashCode ()
 		{
 			return base.GetHashCode ();
-		}
-
-		public static bool operator == (GoogleAccount a, GoogleAccount b)
-		{
-			return ValueObject<ConfigurableObject>.Equality (a, b);
-		}
-
-		public static bool operator != (GoogleAccount a, GoogleAccount b)
-		{
-			return ValueObject<ConfigurableObject>.Inequality (a, b);
 		}
 	}
 }

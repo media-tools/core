@@ -48,7 +48,7 @@ namespace Core.Common
 			return "{ " + Reflect ().Aggregate ((l, r) => l + ", " + r) + " }";
 		}
 
-		public static bool Equality (T a, T b)
+		public static bool Equality (ValueObject<T> a, ValueObject<T> b)
 		{
 			// If both are null, or both are same instance, return true.
 			if (ReferenceEquals (a, b)) {
@@ -64,9 +64,19 @@ namespace Core.Common
 			return a.Reflect ().SequenceEqual (b.Reflect ());
 		}
 
-		public static bool Inequality (T a, T b)
+		public static bool Inequality (ValueObject<T> a, ValueObject<T> b)
 		{
 			return !(Equality (a, b));
+		}
+
+		public static bool operator == (ValueObject<T> a, ValueObject<T> b)
+		{
+			return Equality (a, b);
+		}
+
+		public static bool operator != (ValueObject<T> a, ValueObject<T> b)
+		{
+			return Inequality (a, b);
 		}
 	}
 }

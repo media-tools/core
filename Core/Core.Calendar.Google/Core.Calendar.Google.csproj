@@ -57,15 +57,6 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\portable-net45+wp80+win8+wpa81+dnxcore50\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http.Extensions">
-      <HintPath>..\packages\Google.Apis.HttpWorkaround.1.0.1\lib\portable-net45+win\System.Net.Http.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.Primitives">
-      <HintPath>..\packages\Google.Apis.HttpWorkaround.1.0.1\lib\portable-net45+win\System.Net.Http.Primitives.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http">
-      <HintPath>..\packages\Google.Apis.HttpWorkaround.1.0.1\lib\portable-net45+win\System.Net.Http.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

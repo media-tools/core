@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Core.Calendar.Google</id>
-    <version>0.1.175</version>
+    <version>0.1.176</version>
     <authors>tobiasschulz</authors>
     <owners>tobiasschulz</owners>
     <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
@@ -17,8 +17,7 @@
       <dependency id="Core.Calendar" version="0.1.0" />
       <dependency id="Newtonsoft.Json" version="6.0.8" />
       <dependency id="Google.Apis.Calendar.v3" version="1.9.0.1220" />
-      <dependency id="Google.Apis.HttpWorkaround" version="1.0" />
-<!--      <dependency id="Microsoft.Net.Http" version="2.2.29" /> -->
+      <dependency id="Core.Google.Auth" version="0.1.0" />
     </dependencies>
   </metadata>
   <files>
@@ -27,6 +26,5 @@
     <file src="Core.Calendar.Google/bin/$configuration$/Core.Calendar.Google.dll" target="lib/portable-win81/" />
 
     <file src="Core.Calendar.Google/bin/$configuration$/Core.Calendar.Google.dll" target="lib/net45/" />
-    <file src="Core.Google.Auth.Desktop/bin/$configuration$/Core.Google.Auth.Desktop.dll" target="lib/net45/" />
   </files>
 </package>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>Core.Google.Auth</id>
+    <version>0.1.0</version>
+    <authors>tobiasschulz</authors>
+    <owners>tobiasschulz</owners>
+    <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
+    <projectUrl>https://github.com/media-tools/core/</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/media-tools/core/master/Core/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Common google api authentication classes for .NET applications</description>
+    <releaseNotes>an open source project which provides common utility and helper classes for google api authentication in .NET applications.</releaseNotes>
+    <tags>Utilities Common Core Calendar Google</tags>
+    <dependencies>
+      <dependency id="Core.Common" version="0.1.212" />
+      <dependency id="Google.Apis.Auth" version="1.9.1" />
+      <dependency id="Google.Apis.Plus.v1" version="1.9.0" />
+      <dependency id="Google.GData.Client" version="2.2.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="Core.Google.Auth.Portable/bin/$configuration$/Core.Google.Auth.Portable.dll" target="lib/portable-net45+win/" />
+
+    <file src="Core.Google.Auth.Portable/bin/$configuration$/Core.Google.Auth.Portable.dll" target="lib/portable-win81/" />
+
+    <file src="Core.Google.Auth.Portable/bin/$configuration$/Core.Google.Auth.Portable.dll" target="lib/net45/" />
+    <file src="Core.Google.Auth.Desktop/bin/$configuration$/Core.Google.Auth.Desktop.dll" target="lib/net45/" />
+  </files>
+</package>

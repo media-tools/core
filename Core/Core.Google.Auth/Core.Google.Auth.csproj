@@ -59,29 +59,29 @@
     <Reference Include="System.Net.Http.Extensions">
       <HintPath>..\..\..\google-photos\GooglePhotos\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Core.Portable">
-      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Common.0.1.205\lib\net45\Core.Portable.dll</HintPath>
-    </Reference>
-    <Reference Include="Core.Platform">
-      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Common.0.1.205\lib\net45\Core.Platform.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Posix">
-      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Common.0.1.205\lib\net45\Mono.Posix.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\google-photos\GooglePhotos\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Zlib.Portable">
-      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Zlib.Portable.1.10.0\lib\portable-net4+sl5+wp8+win8+wpa81+MonoTouch+MonoAndroid\Zlib.Portable.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis">
-      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Google.Apis.1.9.0\lib\net40\Google.Apis.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis.PlatformServices">
-      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Google.Apis.1.9.0\lib\net40\Google.Apis.PlatformServices.dll</HintPath>
-    </Reference>
     <Reference Include="Google.Apis.Plus.v1">
       <HintPath>..\..\..\google-photos\GooglePhotos\packages\Google.Apis.Plus.v1.1.9.0.2210\lib\portable-net40+sl50+win+wpa81+wp80\Google.Apis.Plus.v1.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis">
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Google.Apis.1.9.1\lib\net40\Google.Apis.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.PlatformServices">
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Google.Apis.1.9.1\lib\net40\Google.Apis.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="Zlib.Portable">
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Zlib.Portable.1.11.0\lib\portable-net4+sl5+wp8+win8+wpa81+MonoTouch+MonoAndroid\Zlib.Portable.dll</HintPath>
+    </Reference>
+    <Reference Include="Core.Portable">
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Common.0.1.207\lib\net45\Core.Portable.dll</HintPath>
+    </Reference>
+    <Reference Include="Core.Platform">
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Common.0.1.207\lib\net45\Core.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Posix">
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Common.0.1.207\lib\net45\Mono.Posix.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -94,5 +94,6 @@
   <Import Project="..\..\..\google-photos\GooglePhotos\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\google-photos\GooglePhotos\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="App.config" />
   </ItemGroup>
 </Project>

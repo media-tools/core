@@ -30,17 +30,14 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Core.Shell.Common">
-      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Shell.0.1.15\lib\net45\Core.Shell.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Core.Shell.Platform">
-      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Shell.0.1.15\lib\net45\Core.Shell.Platform.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\google-photos\GooglePhotos\packages\Newtonsoft.Json.7.0.1\lib\portable-net45+wp80+win8+wpa81+dnxcore50\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Core.Shell.Common">
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Shell.0.1.18\lib\portable-net45+win+wp80\Core.Shell.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Core.Portable">
-      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Common.0.1.205\lib\portable-net45+win+wp80\Core.Portable.dll</HintPath>
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Common.0.1.207\lib\portable-net45+win+wp80\Core.Portable.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

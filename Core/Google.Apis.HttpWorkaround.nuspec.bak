@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>Google.Apis.HttpWorkaround</id>
+    <version>1.0.0</version>
+    <authors>tobiasschulz</authors>
+    <owners>tobiasschulz</owners>
+    <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
+    <projectUrl>https://github.com/media-tools/core/</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/media-tools/core/master/Core/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A workaround for the common problem with System.Net.Http and projects that use the Google Apis and target .NET 4.5</description>
+    <tags>Workaround Google</tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="packages/Microsoft.Net.Http.*/lib/portable-net40+sl4+win8+wp71+wpa81/System.Net.Http.*" target="lib/portable-net45+win/" />
+
+    <file src="packages/Microsoft.Net.Http.*/lib/portable-net40+sl4+win8+wp71+wpa81/System.Net.Http.*" target="lib/portable-win81/" />
+
+    <file src="packages/Microsoft.Net.Http.*/lib/net40/*.dll" target="lib/net45/" />
+  </files>
+</package>

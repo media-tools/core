@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Google.Apis.HttpWorkaround</id>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <authors>tobiasschulz</authors>
     <owners>tobiasschulz</owners>
     <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>

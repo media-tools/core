@@ -1,6 +1,7 @@
 ﻿using System;
 using Core.Calendar.Google;
 using Core.Platform;
+using Core.Google.Auth.Portable;
 
 namespace Core.Tests.Calendar.Google
 {
@@ -31,7 +32,7 @@ namespace Core.Tests.Calendar.Google
 				}
 			}
 
-			public IGoogleAuth Auth {
+			public IGoogleAuthBroker Auth {
 				get {
 					throw new NotImplementedException ();
 				}

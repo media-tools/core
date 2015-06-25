@@ -83,6 +83,10 @@
       <Project>{DAE4783E-9B3D-4EFA-A521-87B8F0E410D9}</Project>
       <Name>Core.Calendar</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\Core.Google.Auth.Portable\Core.Google.Auth.Portable.csproj">
+      <Project>{6A808D3B-2510-4635-A469-65918B29A56F}</Project>
+      <Name>Core.Google.Auth.Portable</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -62,7 +62,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GoogleCalendarService.cs" />
     <Compile Include="IGoogleConfig.cs" />
-    <Compile Include="IGoogleAuth.cs" />
     <Compile Include="GoogleAppointment.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +79,10 @@
     <ProjectReference Include="..\Core.Calendar\Core.Calendar.csproj">
       <Project>{DAE4783E-9B3D-4EFA-A521-87B8F0E410D9}</Project>
       <Name>Core.Calendar</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core.Google.Auth.Portable\Core.Google.Auth.Portable.csproj">
+      <Project>{6A808D3B-2510-4635-A469-65918B29A56F}</Project>
+      <Name>Core.Google.Auth.Portable</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

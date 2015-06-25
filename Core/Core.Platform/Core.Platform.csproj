@@ -53,6 +53,7 @@
     <Compile Include="IO\SafeDirectoryEnumerator.cs" />
     <Compile Include="IO\FileHelper.cs" />
     <Compile Include="Platform\Linux\LinuxFileHelper.cs" />
+    <Compile Include="IO\DisposableConfigHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

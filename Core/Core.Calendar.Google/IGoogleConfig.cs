@@ -1,5 +1,6 @@
 ﻿using System;
 using Core.Common;
+using Core.Google.Auth.Portable;
 using Google.Apis.Auth.OAuth2;
 
 namespace Core.Calendar.Google
@@ -8,7 +9,7 @@ namespace Core.Calendar.Google
 	{
 		string GoogleUser { get; }
 
-		IGoogleAuth Auth { get; }
+		IGoogleAuthBroker Auth { get; }
 
 		string CalendarName { get; }
 	}

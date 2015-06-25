@@ -1,5 +1,5 @@
-﻿//
-// ConfigHelper.cs
+//
+// DisposableConfigHelper.cs
 //
 // Author:
 //       Tobias Schulz <tobiasschulz.code@outlook.de>
@@ -29,34 +29,26 @@ using System.IO;
 
 namespace Core.IO
 {
-	public static class ConfigHelper
+	public sealed class DisposableConfigHelper<T> : IDisposableConfigHelper<T> where T : class, new()
 	{
-		public static Config OpenConfig<Config> (string fullPath) where Config : class, new()
-		{
-			string dirname = Path.GetDirectoryName (fullPath);
-			if (!string.IsNullOrEmpty (dirname)) {
-				Directory.CreateDirectory (dirname);
-			}
-			File.AppendAllText (fullPath, "");
+		public T Value { get; private set; }
 
-			string content = File.ReadAllText (fullPath);
-			Config stuff = PortableConfigHelper.ReadConfig<Config> (content: ref content);
-			File.WriteAllText (fullPath, content);
-			return stuff;
+		readonly string FullPath;
+
+		public DisposableConfigHelper (string fullPath)
+		{
+			FullPath = fullPath;
+			Value = ConfigHelper.OpenConfig<T> (fullPath: fullPath);
 		}
 
-		public static void SaveConfig<Config> (string fullPath, Config stuff) where Config : class, new()
-		{
-			string dirname = Path.GetDirectoryName (fullPath);
-			if (!string.IsNullOrEmpty (dirname)) {
-				Directory.CreateDirectory (dirname);
-			}
-			File.AppendAllText (fullPath, "");
+		#region IDisposable implementation
 
-			string content = PortableConfigHelper.WriteConfig (stuff: stuff);
-			File.WriteAllText (fullPath, content);
+		public void Dispose ()
+		{
+			ConfigHelper.SaveConfig<T> (fullPath: FullPath, stuff: Value);
 		}
+
+		#endregion
 	}
 
 }
-

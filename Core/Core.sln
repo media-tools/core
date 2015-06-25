@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.UnitTests.Shell", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Shell.Platform", "Core.Shell.Platform\Core.Shell.Platform.csproj", "{A286F6DE-1F31-4A5E-8DDE-BA9395952057}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Google.Auth.Portable", "Core.Google.Auth.Portable\Core.Google.Auth.Portable.csproj", "{6A808D3B-2510-4635-A469-65918B29A56F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{3279A7E2-D808-455E-A269-6FDBA9878835}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3279A7E2-D808-455E-A269-6FDBA9878835}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3279A7E2-D808-455E-A269-6FDBA9878835}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A808D3B-2510-4635-A469-65918B29A56F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A808D3B-2510-4635-A469-65918B29A56F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A808D3B-2510-4635-A469-65918B29A56F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A808D3B-2510-4635-A469-65918B29A56F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6C1684AD-5B79-4168-80B5-FCD237F09FD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6C1684AD-5B79-4168-80B5-FCD237F09FD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C1684AD-5B79-4168-80B5-FCD237F09FD5}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -76,6 +76,7 @@
     <Compile Include="IO\Terminal\ITerminalInputStream.cs" />
     <Compile Include="Common\PortableBlockingQueue.cs" />
     <Compile Include="Common\ValueObject.cs" />
+    <Compile Include="IO\IDisposableConfigHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

@@ -42,6 +42,11 @@ namespace Core.Common
 			dtDateTime = dtDateTime.AddMilliseconds (milliTimeStamp).ToLocalTime ();
 			return dtDateTime;
 		}
+
+		public static bool HasTimeComponent (DateTime dateTime)
+		{
+			return !(dateTime.Hour == 0 && dateTime.Minute == 0 && dateTime.Second == 0);
+		}
 	}
 }
 

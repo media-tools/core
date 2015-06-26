@@ -4,6 +4,7 @@ using Google.GData.Photos;
 using Picasa = Google.Picasa;
 using Google.GData.Extensions.MediaRss;
 using Core.Common;
+using System.Text.RegularExpressions;
 
 namespace Core.Media.Google.GooglePhotos
 {
@@ -17,10 +18,11 @@ namespace Core.Media.Google.GooglePhotos
 
 		public string HostedURL { get; private set; }
 
-		public ulong GoogleTimestampUnix { get; private set; }
+		public DateTime GoogleTimestamp { get ; private set; }
 
-		public DateTime GoogleTimestamp { get { return DateTimeExtensions.MillisecondsTimeStampToDateTime (TimestampUnix); } }
+		public string BestFilename { get ; private set; }
 
+		public string AlternateFilename { get ; private set; }
 
 		public GoogleContent (GooglePhotosService service, Picasa.Album picasaAlbum, Picasa.Photo picasaPhoto)
 		{
@@ -39,10 +41,10 @@ namespace Core.Media.Google.GooglePhotos
 		void findTimestamp (Picasa.Photo picasaPhoto)
 		{
 			try {
-				TimestampUnix = internalPhoto.Timestamp;
+				GoogleTimestamp = DateTimeExtensions.FromMillisecondsSinceEpoch (picasaPhoto.Timestamp);
 			} catch (OverflowException) {
-				TimestampUnix = (ulong)DateTime.Now.ToMillisecondsTimestamp ();
-				Log.Debug ("Fuck: ", Timestamp.ToString ());
+				GoogleTimestamp = DateTime.Now;
+				Log.Debug ("Fuck: ", GoogleTimestamp.ToString ());
 			}
 		}
 
@@ -57,10 +59,38 @@ namespace Core.Media.Google.GooglePhotos
 			string betterFilename = filename;
 			string username = service.Auth.Account.ShortDisplayName;
 
-			if (Filename == "MOVIE.m4v") {
-				betterFilename = "MOVIE_" + Timestamp.ToString ("yyyyMMdd_HHmmss") + ".m4v";
+			if (filename == "MOVIE.m4v") {
+				betterFilename = "MOVIE_" + GoogleTimestamp.ToString ("yyyyMMdd_HHmmss") + ".m4v";
 			}
+
+			if (!FilenameUtilities.IsPreferredFileName (betterFilename)) {
+				DateTime preferredDate;
+				// get the date from the filename or use google's timestamp
+				DateTime date;
+				if (FilenameUtilities.GetFileNameDate (fileName: betterFilename, date: out date) && date.HasTimeComponent ()) {
+					preferredDate = date;
+				} else {
+					preferredDate = GoogleTimestamp;
+				}
+				betterFilename = FilenameUtilities.MakePreferredFileName (fileName: betterFilename, date: preferredDate, author: username);
+			}
+			if (FilenameUtilities.HasNoFileEnding (fullPath: betterFilename)) {
+				string fileEnding;
+				// determine the best file ending
+				if (FileHooks.DetermineFileEndingByMimeType (mimeType: MimeType, fileEnding: out fileEnding)) {
+					// rename the file
+					filename += fileEnding;
+					betterFilename += fileEnding;
+					Log.Debug ("Filename with ending: ", betterFilename);
+				}
+			}
+			betterFilename = regexIllegalCharacters.Replace (betterFilename, "");
+			BestFilename = betterFilename;
+			AlternateFilename = filename;
+			Log.Debug ("Filename for download: ", BestFilename);
 		}
+
+		readonly Regex regexIllegalCharacters = new Regex ("[^a-zA-Z0-9._)( -]");
 
 		void findBestContent (Picasa.Photo picasaPhoto)
 		{

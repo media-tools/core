@@ -42,6 +42,7 @@
     <Compile Include="GooglePhotos\PicasaExtensions.cs" />
     <Compile Include="GooglePhotos\GoogleContent.cs" />
     <Compile Include="GooglePhotos\GoogleVideo.cs" />
+    <Compile Include="GooglePhotos\FilenameUtilities.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\..\google-photos\GooglePhotos\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\google-photos\GooglePhotos\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Core.IO;
 using Core.Shell.Common.FileSystems;
 using Picasa = Google.Picasa;
 
@@ -6,20 +9,23 @@ namespace Core.Media.Google.GooglePhotos
 {
 	public sealed class GoogleFileSystem : FileSystemSubsystem
 	{
-		readonly Prefix prefix;
-		public readonly GooglePhotosService Service;
+		public readonly Dictionary<string, GooglePhotosService> Services = new Dictionary<string, GooglePhotosService> ();
 
-		public GoogleFileSystem (GooglePhotosService service)
+		readonly Prefix mainPrefix;
+
+		public GoogleFileSystem ()
 		{
-			Service = service;
-
-			prefix = new Prefix ("google-photos:/", this);
-			AddPrefix (prefix);
+			mainPrefix = new Prefix ("google-photos:/", this);
+			AddPrefix (mainPrefix);
 		}
 
-		public GoogleFile File (Picasa.Album picasaAlbum, Picasa.Photo picasaPhoto)
+		public GoogleFile File (GooglePhotosService service, Picasa.Album picasaAlbum, Picasa.Photo picasaPhoto)
 		{
-			return new GoogleFile (new Path (prefix, new string[]{ picasaAlbum.Title, picasaPhoto.Title }, this));
+			return new GoogleFile (new Path (mainPrefix, new string[] {
+				PicasaExtensions.VirtualDirectoryName (service),
+				PicasaExtensions.VirtualDirectoryName (picasaAlbum),
+				PicasaExtensions.VirtualFileName (picasaPhoto)
+			}, this));
 		}
 
 		#region implemented abstract members of FileSystemSubsystem
@@ -43,21 +49,17 @@ namespace Core.Media.Google.GooglePhotos
 
 		public override string GetRealPath (Prefix prefix, string[] virtualPath)
 		{
-			string realPath;
-			if (prefix == homePrefix) {
-				realPath = PathHelper.CombinePath (PlatformInfo.User.HomeDirectory, virtualPath);
-			} else {
-				realPath = prefix.CombinePath (virtualPath);
-			}
-			return realPath;
+			return null;
 		}
 
 		protected override VirtualNode NodeInternal (Path path)
 		{
-			if (FileHelper.Instance.IsDirectory (path: path.RealPath)) {
+			if (path.VirtualPath.Length == 2) {
 				return Directory (path);
-			} else {
+			} else if (path.VirtualPath.Length == 3) {
 				return File (path);
+			} else {
+				return null;
 			}
 		}
 
@@ -74,15 +76,22 @@ namespace Core.Media.Google.GooglePhotos
 			return null;
 		}
 
-		public static void Register (GooglePhotosService service)
+		public static void Register ()
 		{
-			FileSystemSubsystem fs = new GoogleFileSystem (service);
+			FileSystemSubsystem fs = new GoogleFileSystem ();
 
 			if (fs != null) {
 				FileSystemSubsystems.Subsystems.Add (fs);
 				FileSystemSubsystems.DefaultRootDirectory = fs.DefaultRootDirectory;
 			}
 		}
+
+		public static void AddService (GooglePhotosService service)
+		{
+			Instance.Services [PicasaExtensions.VirtualDirectoryName (service)] = service;
+		}
+
+		public static GoogleFileSystem Instance { get { return FileSystemSubsystems.Subsystems.OfType<GoogleFileSystem> ().First (); } }
 	}
 }
 

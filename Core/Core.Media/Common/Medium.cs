@@ -14,6 +14,9 @@ namespace Core.Media.Common
 		[JsonProperty ("url_hosted")]
 		public string HostedURL { get; set; } = null;
 
+		[JsonProperty ("mime_type")]
+		public string MimeType { get; set; } = null;
+
 		[JsonProperty ("timestamp_local")]
 		public DateTime? DateTimeLocal { get; set; } = null;
 

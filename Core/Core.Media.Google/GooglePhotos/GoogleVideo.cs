@@ -3,9 +3,9 @@ using Picasa = Google.Picasa;
 
 namespace Core.Media.Google.GooglePhotos
 {
-	public class GooglePhoto : Photo
+	public class GoogleVideo : Video
 	{
-		public GooglePhoto (GoogleContent content)
+		public GoogleVideo (GoogleContent content)
 		{
 			File = content.File;
 			Dimensions = content.Dimensions;

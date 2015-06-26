@@ -32,13 +32,23 @@ namespace Core.Media.Google.GooglePhotos
 				Picasa.Photo picasaPhoto = new Picasa.Photo ();
 				picasaPhoto.AtomEntry = picture;
 
-				AddPhoto (new GooglePhoto (service, picasaAlbum, picasaPhoto));
+				GoogleContent content = new GoogleContent (service, picasaAlbum, picasaPhoto);
+				if (content.MimeType.StartsWith ("image")) {
+					AddPhoto (new GooglePhoto (content));
+				} else if (content.MimeType.StartsWith ("video")) {
+					AddVideo (new GoogleVideo (content));
+				}
 			}
 		}
 
 		public override void AddPhoto (Photo photo)
 		{
 			base.AddPhoto (photo);
+		}
+
+		public override void AddVideo (Video video)
+		{
+			base.AddVideo (video);
 		}
 	}
 }

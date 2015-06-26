@@ -25,6 +25,23 @@ namespace Core.Common
 		{
 			return (((dateTimeOffset.Ticks - dateTimeOffset.Offset.Ticks) - EPOCH_TICKS) / TimeSpan.TicksPerMillisecond);
 		}
+
+
+		public static DateTime FromSecondsSinceEpoch (double unixTimeStamp)
+		{
+			// Unix timestamp is seconds past epoch
+			DateTime dtDateTime = new DateTime (1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			dtDateTime = dtDateTime.AddSeconds (unixTimeStamp).ToLocalTime ();
+			return dtDateTime;
+		}
+
+		public static DateTime FromMillisecondsSinceEpoch (double milliTimeStamp)
+		{
+			// milliseconds past epoch
+			DateTime dtDateTime = new DateTime (1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			dtDateTime = dtDateTime.AddMilliseconds (milliTimeStamp).ToLocalTime ();
+			return dtDateTime;
+		}
 	}
 }
 

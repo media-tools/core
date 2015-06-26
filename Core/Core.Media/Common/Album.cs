@@ -33,6 +33,11 @@ namespace Core.Media.Common
 			Photos.Add (photo);
 		}
 
+		public virtual void AddVideo (Video video)
+		{
+			Videos.Add (video);
+		}
+
 		public override string ToString ()
 		{
 			return string.Format ("[Album: Name={0}, Photos={1}, Videos={2}]", Name, Photos.Count, Videos.Count);

@@ -13,6 +13,47 @@ namespace Core.Media.Google.GooglePhotos
 		{
 			
 		}
+
+		#region implemented abstract members of VirtualNode
+
+		public override bool Validate (bool throwExceptions)
+		{
+			return Path.VirtualPath.Length == 3;
+		}
+
+		public override string PermissionsString {
+			get {
+				return "none";
+			}
+		}
+
+		public override string OwnerName {
+			get {
+				return Path.VirtualPath [0];
+			}
+		}
+
+		public override string GroupName {
+			get {
+				return "google";
+			}
+		}
+
+		#endregion
+
+		#region implemented abstract members of VirtualFile
+
+		public override VirtualFileReader OpenReader ()
+		{
+			return null;
+		}
+
+		public override VirtualFileWriter OpenWriter ()
+		{
+			throw new NotImplementedException ();
+		}
+
+		#endregion
 	}
 
 }

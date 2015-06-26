@@ -2,7 +2,7 @@ using System;
 using Core.Math;
 using Newtonsoft.Json;
 
-namespace Core.Media
+namespace Core.Media.Common
 {
 	public class Video : Medium
 	{

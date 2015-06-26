@@ -13,7 +13,6 @@ namespace Core.Media.Common
 		[JsonIgnore]
 		public HashSet<Photo> Photos { get; set; } = new HashSet<Photo> ();
 
-
 		[JsonProperty ("videos")]
 		Video[] Videos_JSON { get { return Videos?.SortByDate ()?.ToArray (); } set { Videos = new HashSet<Video> (value); } }
 
@@ -27,9 +26,16 @@ namespace Core.Media.Common
 			Name = name;
 		}
 
+		public abstract void Load ();
+
 		public virtual void AddPhoto (Photo photo)
 		{
 			Photos.Add (photo);
+		}
+
+		public override string ToString ()
+		{
+			return string.Format ("[Album: Name={0}, Photos={1}, Videos={2}]", Name, Photos.Count, Videos.Count);
 		}
 	}
 

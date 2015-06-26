@@ -37,7 +37,7 @@
       <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Shell.0.1.25\lib\portable-net45+win\Core.Shell.Common.dll</HintPath>
     </Reference>
     <Reference Include="Core.Portable">
-      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Common.0.1.214\lib\portable-net45+win\Core.Portable.dll</HintPath>
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Common.0.1.215\lib\portable-net45+win\Core.Portable.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

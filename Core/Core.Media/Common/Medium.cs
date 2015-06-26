@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Core.Shell.Common.FileSystems;
 
-namespace Core.Media
+namespace Core.Media.Common
 {
 	public abstract class Medium
 	{

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Core.Shell.Common.FileSystems;
 using Core.Math;
 
-namespace Core.Media
+namespace Core.Media.Common
 {
 	public class PhotoDimensions
 	{

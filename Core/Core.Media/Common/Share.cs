@@ -7,7 +7,6 @@ namespace Core.Media.Common
 	{
 		protected Share ()
 		{
-
 		}
 
 		public abstract IEnumerable<Album> GetAlbums ();

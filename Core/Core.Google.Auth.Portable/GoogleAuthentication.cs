@@ -8,10 +8,10 @@ namespace Core.Google.Auth.Portable
 	public interface IGoogleAuthReceiver
 	{
 		// when the tokens change
-		void UpdateAuth (GoogleAuthentification auth);
+		void UpdateAuth (GoogleAuthentication auth);
 	}
 
-	public sealed class GoogleAuthentification
+	public sealed class GoogleAuthentication
 	{
 		// the google app
 		public IGoogleAuthBroker Broker { get; set; }
@@ -30,7 +30,7 @@ namespace Core.Google.Auth.Portable
 		// clients
 		List<IGoogleAuthReceiver> Receivers = new List<IGoogleAuthReceiver> ();
 
-		public GoogleAuthentification (IGoogleAuthBroker broker, GoogleAccount account)
+		public GoogleAuthentication (IGoogleAuthBroker broker, GoogleAccount account)
 		{
 			Broker = broker;
 			Account = account;

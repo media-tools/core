@@ -1,55 +1,58 @@
 ﻿using System;
 using Core.Media.Common;
+using Core.Media.Google.GooglePhotos.Queries;
 using Google.GData.Photos;
 using Picasa = Google.Picasa;
 
 namespace Core.Media.Google.GooglePhotos
 {
-	public class GoogleAlbum : Album
+	public sealed class GoogleAlbum : Album
 	{
 		readonly GooglePhotosService service;
-		readonly PicasaEntry album;
+		readonly AlbumsQuery albumsQuery;
 
-		public GoogleAlbum (GooglePhotosService service, PicasaEntry album, string name)
+		DiscretePicasaAlbum[] picasaAlbums;
+
+		public GoogleAlbum (GooglePhotosService service, AlbumsQuery albumsQuery, string name)
 			: base (name)
 		{
 			this.service = service;
-			this.album = album;
+			this.albumsQuery = albumsQuery;
+
+			Directory = null;
+
+			picasaAlbums = albumsQuery.ByDecodedName (decodedName: Name);
 		}
+
+		#region implemented abstract members of Album
 
 		public override void Load ()
 		{
-			Picasa.Album picasaAlbum = new Picasa.Album (); 
-			picasaAlbum.AtomEntry = album;
+			foreach (DiscretePicasaAlbum album in picasaAlbums) {
+				ContentQuery contentQuery = new ContentQuery (service, album);
 
-			PhotoQuery picturesQuery = new PhotoQuery (PicasaQuery.CreatePicasaUri ("default", picasaAlbum.Id));
-			picturesQuery.ExtraParameters = "imgmax=d";
-			PicasaFeed picturesFeed = service.PicasaService.Query (picturesQuery);
-
-			foreach (PicasaEntry picture in picturesFeed.Entries) {
-				string pictureTitle = picture.Title.Text;
-
-				Picasa.Photo picasaPhoto = new Picasa.Photo ();
-				picasaPhoto.AtomEntry = picture;
-
-				GoogleContent content = new GoogleContent (service, picasaAlbum, picasaPhoto);
-				if (content.MimeType.StartsWith ("image")) {
-					AddPhoto (new GooglePhoto (content));
-				} else if (content.MimeType.StartsWith ("video")) {
-					AddVideo (new GoogleVideo (content));
+				foreach (GoogleContent content in contentQuery.Content()) {
+					if (content.MimeType.StartsWith ("image")) {
+						AddPhoto (new GooglePhoto (content));
+					} else if (content.MimeType.StartsWith ("video")) {
+						AddVideo (new GoogleVideo (content));
+					}
 				}
 			}
 		}
 
-		public override void AddPhoto (Photo photo)
+		public override Photo InsertPhoto_Internal (Photo photo)
 		{
-			base.AddPhoto (photo);
+			throw new NotImplementedException ();
 		}
 
-		public override void AddVideo (Video video)
+		public override Video InsertVideo_Internal (Video video)
 		{
-			base.AddVideo (video);
+			throw new NotImplementedException ();
 		}
+
+		#endregion
 	}
+
 }
 

@@ -14,9 +14,10 @@ namespace Core.Media.Google.GooglePhotos
 			return service.Auth.Account.Emails;
 		}
 
-		public static string VirtualDirectoryName (Picasa.Album picasaAlbum)
+		public static string VirtualDirectoryName (DiscretePicasaAlbum picasaAlbum)
 		{
-			return picasaAlbum.Title + " (" + picasaAlbum.Id + ")";
+			Picasa.Album album = new Picasa.Album { AtomEntry = picasaAlbum.Entry };
+			return album.Title + " (" + album.Id + ")";
 		}
 
 		public static string VirtualFileName (Picasa.Photo picasaPhoto)

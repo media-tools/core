@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Core.Google.Auth.Portable;
 using Core.Media.Common;
+using Core.Media.Google.GooglePhotos.Queries;
 using Google.GData.Photos;
-using System.Linq;
 
 namespace Core.Media.Google.GooglePhotos
 {
@@ -18,16 +19,12 @@ namespace Core.Media.Google.GooglePhotos
 
 		public override IEnumerable<Album> GetAlbums ()
 		{
-			AlbumQuery albumsQuery = new AlbumQuery (PicasaQuery.CreatePicasaUri ("default"));
-			albumsQuery.ExtraParameters = "imgmax=d";
-			PicasaFeed albumsFeed = service.PicasaService.Query (albumsQuery);
+			AlbumsQuery albumsQuery = new AlbumsQuery (service);
+			string[] albumNames = albumsQuery.DecodedNames ();
 
 			List<GoogleAlbum> result = new List<GoogleAlbum> ();
-			//Loop through all albums
-			foreach (PicasaEntry album in albumsFeed.Entries) {
-				string albumTitle = album.Title.Text;
-
-				result.Add (new GoogleAlbum (service: service, album: album, name: albumTitle));
+			foreach (string albumName in albumNames) {
+				result.Add (new GoogleAlbum (service: service, albumsQuery: albumsQuery, name: albumName));
 			}
 
 			return result.OrderBy (a => a.Name);

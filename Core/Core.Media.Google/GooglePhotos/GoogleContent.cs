@@ -1,10 +1,11 @@
 using System;
+using System.Text.RegularExpressions;
+using Core.Common;
 using Core.Media.Common;
+using Core.Media.Google.GooglePhotos.FileSystem;
+using Google.GData.Extensions.MediaRss;
 using Google.GData.Photos;
 using Picasa = Google.Picasa;
-using Google.GData.Extensions.MediaRss;
-using Core.Common;
-using System.Text.RegularExpressions;
 
 namespace Core.Media.Google.GooglePhotos
 {
@@ -24,7 +25,7 @@ namespace Core.Media.Google.GooglePhotos
 
 		public string AlternateFilename { get ; private set; }
 
-		public GoogleContent (GooglePhotosService service, Picasa.Album picasaAlbum, Picasa.Photo picasaPhoto)
+		public GoogleContent (GooglePhotosService service, DiscretePicasaAlbum picasaAlbum, Picasa.Photo picasaPhoto)
 		{
 			File = GoogleFileSystem.Instance.File (service, picasaAlbum, picasaPhoto);
 
@@ -67,7 +68,7 @@ namespace Core.Media.Google.GooglePhotos
 				DateTime preferredDate;
 				// get the date from the filename or use google's timestamp
 				DateTime date;
-				if (FilenameUtilities.GetFileNameDate (fileName: betterFilename, date: out date) && date.HasTimeComponent ()) {
+				if (FilenameUtilities.GetFileNameDate (fileName: betterFilename, date: out date) && DateTimeExtensions.HasTimeComponent (date)) {
 					preferredDate = date;
 				} else {
 					preferredDate = GoogleTimestamp;
@@ -75,19 +76,21 @@ namespace Core.Media.Google.GooglePhotos
 				betterFilename = FilenameUtilities.MakePreferredFileName (fileName: betterFilename, date: preferredDate, author: username);
 			}
 			if (FilenameUtilities.HasNoFileEnding (fullPath: betterFilename)) {
-				string fileEnding;
+				string mimeType = picasaPhoto.PicasaEntry.Content.Type;
+				string fileEnding = MimeTypes.ExtensionFromMimeType (mimeType: mimeType);
+
 				// determine the best file ending
-				if (FileHooks.DetermineFileEndingByMimeType (mimeType: MimeType, fileEnding: out fileEnding)) {
+				if (fileEnding != null) {
 					// rename the file
 					filename += fileEnding;
 					betterFilename += fileEnding;
-					Log.Debug ("Filename with ending: ", betterFilename);
+					//Log.Debug ("Filename with ending: ", betterFilename);
 				}
 			}
 			betterFilename = regexIllegalCharacters.Replace (betterFilename, "");
 			BestFilename = betterFilename;
 			AlternateFilename = filename;
-			Log.Debug ("Filename for download: ", BestFilename);
+			//Log.Debug ("Filename for download: ", BestFilename);
 		}
 
 		readonly Regex regexIllegalCharacters = new Regex ("[^a-zA-Z0-9._)( -]");
@@ -110,7 +113,7 @@ namespace Core.Media.Google.GooglePhotos
 					Log.Debug ("GoogleContent: ", filename, ": Failed to parse int (height): ", content.Height);
 				}
 
-				Log.Debug ("GoogleContent: ", filename, ": Content: type=", contentType, ", size=", contentWidth, "x", contentHeight);
+				//Log.Debug ("GoogleContent: ", filename, ": Content: type=", contentType, ", size=", contentWidth, "x", contentHeight);
 
 				if ((contentType.StartsWith ("video") && !MimeType.StartsWith ("video"))
 				    || (contentHeight > Dimensions.Height || contentWidth > Dimensions.Width)) {
@@ -119,7 +122,7 @@ namespace Core.Media.Google.GooglePhotos
 					HostedURL = content.Url;
 				}
 			}
-			Log.Debug ("GoogleContent: ", filename, ": Best content: type=", MimeType, ", size=", Dimensions.Width, "x", Dimensions.Height);
+			//Log.Debug ("GoogleContent: ", filename, ": Best content: type=", MimeType, ", size=", Dimensions.Width, "x", Dimensions.Height);
 		}
 	}
 }

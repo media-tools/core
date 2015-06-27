@@ -29,10 +29,39 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Core.Portable">
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Common.0.1.4\lib\net45\Core.Portable.dll</HintPath>
+    </Reference>
+    <Reference Include="Core.Platform">
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Common.0.1.4\lib\net45\Core.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Core.Shell.Common">
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Shell.0.1.15\lib\net45\Core.Shell.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Core.Shell.Platform">
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Shell.0.1.15\lib\net45\Core.Shell.Platform.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="LocalMedia\LocalAlbum.cs" />
+    <Compile Include="LocalMedia\LocalPhoto.cs" />
+    <Compile Include="Mono.Options-PCL.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="LocalMedia\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core.Media\Core.Media.csproj">
+      <Project>{3AD9088F-8C19-4B98-ADB6-17909F8310F8}</Project>
+      <Name>Core.Media</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
 </Project>

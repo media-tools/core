@@ -18,7 +18,6 @@ namespace Core.Media.Google.GooglePhotos
 
 		#region IGoogleAuthReceiver implementation
 
-
 		public void UpdateAuth (GoogleAuthentication auth)
 		{
 			PicasaService = new PicasaService (auth.RequestFactory.ApplicationName);

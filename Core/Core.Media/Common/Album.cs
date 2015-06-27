@@ -1,12 +1,16 @@
 ﻿using System;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using Core.Shell.Common.FileSystems;
+using Newtonsoft.Json;
 
 namespace Core.Media.Common
 {
 	public abstract class Album
 	{
+		[JsonProperty ("directory")]
+		public VirtualDirectory Directory { get; set; } = null;
+
 		[JsonProperty ("photos")]
 		Photo[] Photos_JSON { get { return Photos?.SortByDate ()?.ToArray (); } set { Photos = new HashSet<Photo> (value); } }
 
@@ -28,12 +32,26 @@ namespace Core.Media.Common
 
 		public abstract void Load ();
 
-		public virtual void AddPhoto (Photo photo)
+		public void InsertPhoto (Photo photo)
+		{
+			Photos.Add (InsertPhoto_Internal (photo));
+		}
+
+		public void InsertVideo (Video video)
+		{
+			Videos.Add (InsertVideo_Internal (video));
+		}
+
+		public abstract Photo InsertPhoto_Internal (Photo photo);
+
+		public abstract Video InsertVideo_Internal (Video video);
+
+		protected void AddPhoto (Photo photo)
 		{
 			Photos.Add (photo);
 		}
 
-		public virtual void AddVideo (Video video)
+		protected void AddVideo (Video video)
 		{
 			Videos.Add (video);
 		}

@@ -4,14 +4,13 @@ using Core.Shell.Common.FileSystems;
 using Google.GData.Photos;
 using Picasa = Google.Picasa;
 
-namespace Core.Media.Google.GooglePhotos
+namespace Core.Media.Google.GooglePhotos.FileSystem
 {
 	public class GoogleFile : VirtualFile
 	{
 		public GoogleFile (Path path)
 			: base (path)
 		{
-			
 		}
 
 		#region implemented abstract members of VirtualNode

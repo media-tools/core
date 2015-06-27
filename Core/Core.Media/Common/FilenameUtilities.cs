@@ -13,11 +13,6 @@ namespace Core.Media.Google.GooglePhotos
 
 		public static bool IsNormalizedAlbumName (string name)
 		{
-			if (name == "Winterurlaub 2014")
-				return false;
-			if (name == "Winterurlaub 2008")
-				return false;
-
 			if (name.Contains ("Kamera 20")) {
 				return false;
 			} else if (name.Length == 0) {
@@ -31,11 +26,6 @@ namespace Core.Media.Google.GooglePhotos
 
 		public static string NormalizeAlbumName (string name)
 		{
-			if (name == "Winterurlaub 2014")
-				return "Winterurlaub 2014-15";
-			if (name == "Winterurlaub 2008")
-				return "Winterurlaub 2008-09";
-
 			bool done;
 			do {
 				if (name.Contains ("Kamera 20")) {
@@ -163,7 +153,7 @@ namespace Core.Media.Google.GooglePhotos
 					Match match = regex.Match (fileName);
 					if (match.Success) {
 						string dateTimeStr = match.Groups [1].Value;
-						Log.Debug ("GetFileNameDate: fileName=", fileName, ", dateTimeStr=", dateTimeStr, " (TryParseExact)");
+						//Log.Debug ("GetFileNameDate: fileName=", fileName, ", dateTimeStr=", dateTimeStr, " (TryParseExact)");
 						if (DateTime.TryParseExact (dateTimeStr, format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out date)) {
 							if (date != DateTime.MinValue) {
 								return true;
@@ -178,7 +168,7 @@ namespace Core.Media.Google.GooglePhotos
 					Match match = regex.Match (fileName);
 					if (match.Success) {
 						string dateTimeStr = match.Groups [1].Value;
-						Log.Debug ("GetFileNameDate: fileName=", fileName, ", dateTimeStr=", dateTimeStr, " (TryParse)");
+						//Log.Debug ("GetFileNameDate: fileName=", fileName, ", dateTimeStr=", dateTimeStr, " (TryParse)");
 
 						if (DateTime.TryParse (dateTimeStr, out date)) {
 							if (date != DateTime.MinValue) {
@@ -198,9 +188,9 @@ namespace Core.Media.Google.GooglePhotos
 
 			string fileName = fullPath.Split ('/').Last ();
 			string lastPart = fileName.Split ('.').Last ();
-			bool containsLetters = lastPart.Any (x => char.IsLetter (x));
-			bool containsWhitespaces = lastPart.Any (x => char.IsWhiteSpace (x));
-			bool containsPunctuation = lastPart.Any (x => char.IsPunctuation (x));
+			bool containsLetters = lastPart.ToCharArray ().Any (x => char.IsLetter (x));
+			bool containsWhitespaces = lastPart.ToCharArray ().Any (x => char.IsWhiteSpace (x));
+			bool containsPunctuation = lastPart.ToCharArray ().Any (x => char.IsPunctuation (x));
 
 			hasNoEnding = !containsLetters || containsWhitespaces || containsPunctuation;
 

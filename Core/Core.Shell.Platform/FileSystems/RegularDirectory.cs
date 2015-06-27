@@ -31,18 +31,6 @@ namespace Core.Shell.Platform.FileSystems
 			return new RegularDirectoryListing (directory: this);
 		}
 
-		public VirtualDirectory GetChildDirectory (string name)
-		{
-			Path childPath = Path.CombinePath (name);
-			return Path.FileSystem.Directory (childPath);
-		}
-
-		public VirtualFile GetChildFile (string name)
-		{
-			Path childPath = Path.CombinePath (name);
-			return Path.FileSystem.File (childPath);
-		}
-
 		public void CreateDirectories ()
 		{
 			try {

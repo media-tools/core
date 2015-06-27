@@ -5,7 +5,7 @@ using Core.IO;
 using Core.Shell.Common.FileSystems;
 using Picasa = Google.Picasa;
 
-namespace Core.Media.Google.GooglePhotos
+namespace Core.Media.Google.GooglePhotos.FileSystem
 {
 	public sealed class GoogleFileSystem : FileSystemSubsystem
 	{
@@ -19,7 +19,7 @@ namespace Core.Media.Google.GooglePhotos
 			AddPrefix (mainPrefix);
 		}
 
-		public GoogleFile File (GooglePhotosService service, Picasa.Album picasaAlbum, Picasa.Photo picasaPhoto)
+		public GoogleFile File (GooglePhotosService service, DiscretePicasaAlbum picasaAlbum, Picasa.Photo picasaPhoto)
 		{
 			return new GoogleFile (new Path (mainPrefix, new string[] {
 				PicasaExtensions.VirtualDirectoryName (service),

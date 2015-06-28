@@ -41,8 +41,8 @@ namespace Core.Shell.Platform.FileSystems
 
 		IEnumerable<VirtualNode> createListing ()
 		{
-			Log.Debug ("Directory listing: ", directory);
-			Log.Indent++;
+			//Log.Debug ("Directory listing: ", directory);
+			//Log.Indent++;
 
 			var directories = SafeDirectoryEnumerator.EnumerateDirectories (directory.Path.RealPath, "*", SearchOption.TopDirectoryOnly);
 			foreach (string realPath in directories) {
@@ -61,7 +61,7 @@ namespace Core.Shell.Platform.FileSystems
 				}
 			}
 
-			Log.Indent--;
+			//Log.Indent--;
 		}
 	}
 }

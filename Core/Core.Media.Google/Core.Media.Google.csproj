@@ -86,17 +86,17 @@
     <Reference Include="Zlib.Portable">
       <HintPath>..\..\..\google-photos\GooglePhotos\packages\Zlib.Portable.1.11.0\lib\portable-net4+sl5+wp8+win8+wpa81+MonoTouch+MonoAndroid\Zlib.Portable.dll</HintPath>
     </Reference>
-    <Reference Include="Core.Shell.Common">
-      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Shell.0.1.29\lib\portable-net45+win\Core.Shell.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Core.Google.Auth.Portable">
-      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Google.Auth.0.1.5\lib\portable-net45+win\Core.Google.Auth.Portable.dll</HintPath>
-    </Reference>
     <Reference Include="Google.Apis.Plus.v1">
       <HintPath>..\..\..\google-photos\GooglePhotos\packages\Google.Apis.Plus.v1.1.9.0.2230\lib\portable-net40+sl50+win+wpa81+wp80\Google.Apis.Plus.v1.dll</HintPath>
     </Reference>
+    <Reference Include="Core.Shell.Common">
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Shell.0.1.30\lib\portable-net45+win\Core.Shell.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Core.Google.Auth.Portable">
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Google.Auth.0.1.6\lib\portable-net45+win\Core.Google.Auth.Portable.dll</HintPath>
+    </Reference>
     <Reference Include="Core.Portable">
-      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Common.0.1.218\lib\portable-net45+win\Core.Portable.dll</HintPath>
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Common.0.1.219\lib\portable-net45+win\Core.Portable.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

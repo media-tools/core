@@ -1,13 +1,15 @@
 ﻿using System;
 using Core.Media.Common;
+using Core.Shell.Common.FileSystems;
 
 namespace Core.Media.Platform.LocalMedia
 {
 	public class LocalAlbum : Album
 	{
-		public LocalAlbum (string path)
-			: base (name: path)
+		public LocalAlbum (string name, VirtualDirectory directory)
+			: base (name: name)
 		{
+			Directory = directory;
 		}
 
 		#region implemented abstract members of Album

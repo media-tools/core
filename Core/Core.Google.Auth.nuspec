@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Core.Google.Auth</id>
-    <version>0.1.6</version>
+    <version>0.1.7</version>
     <authors>tobiasschulz</authors>
     <owners>tobiasschulz</owners>
     <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>

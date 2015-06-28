@@ -46,7 +46,7 @@ namespace Core.Shell.Platform.FileSystems
 
 			var directories = SafeDirectoryEnumerator.EnumerateDirectories (directory.Path.RealPath, "*", SearchOption.TopDirectoryOnly);
 			foreach (string realPath in directories) {
-				Log.Debug ("realPath: ", realPath);
+				//Log.Debug ("realPath: ", realPath);
 				VirtualNode node = directory.GetChildDirectory (PathHelper.GetFileName (realPath));
 				if (node != null) {
 					yield return node;
@@ -54,7 +54,7 @@ namespace Core.Shell.Platform.FileSystems
 			}
 			var files = SafeDirectoryEnumerator.EnumerateFiles (directory.Path.RealPath, "*", SearchOption.TopDirectoryOnly);
 			foreach (string realPath in files) {
-				Log.Debug ("realPath: ", realPath);
+				//Log.Debug ("realPath: ", realPath);
 				VirtualNode node = directory.GetChildFile (PathHelper.GetFileName (realPath));
 				if (node != null) {
 					yield return node;

@@ -34,17 +34,12 @@ namespace Core.IO
 
 		public static string NormalizePath (string path)
 		{
-			Log.Debug ("PathHelper.NormalizePath: path=", path);
+			//Log.Debug ("PathHelper.NormalizePath: path=", path);
 			if (string.IsNullOrWhiteSpace (path))
 				return string.Empty;
 
 			// no windows file separators!
 			path = path.Replace ('\\', '/');
-
-			// no trailing slash!
-			//if (path.ToCharArray ().Any (c => c != '/')) {
-			//	path = path.TrimEnd ('/');
-			//}
 
 			bool startsWithSlash = path.StartsWith ("/");
 			
@@ -55,7 +50,7 @@ namespace Core.IO
 					// ignore
 				} else if (part == "..") {
 					// go one up!
-					Log.Debug ("PathHelper.NormalizePath: go up from ", newParts.Join ("/"));
+					//Log.Debug ("PathHelper.NormalizePath: go up from ", newParts.Join ("/"));
 					if (newParts.Count > 0) {
 						newParts.RemoveAt (newParts.Count - 1);
 					}

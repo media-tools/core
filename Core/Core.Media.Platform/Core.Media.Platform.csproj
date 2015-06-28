@@ -30,19 +30,22 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Core.Portable">
-      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Common.0.1.4\lib\net45\Core.Portable.dll</HintPath>
-    </Reference>
-    <Reference Include="Core.Platform">
-      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Common.0.1.4\lib\net45\Core.Platform.dll</HintPath>
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Core.Shell.Common">
-      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Shell.0.1.15\lib\net45\Core.Shell.Common.dll</HintPath>
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Shell.0.1.30\lib\net45\Core.Shell.Common.dll</HintPath>
     </Reference>
     <Reference Include="Core.Shell.Platform">
-      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Shell.0.1.15\lib\net45\Core.Shell.Platform.dll</HintPath>
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Shell.0.1.30\lib\net45\Core.Shell.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Core.Portable">
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Common.0.1.219\lib\net45\Core.Portable.dll</HintPath>
+    </Reference>
+    <Reference Include="Core.Platform">
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Common.0.1.219\lib\net45\Core.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Posix">
+      <HintPath>..\..\..\google-photos\GooglePhotos\packages\Core.Common.0.1.219\lib\net45\Mono.Posix.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -50,6 +53,7 @@
     <Compile Include="LocalMedia\LocalAlbum.cs" />
     <Compile Include="LocalMedia\LocalPhoto.cs" />
     <Compile Include="Mono.Options-PCL.cs" />
+    <Compile Include="LocalMedia\LocalShare.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

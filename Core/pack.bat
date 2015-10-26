@@ -1,4 +1,6 @@
-"C:\Program Files\Mono\bin\xbuild" /p:Configuration=Release Core.sln
+nuget restore
+
+"C:\Program Files (x86)\Msbuild\14.0\bin\msbuild" /p:Configuration=Release Core.sln
 
 
 mkdir nuget-out
